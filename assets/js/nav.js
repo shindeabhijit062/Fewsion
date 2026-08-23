@@ -1,0 +1,602 @@
+function animateCounter(el) {
+  const value = parseFloat(el.dataset.value || '0');
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const decimals = parseInt(el.dataset.decimals || '0', 10);
+  const duration = 2000;
+  const start = performance.now();
+
+  function tick(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+    const current = value * eased;
+    const formatted = decimals > 0
+      ? current.toFixed(decimals)
+      : Math.round(current).toLocaleString('en-IN');
+    el.textContent = `${prefix}${formatted}${suffix}`;
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = `${prefix}${decimals > 0 ? value.toFixed(decimals) : value.toLocaleString('en-IN')}${suffix}`;
+  }
+  requestAnimationFrame(tick);
+}
+
+const counterObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        animateCounter(entry.target);
+        counterObserver.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.3, rootMargin: '0px 0px -60px 0px' }
+);
+document.querySelectorAll('[data-counter]').forEach((el) => counterObserver.observe(el));
+
+
+ // ============================================================
+// Fewsion — vanilla JS port of components/fewsion/motion.tsx,
+// buttons.tsx, navbar.tsx, how-it-works.tsx, comparison.tsx, roadmap.tsx
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------------------------------------------------------
+     1) Reveal on scroll  (replaces <Reveal> / whileInView)
+     --------------------------------------------------------- */
+  const revealEls = document.querySelectorAll('[data-reveal], [data-reveal-blur]');
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const delay = entry.target.dataset.delay || 0;
+          entry.target.style.transitionDelay = `${delay}s`;
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -80px 0px' }
+  );
+  revealEls.forEach((el) => revealObserver.observe(el));
+
+  /* ---------------------------------------------------------
+     2) Stagger groups (replaces <Stagger>/<StaggerItem>)
+     Any [data-stagger] container reveals its [data-stagger-item]
+     children one-by-one once the container enters view.
+     --------------------------------------------------------- */
+  document.querySelectorAll('[data-stagger]').forEach((group) => {
+    const step = parseFloat(group.dataset.staggerDelay || '0.1');
+    const items = group.querySelectorAll('[data-stagger-item]');
+    items.forEach((item, i) => {
+      item.style.setProperty('--stagger-delay', `${i * step}s`);
+      item.setAttribute('data-reveal', '');
+    });
+  });
+  // re-scan (items were just tagged with data-reveal above)
+  document.querySelectorAll('[data-stagger-item][data-reveal]').forEach((el) => revealObserver.observe(el));
+
+  /* ---------------------------------------------------------
+     3) Animated counters (replaces <Counter>)
+     --------------------------------------------------------- */
+  function animateCounter(el) {
+    const value = parseFloat(el.dataset.value || '0');
+    const prefix = el.dataset.prefix || '';
+    const suffix = el.dataset.suffix || '';
+    const decimals = parseInt(el.dataset.decimals || '0', 10);
+    const duration = 2000;
+    const start = performance.now();
+
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      // easeOutExpo-ish spring feel
+      const eased = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+      const current = value * eased;
+      const formatted = decimals > 0
+        ? current.toFixed(decimals)
+        : Math.round(current).toLocaleString('en-IN');
+      el.textContent = `${prefix}${formatted}${suffix}`;
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = `${prefix}${decimals > 0 ? value.toFixed(decimals) : value.toLocaleString('en-IN')}${suffix}`;
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const counterObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.3, rootMargin: '0px 0px -60px 0px' }
+  );
+  document.querySelectorAll('[data-counter]').forEach((el) => counterObserver.observe(el));
+
+  /* ---------------------------------------------------------
+     4) Navbar: scroll shrink/blur + mobile menu
+     --------------------------------------------------------- */
+  const header = document.getElementById('site-header');
+  if (header) {
+    const onScroll = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 24);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+  const menuBtn = document.getElementById('menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      const isOpen = mobileMenu.classList.toggle('is-open');
+      menuBtn.setAttribute('aria-expanded', String(isOpen));
+      menuBtn.querySelector('.icon-menu').classList.toggle('hidden', isOpen);
+      menuBtn.querySelector('.icon-close').classList.toggle('hidden', !isOpen);
+    });
+    mobileMenu.querySelectorAll('a').forEach((a) =>
+      a.addEventListener('click', () => {
+        mobileMenu.classList.remove('is-open');
+        menuBtn.setAttribute('aria-expanded', 'false');
+        menuBtn.querySelector('.icon-menu').classList.remove('hidden');
+        menuBtn.querySelector('.icon-close').classList.add('hidden');
+      })
+    );
+  }
+
+  /* ---------------------------------------------------------
+     5) Magnetic buttons (replaces <MagneticButton>)
+     --------------------------------------------------------- */
+  document.querySelectorAll('.magnetic-btn').forEach((btn) => {
+    let burstTimeout;
+    btn.addEventListener('mousemove', (e) => {
+      if (reducedMotion) return;
+      const rect = btn.getBoundingClientRect();
+      const dx = e.clientX - (rect.left + rect.width / 2);
+      const dy = e.clientY - (rect.top + rect.height / 2);
+      btn.style.transform = `translate(${dx * 0.28}px, ${dy * 0.28}px)`;
+    });
+    btn.addEventListener('mouseenter', () => {
+      btn.classList.add('is-hovering');
+      spawnParticles(btn);
+    });
+    btn.addEventListener('mouseleave', () => {
+      btn.classList.remove('is-hovering');
+      btn.style.transform = 'translate(0, 0)';
+    });
+  });
+
+  function spawnParticles(btn) {
+    if (reducedMotion) return;
+    const layer = btn.querySelector('.btn-particles');
+    if (!layer) return;
+    layer.innerHTML = '';
+    const isPrimary = btn.classList.contains('btn-primary');
+    const count = 10;
+    for (let i = 0; i < count; i++) {
+      const angle = (i / count) * Math.PI * 2;
+      const dist = 36 + (i % 3) * 14;
+      const p = document.createElement('span');
+      p.className = 'btn-particle';
+      p.style.background = isPrimary ? 'oklch(0.15 0.02 80 / 80%)' : 'var(--primary)';
+      layer.appendChild(p);
+      requestAnimationFrame(() => {
+        p.style.transform = `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px) scale(0)`;
+        p.style.opacity = '0';
+      });
+      setTimeout(() => p.remove(), 750);
+    }
+  }
+
+  /* ---------------------------------------------------------
+     6) Spotlight cards (replaces <SpotlightCard>)
+     --------------------------------------------------------- */
+  document.querySelectorAll('.spotlight-card').forEach((card) => {
+    const tilt = card.dataset.tilt !== 'false';
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const px = ((e.clientX - rect.left) / rect.width) * 100;
+      const py = ((e.clientY - rect.top) / rect.height) * 100;
+      card.style.setProperty('--sx', `${px}%`);
+      card.style.setProperty('--sy', `${py}%`);
+      if (tilt && !reducedMotion) {
+        const rY = ((px - 50) / 50) * 5;
+        const rX = ((50 - py) / 50) * 5;
+        card.style.transform = `perspective(900px) rotateX(${rX}deg) rotateY(${rY}deg)`;
+      }
+    });
+    card.addEventListener('mouseenter', () => card.classList.add('is-hovering'));
+    card.addEventListener('mouseleave', () => {
+      card.classList.remove('is-hovering');
+      card.style.transform = 'perspective(900px) rotateX(0deg) rotateY(0deg)';
+    });
+  });
+
+  /* ---------------------------------------------------------
+     7) How It Works — auto-cycling step tabs (replaces useState/interval)
+     --------------------------------------------------------- */
+  const hiw = document.getElementById('how-it-works');
+  if (hiw) {
+    const tabs = Array.from(hiw.querySelectorAll('[data-hiw-tab]'));
+    const panels = Array.from(hiw.querySelectorAll('[data-hiw-panel]'));
+    const CYCLE_MS = 4000;
+    let active = 0;
+    let paused = false;
+    let timer = null;
+
+    function render() {
+      tabs.forEach((tab, i) => {
+        const isActive = i === active;
+        tab.classList.toggle('is-active', isActive);
+        tab.setAttribute('aria-selected', String(isActive));
+        const bar = tab.querySelector('.hiw-progress');
+        const desc = tab.querySelector('.hiw-desc');
+        if (bar) {
+          bar.style.transition = 'none';
+          bar.style.transform = 'scaleX(0)';
+          if (isActive) {
+            requestAnimationFrame(() => {
+              bar.style.transition = `transform ${CYCLE_MS / 1000}s linear`;
+              bar.style.transform = paused ? 'scaleX(0)' : 'scaleX(1)';
+            });
+          }
+        }
+        if (desc) desc.classList.toggle('hidden', !isActive);
+      });
+      panels.forEach((p, i) => p.classList.toggle('hidden', i !== active));
+    }
+
+    function next() { active = (active + 1) % tabs.length; render(); }
+
+    function startTimer() {
+      if (reducedMotion) return;
+      clearInterval(timer);
+      timer = setInterval(() => { if (!paused) next(); }, CYCLE_MS);
+    }
+
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => { active = i; render(); });
+    });
+    hiw.addEventListener('mouseenter', () => { paused = true; render(); });
+    hiw.addEventListener('mouseleave', () => { paused = false; render(); });
+
+    render();
+    startTimer();
+  }
+
+  /* ---------------------------------------------------------
+     8) Comparison table tabs (replaces useState tab switch)
+     --------------------------------------------------------- */
+  const comparison = document.getElementById('comparison-tabs');
+  if (comparison) {
+    const buttons = Array.from(comparison.querySelectorAll('[data-cmp-tab]'));
+    const panels = Array.from(document.querySelectorAll('[data-cmp-panel]'));
+    buttons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        buttons.forEach((b) => {
+          const isActive = b === btn;
+          b.classList.toggle('is-active', isActive);
+        });
+        panels.forEach((p) => p.classList.toggle('hidden', p.dataset.cmpPanel !== btn.dataset.cmpTab));
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------
+     9) Roadmap — scroll-linked progress line
+     --------------------------------------------------------- */
+  const roadmapTrack = document.getElementById('roadmap-track');
+  const roadmapProgress = document.getElementById('roadmap-progress');
+  if (roadmapTrack && roadmapProgress) {
+    const onScroll = () => {
+      const rect = roadmapTrack.getBoundingClientRect();
+      const vh = window.innerHeight;
+      const start = vh * 0.7;
+      const total = rect.height + (vh * 0.7 - vh * 0.6) + rect.height;
+      const progressed = start - rect.top;
+      const pct = Math.min(Math.max(progressed / (rect.height + vh * 0.1), 0), 1);
+      roadmapProgress.style.height = `${pct * 100}%`;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    onScroll();
+  }
+});
+/* ============================================================
+   Fewsion Shared Navbar — nav.js
+   ------------------------------------------------------------
+   USAGE:
+   1. Add a placeholder div as the FIRST thing inside <body>:
+        <div id="fewsion-nav"></div>
+   2. Load this script anywhere on the page (head or body):
+        <script src="nav.js"></script>
+
+   REQUIRES: the page must already define Fewsion's CSS
+   variables in :root (--black, --amber, --amber2, --white,
+   --muted, --text, --border, --border2, --font-display) —
+   every Fewsion page already does this as part of the shared
+   design system, so no extra setup is needed.
+   ============================================================ */
+ // 1. GSAP Scroll Reveals (Replacing Framer Motion)
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.from(".hero-reveal", {
+      opacity: 0,
+      y: 40,
+      duration: 1,
+      stagger: 0.2,
+      ease: "power3.out"
+    });
+
+    gsap.from(".tilt-card", {
+      scrollTrigger: {
+        trigger: "#business",
+        start: "top 80%"
+      },
+      opacity: 0,
+      y: 30,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: "power3.out"
+    });
+
+    // 2. Magnetic Button Effect (SpotlightButton / MagneticButton replica)
+    document.querySelectorAll('.magnetic-btn').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        gsap.to(btn, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: 'power2.out' });
+      });
+      btn.addEventListener('mouseleave', () => {
+        gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.3)' });
+      });
+    });
+// --------------------------------------------------------------//
+
+(function () {
+  function init() {
+    var isGithubPages = window.location.pathname.includes('/fewsion-website/');
+    var prefix = isGithubPages ? '/fewsion-website/pages/' : '/pages/';
+
+    var NAV_LINKS = [
+      { href: prefix + 'Creator/creators.html', label: 'Creators' },
+      { href: prefix + 'Brand/brands.html', label: 'Brands' },
+      { href: prefix + 'Editor/editors.html', label: 'Editors' },
+      { href: prefix + 'marketing/pricing.html', label: 'Pricing' },
+      { href: prefix + 'marketing/index.html#solution', label: 'How It Works' }
+    ];
+
+    var signupHref = prefix + 'auth/signup.html';
+    var loginHref = prefix + 'auth/login.html';
+    var logoHref = prefix + 'marketing/index.html';
+
+    var currentPath = window.location.pathname;
+
+    var linksHTML = NAV_LINKS.map(function (l) {
+      var isActive = currentPath.endsWith(l.href.split('#')[0]);
+      return '<li><a href="' + l.href + '"' + (isActive ? ' class="nav-active"' : '') + '>' + l.label + '</a></li>';
+    }).join('');
+
+    var navHTML =
+      '<nav id="navbar">' +
+        '<a class="nav-logo" href="' + logoHref + '">Few<span>sion</span></a>' +
+        '<ul class="nav-links" id="navLinks">' +
+          linksHTML +
+          '<li><a href="' + signupHref + '" class="nav-cta">Sign up</a></li>' +
+          '<li><a href="' + loginHref + '" class="nav-cta nav-cta-ghost">Login</a></li>' +
+        '</ul>' +
+        '<div class="nav-hamburger" id="hamburger"><span></span><span></span><span></span></div>' +
+      '</nav>';
+
+    var navCSS =
+      'nav#navbar{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 5%;height:70px;' +
+        'display:flex;align-items:center;justify-content:space-between;' +
+        'background:rgba(8,8,8,0.92);backdrop-filter:blur(16px);' +
+        'border-bottom:1px solid var(--border);}' +
+      '.nav-logo{font-family:var(--font-display);font-size:22px;font-weight:800;letter-spacing:-.5px;color:var(--white);text-decoration:none;}' +
+      '.nav-logo span{color:var(--amber);}' +
+      '.nav-links{display:flex;align-items:center;gap:36px;list-style:none;}' +
+      '.nav-links a{font-size:14px;color:var(--muted);text-decoration:none;font-weight:400;letter-spacing:.02em;transition:color .2s;}' +
+      '.nav-links a:hover,.nav-links a.nav-active{color:var(--text);}' +
+      '.nav-cta{background:var(--amber);color:#000 !important;font-weight:600 !important;padding:9px 22px;border-radius:50px;transition:opacity .2s,transform .2s !important;}' +
+      '.nav-cta:hover{opacity:.88;transform:translateY(-1px) !important;}' +
+      '.nav-cta-ghost{background:transparent !important;color:var(--amber) !important;border:1px solid rgba(245,166,35,.4);}' +
+      '.nav-hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}' +
+      '.nav-hamburger span{display:block;width:24px;height:2px;background:var(--text);border-radius:2px;transition:all .3s;}' +
+      '@media (max-width:768px){' +
+        '.nav-links{display:none;}' +
+        '.nav-links.open{display:flex;flex-direction:column;position:fixed;inset:70px 0 0 0;background:rgba(8,8,8,0.97);backdrop-filter:blur(16px);padding:32px 5%;gap:24px;z-index:99;}' +
+        '.nav-links.open a{font-size:22px;color:var(--text);}' +
+        '.nav-hamburger{display:flex;}' +
+      '}';
+
+    // Inject CSS once
+    if (!document.getElementById('fewsion-nav-style')) {
+      var style = document.createElement('style');
+      style.id = 'fewsion-nav-style';
+      style.textContent = navCSS;
+      document.head.appendChild(style);
+    }
+
+    // Inject HTML into placeholder (or prepend to body as a fallback)
+    var mount = document.getElementById('fewsion-nav');
+    if (mount) {
+      mount.innerHTML = navHTML;
+    } else {
+      document.body.insertAdjacentHTML('afterbegin', navHTML);
+    }
+
+    // Mobile menu toggle
+    var hamburger = document.getElementById('hamburger');
+    var navLinksEl = document.getElementById('navLinks');
+    if (hamburger && navLinksEl) {
+      hamburger.addEventListener('click', function () {
+        navLinksEl.classList.toggle('open');
+      });
+      navLinksEl.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () { navLinksEl.classList.remove('open'); });
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+// <nav id="navbar">
+//   <a class="nav-logo" href="index.html">Few<span>sion</span></a>
+//   <ul class="nav-links" id="navLinks">
+//     <li><a href="creators.html">Creators</a></li>
+//     <li><a href="brands.html">Brands</a></li>
+//     <li><a href="editors.html">Editors</a></li>
+//     <li><a href="pricing.html">Pricing</a></li>
+//     <li><a href="#solution">How It Works</a></li>
+//     <li><a href="signup.html" class="nav-cta">Sign up </a></li>
+//     <li><a href="login.html" class="nav-cta">Login</a></li>
+//   </ul>
+//   <div class="nav-hamburger" id="hamburger" onclick="toggleMenu()">
+//     <span></span><span></span><span></span>
+//   </div>
+// </nav>
+// <style>
+//   :root {
+//     --black: #080808;
+//     --deep: #0e0e0e;
+//     --card: #141414;
+//     --card2: #1a1a1a;
+//     --border: rgba(255,255,255,0.07);
+//     --border2: rgba(255,255,255,0.12);
+//     --amber: #F5A623;
+//     --amber2: #FF6B35;
+//     --amber-glow: rgba(245,166,35,0.15);
+//     --text: #f0ece4;
+//     --muted: #888;
+//     --muted2: #555;
+//     --white: #ffffff;
+//     --font-display: 'Syne', sans-serif;
+//     --font-body: 'DM Sans', sans-serif;
+//     --radius: 16px;
+//     --radius-sm: 10px;
+//   }
+
+//   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+//  /* ─── NAV ─── */
+//   nav {
+//     position: fixed;
+//     top: 0; left: 0; right: 0;
+//     z-index: 100;
+//     padding: 0 5%;
+//     height: 70px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     transition: background 0.3s, border-color 0.3s;
+//     border-bottom: 1px solid transparent;
+//   }
+//   nav.scrolled {
+//     background: rgba(8,8,8,0.92);
+//     backdrop-filter: blur(16px);
+//     border-color: var(--border);
+//   }
+//   .nav-logo {
+//     font-family: var(--font-display);
+//     font-size: 22px;
+//     font-weight: 800;
+//     letter-spacing: -0.5px;
+//     color: var(--white);
+//     text-decoration: none;
+//   }
+//   .nav-logo span { color: var(--amber); }
+//   .nav-links {
+//     display: flex;
+//     align-items: center;
+//     gap: 36px;
+//     list-style: none;
+//   }
+//   .nav-links a {
+//     font-size: 14px;
+//     color: var(--muted);
+//     text-decoration: none;
+//     font-weight: 400;
+//     letter-spacing: 0.02em;
+//     transition: color 0.2s;
+//   }
+//   .nav-links a:hover { color: var(--text); }
+//   .nav-cta {
+//     background: var(--amber);
+//     color: #000 !important;
+//     font-weight: 600 !important;
+//     padding: 9px 22px;
+//     border-radius: 50px;
+//     transition: opacity 0.2s, transform 0.2s !important;
+//   }
+//   .nav-cta:hover { opacity: 0.88; transform: translateY(-1px) !important; }
+//   .nav-hamburger {
+//     display: none;
+//     flex-direction: column;
+//     gap: 5px;
+//     cursor: pointer;
+//     padding: 4px;
+//   }
+//   .nav-hamburger span {
+//     display: block;
+//     width: 24px;
+//     height: 2px;
+//     background: var(--text);
+//     border-radius: 2px;
+//     transition: all 0.3s;
+//   }
+
+//     </style>
+//  // Sticky nav
+//   const navbar = document.getElementById('navbar');
+//   window.addEventListener('scroll', () => {
+//     navbar.classList.toggle('scrolled', window.scrollY > 20);
+//   });
+
+//   // Mobile menu
+//   function toggleMenu() {
+//     document.getElementById('navLinks').classList.toggle('open');
+//   }
+//   document.querySelectorAll('.nav-links a').forEach(a => {
+//     a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+//   });
+
+//   // Competitor tabs
+//   function showTab(id) {
+//     document.querySelectorAll('.comp-tab').forEach((t,i) => {
+//       t.classList.toggle('active', ['global','india','gap'][i] === id);
+//     });
+//     document.querySelectorAll('.comp-panel').forEach(p => p.classList.remove('active'));
+//     document.getElementById('tab-' + id).classList.add('active');
+//   }
+
+//   // Scroll reveal
+//   const observer = new IntersectionObserver((entries) => {
+//     entries.forEach(entry => {
+//       if (entry.isIntersecting) {
+//         entry.target.classList.add('visible');
+//         observer.unobserve(entry.target);
+//       }
+//     });
+//   }, { threshold: 0.1 });
+
+//   document.querySelectorAll('.reveal, .roadmap-item').forEach(el => observer.observe(el));
+
+//   // Smooth active nav highlight
+//   const sections = document.querySelectorAll('section[id]');
+//   const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+//   window.addEventListener('scroll', () => {
+//     let current = '';
+//     sections.forEach(s => {
+//       if (window.scrollY >= s.offsetTop - 120) current = s.id;
+//     });
+//     navLinks.forEach(a => {
+//       a.style.color = a.getAttribute('href') === '#' + current ? 'var(--text)' : '';
+//     });
+//   });

@@ -1,0 +1,187 @@
+// ─── CONFIG ────────────────────────────────────────────────────────────────
+// Replace these two values with your actual Supabase project credentials.
+// The URL must be the project root (NOT the /rest/v1/ endpoint).
+// ─── CONFIG ────────────────────────────────────────────────────────────────
+// Ensure the URL is exactly your project root without any extra appended strings or parameters
+const FEWSION_SUPABASE_URL = "https://vdtpdqpmxxcwkqslhvww.supabase.co";
+const FEWSION_SUPABASE_KEY = "sb_publishable_zZ43Mm55wlCtH30mffIUtw_iUZd1Kb3"; // anon/public key
+
+if (!window.supabase) {
+  console.error("Supabase library not loaded!");
+}
+// ─── BOOT ──────────────────────────────────────────────────────────────────
+const supabaseClient = window.supabase.createClient(FEWSION_SUPABASE_URL, FEWSION_SUPABASE_KEY);
+
+console.log("Supabase URL:", FEWSION_SUPABASE_URL);
+console.log("Supabase Key:", FEWSION_SUPABASE_KEY);
+console.log("Supabase Client:", supabaseClient);
+
+
+// ─────────────────────────────────────────
+// FEWSION AUTH
+// ─────────────────────────────────────────
+window.FewsionAuth = {
+
+  // Get Supabase Client
+  client() {
+    return supabaseClient;
+  },
+
+  // Get Current Auth User
+  // Get Current Auth User
+  async getUser() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    
+    // If no session exists, just return null silently
+    if (!session) return null;
+
+    const { data: { user }, error } = await supabaseClient.auth.getUser();
+    
+    if (error) {
+      console.error("Error fetching user details:", error);
+      return null;
+    }
+
+    return user;
+  },
+
+  // Get Profile From Users Table
+  async getProfile(userId) {
+    const { data, error } = await supabaseClient
+      .from("users")
+      .select("*")
+      .eq("id", userId)
+      .single();
+
+    if (error) {
+      console.error("Profile Error:", error);
+      return { data: null, error };
+    }
+
+    return { data, error: null };
+  },
+
+  // Get Current User Profile
+  async getCurrentProfile() {
+    const user = await this.getUser();
+
+    if (!user) {
+      return null;
+    }
+
+    const { data } = await this.getProfile(user.id);
+
+    return data;
+  },
+
+  // Redirect According To Role
+  async redirectByRole(role, userId = null) {
+    try {
+      if (role) {
+        const activeUserId = userId || (await FewsionAuth.getUser())?.id;
+        if (activeUserId) {
+          let tableName = "";
+          if (role === "brand") tableName = "brand_profiles";
+          else if (role === "creator") tableName = "creator_profiles";
+          else if (role === "editor") tableName = "editor_profiles";
+          
+          if (tableName) {
+            const { data: subProfile, error: subError } = await supabaseClient
+              .from(tableName)
+              .select("id")
+              .eq("user_id", activeUserId)
+              .maybeSingle();
+              
+            if (subError) {
+              console.error("Error querying sub-profile:", subError);
+            } else if (subProfile) {
+              window.location.href = "../portals/" + role + "-dashboard.html";
+              return;
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Exception in redirectByRole database check:", err);
+    }
+
+    switch (role) {
+      case "brand":
+        window.location.href = "../Brand/fewsion_brand_portal.html";
+        break;
+
+      case "creator":
+        window.location.href = "../Creator/fewsion_creator_portal.html";
+        break;
+
+      case "editor":
+        window.location.href = "../Editor/fewsion_editor_portal.html";
+        break;
+
+      default:
+        window.location.href = "../auth/login.html";
+    }
+  },
+
+  // Redirect If Logged In
+  async redirectIfLoggedIn() {
+    const user = await this.getUser();
+
+    if (!user) return;
+
+    const { data: profile } =
+      await this.getProfile(user.id);
+
+    if (profile?.role) {
+      this.redirectByRole(profile.role);
+    }
+  },
+
+  // Protect Pages
+  async requireAuth(requiredRole = null) {
+    const user = await this.getUser();
+    const loginUrl = "../auth/login.html";
+
+    if (!user) {
+      window.location.href = loginUrl;
+      return null;
+    }
+
+    const { data: profile } =
+      await this.getProfile(user.id);
+
+    if (!profile) {
+      window.location.href = loginUrl;
+      return null;
+    }
+
+    if (
+      requiredRole &&
+      profile.role !== requiredRole
+    ) {
+      this.redirectByRole(profile.role);
+      return null;
+    }
+
+    return {
+      user,
+      profile
+    };
+  },
+
+  // Sign Out
+  async signOut(
+    redirectTo = "index.html"
+  ) {
+    await supabaseClient.auth.signOut();
+
+    let url = redirectTo;
+    if (redirectTo === "index.html") {
+      url = "../marketing/index.html";
+    } else if (redirectTo === "login.html") {
+      url = "../auth/login.html";
+    }
+    window.location.href = url;
+  }
+};
+
