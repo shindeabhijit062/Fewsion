@@ -111,6 +111,44 @@ interface Contract {
   counterparty_signature_name?: string | null;
 }
 
+// Context shape
+export interface CreatorContextType {
+  loading: boolean;
+  activeTab: TabId;
+  setActiveTab: (t: TabId) => void;
+  userId: string | null;
+  profile: Profile | null;
+  applications: Application[];
+  collaborations: Collaboration[];
+  payments: Payment[];
+  notifications: NotificationRow[];
+  reviews: Review[];
+  notifOpen: boolean;
+  setNotifOpen: (open: boolean) => void;
+  selectedCollabId: string | null;
+  setSelectedCollabId: (id: string | null) => void;
+  threadMessages: MessageRow[];
+  setThreadMessages: React.Dispatch<React.SetStateAction<MessageRow[]>>;
+  threadInput: string;
+  setThreadInput: React.Dispatch<React.SetStateAction<string>>;
+  contractModal: Contract | null;
+  setContractModal: React.Dispatch<React.SetStateAction<Contract | null>>;
+  signing: boolean;
+  setSigning: React.Dispatch<React.SetStateAction<boolean>>;
+  totalEarnings: (releasedOnly?: boolean) => number;
+  averageRating: number | null;
+  unreadCount: number;
+  initials: string;
+  markNotificationsRead: () => Promise<void> | void;
+  toggleNotifPanel: () => void;
+  openThread: (collabId: string) => Promise<void> | void;
+  sendMessage: () => Promise<void> | void;
+  viewContract: (collabId: string) => Promise<void> | void;
+  signContract: () => Promise<void> | void;
+  handleLogout: () => Promise<void> | void;
+  statusTagClasses: (s?: string) => string;
+}
+
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
   { id: 'applications', label: 'My Applications', icon: FileText },
@@ -134,7 +172,7 @@ const fmtTime = (d?: string) => (d ? new Date(d).toLocaleTimeString([], { hour: 
 const fmtINR = (n?: number) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
 // Context
-const CreatorContext = createContext<any | null>(null);
+const CreatorContext = createContext<CreatorContextType | undefined>(undefined);
 
 export const emptyBox = (text: string) => (
   <div className="rounded-xl border border-dashed border-[var(--border2)] p-8 text-center text-sm text-[var(--muted)]">
@@ -402,7 +440,7 @@ export function CreatorProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function useCreatorData() {
+export function useCreatorData(): CreatorContextType {
   const context = useContext(CreatorContext);
   if (!context) {
     throw new Error('useCreatorData must be used within a CreatorProvider');
