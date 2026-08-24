@@ -14,11 +14,11 @@ export default function SuperAdminDashboardLayout({
   
   // Basic title logic based on pathname
   let title = 'Dashboard';
-  if (pathname.includes('/users')) title = 'User Management';
-  if (pathname.includes('/brands')) title = 'Brand Profiles';
-  if (pathname.includes('/creators')) title = 'Creator Profiles';
-  if (pathname.includes('/campaigns')) title = 'Campaigns';
-  if (pathname.includes('/settings')) title = 'Platform Settings';
+  if (pathname?.includes('/users')) title = 'User Management';
+  if (pathname?.includes('/brands')) title = 'Brand Profiles';
+  if (pathname?.includes('/creators')) title = 'Creator Profiles';
+  if (pathname?.includes('/campaigns')) title = 'Campaigns';
+  if (pathname?.includes('/settings')) title = 'Platform Settings';
 
   return (
     <div className="flex min-h-screen bg-[var(--core-bg)]" style={{ backgroundColor: 'var(--black)' }}>

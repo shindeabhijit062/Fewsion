@@ -136,6 +136,12 @@ const fmtINR = (n?: number) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 // Context
 const CreatorContext = createContext<any | null>(null);
 
+export const emptyBox = (text: string) => (
+  <div className="rounded-xl border border-dashed border-[var(--border2)] p-8 text-center text-sm text-[var(--muted)]">
+    {text}
+  </div>
+);
+
 // export default function CreatorDashboardPage() {
 export function CreatorProvider({ children }: { children: React.ReactNode }) {
 
@@ -375,11 +381,6 @@ export function CreatorProvider({ children }: { children: React.ReactNode }) {
     return 'bg-[var(--amber)]/10 border-[var(--amber)]/20 text-[var(--amber)]';
   };
 
-  const emptyBox = (text: string) => (
-    <div className="rounded-xl border border-dashed border-[var(--border2)] p-8 text-center text-sm text-[var(--muted)]">
-      {text}
-    </div>
-  );
 
   // ---------------------------------------------------------------------
   // Render

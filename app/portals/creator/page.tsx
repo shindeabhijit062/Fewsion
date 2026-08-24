@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Bell } from 'lucide-react';
-import { useCreatorData, TabId } from './CreatorContext';
+import { ArrowLeft, Bell, Send as SendIcon } from 'lucide-react';
+import { useCreatorData, TabId, emptyBox } from './CreatorContext';
 
 const TAB_COPY: Record<TabId, { title: string; subtitle: string }> = {
   overview: { title: 'Overview', subtitle: 'Track active campaign deliverables and clear escrow releases.' },
