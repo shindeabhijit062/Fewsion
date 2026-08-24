@@ -447,3 +447,12 @@ export function useCreatorData(): CreatorContextType {
   }
   return context;
 }
+
+export function useCreator(): CreatorContextType {
+  const context = useContext(CreatorContext);
+  if (!context) {
+    throw new Error('useCreator must be used within a CreatorProvider');
+  }
+  return context;
+}
+
