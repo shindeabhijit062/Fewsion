@@ -24,7 +24,15 @@
  * 3. Auth: uses supabase.auth.getUser(); logging out redirects to /login.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+// import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import Link from 'next/link';
 import {
   LayoutDashboard,
@@ -43,7 +51,7 @@ import { supabase } from '@/utils/supabase';
 // ---------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------
-type TabId = 'overview' | 'applications' | 'collaborations' | 'payments' | 'messages' | 'reviews';
+export type TabId = 'overview' | 'applications' | 'collaborations' | 'payments' | 'messages' | 'reviews';
 
 interface Profile {
   creator_name?: string;
@@ -125,7 +133,11 @@ const fmtDate = (d?: string) => (d ? new Date(d).toLocaleDateString() : '—');
 const fmtTime = (d?: string) => (d ? new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '');
 const fmtINR = (n?: number) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
-export default function CreatorDashboardPage() {
+// Context
+const CreatorContext = createContext<any | null>(null);
+
+// export default function CreatorDashboardPage() {
+export function CreatorProvider({ children }: { children: React.ReactNode }) {
 
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabId>('overview');
