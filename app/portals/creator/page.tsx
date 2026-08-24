@@ -149,7 +149,7 @@ export default function CreatorDashboardPage() {
               {[
                 { label: 'Creator score', value: `${profile?.ai_total_score ?? '--'}/100` },
                 { label: 'Follower scale', value: (profile?.follower_count ?? 0).toLocaleString() },
-                { label: 'Engagement rate', value: profile?.engagement_rate ? `${profile.engagement_rate}%` : '--%' },
+                { label: 'Engagement rate', value: profile?.engagement_rate ? `${profile?.engagement_rate}%` : '--%' },
                 { label: 'Total earnings', value: fmtINR(totalEarnings()), accent: true },
               ].map((stat) => (
                 <div key={stat.label} className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
