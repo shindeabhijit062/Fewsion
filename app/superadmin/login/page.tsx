@@ -47,18 +47,33 @@ export default function SuperAdminLoginPage() {
         return;
       }
 
-      if (data.user) {
-        // Query user role from public.users table
-        const { data: profile } = await supabase
+        // Query user role from public.users table (by ID or email)
+        const { data: profileById } = await supabase
           .from('users')
           .select('role')
           .eq('id', data.user.id)
           .maybeSingle();
 
-        const userRole = profile?.role || data.user.user_metadata?.role;
+        let rawRole = profileById?.role;
 
-        if (userRole !== 'super_admin' && userRole !== 'admin' && userRole !== 'superadmin') {
-          showToast(`Access Denied. Account "${trimmedEmail}" does not have Super Admin privileges.`, 'error');
+        if (!rawRole) {
+          const { data: profileByEmail } = await supabase
+            .from('users')
+            .select('role')
+            .eq('email', trimmedEmail)
+            .maybeSingle();
+          rawRole = profileByEmail?.role;
+        }
+
+        if (!rawRole) {
+          rawRole = data.user.user_metadata?.role;
+        }
+
+        const normalizedRole = String(rawRole || '').toLowerCase();
+        const isSuperAdmin = ['super_admin', 'superadmin', 'admin'].includes(normalizedRole);
+
+        if (!isSuperAdmin) {
+          showToast(`Access Denied. Account "${trimmedEmail}" (Role: "${rawRole || 'None'}") does not have Super Admin privileges.`, 'error');
           await supabase.auth.signOut();
           return;
         }

@@ -32,22 +32,34 @@ export default function SuperAdminDashboardLayout({
           return;
         }
 
-        // Check user role from Supabase DB
-        const { data: profile } = await supabase
+        // Check user role from Supabase DB (by ID or email)
+        const { data: profileById } = await supabase
           .from('users')
           .select('role, full_name, email')
           .eq('id', user.id)
           .maybeSingle();
 
-        const role = profile?.role || user.user_metadata?.role;
-        const isSuperAdmin = role === 'super_admin' || role === 'admin' || role === 'superadmin';
+        let profile = profileById;
+
+        if (!profile && user.email) {
+          const { data: profileByEmail } = await supabase
+            .from('users')
+            .select('role, full_name, email')
+            .eq('email', user.email)
+            .maybeSingle();
+          profile = profileByEmail;
+        }
+
+        const rawRole = profile?.role || user.user_metadata?.role;
+        const normalizedRole = String(rawRole || '').toLowerCase();
+        const isSuperAdmin = ['super_admin', 'superadmin', 'admin'].includes(normalizedRole);
 
         if (isSuperAdmin) {
           setAuthorized(true);
           setAdminProfile({
             email: user.email,
             full_name: profile?.full_name || user.user_metadata?.full_name || 'Super Admin',
-            role: role === 'super_admin' ? 'SUPER ADMIN' : 'ADMIN',
+            role: normalizedRole === 'super_admin' ? 'SUPER ADMIN' : 'ADMIN',
           });
         } else {
           setAuthorized(false);
