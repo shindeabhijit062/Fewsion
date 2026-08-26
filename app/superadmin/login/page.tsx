@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
+import { logAuditAction } from '@/lib/audit';
 
 export default function SuperAdminLoginPage() {
   const [email, setEmail] = useState('');
@@ -47,28 +48,36 @@ export default function SuperAdminLoginPage() {
       }
 
       if (data.user) {
-        // Fetch user role
-        const { data: profile, error: profileError } = await supabase
+        // Query user role from public.users table
+        const { data: profile } = await supabase
           .from('users')
           .select('role')
           .eq('id', data.user.id)
           .maybeSingle();
 
-        let userRole = profile?.role || data.user.user_metadata?.role;
+        const userRole = profile?.role || data.user.user_metadata?.role;
 
-        if (userRole !== 'superadmin') {
-          showToast(`Access Denied. You do not have super admin privileges.`, 'error');
-          // Optionally sign them out immediately
+        if (userRole !== 'super_admin' && userRole !== 'admin' && userRole !== 'superadmin') {
+          showToast(`Access Denied. Account "${trimmedEmail}" does not have Super Admin privileges.`, 'error');
           await supabase.auth.signOut();
           return;
         }
 
-        showToast('Authentication successful. Initializing dashboard...', 'success');
+        // Record Audit log on successful login
+        await logAuditAction(
+          data.user.id,
+          'SUPER_ADMIN_LOGIN',
+          'users',
+          data.user.id,
+          { email: trimmedEmail }
+        );
+
+        showToast('Authentication successful. Redirecting to control panel...', 'success');
         setTimeout(() => {
           window.location.href = `/superadmin/dashboard`;
-        }, 1200);
+        }, 1000);
       }
-    } catch (err) {
+    } catch {
       showToast('Authentication failed. Please try again.', 'error');
     } finally {
       setLoading(false);
@@ -82,7 +91,7 @@ export default function SuperAdminLoginPage() {
     >
       {/* ── LEFT panel ── */}
       <div
-        className="relative flex flex-col justify-between p-12 overflow-hidden"
+        className="relative flex flex-col justify-between p-12 overflow-hidden hidden md:flex"
         style={{
           background: 'linear-gradient(160deg, var(--deep) 0%, var(--black) 100%)',
           borderRight: '1px solid var(--border)',
@@ -93,50 +102,56 @@ export default function SuperAdminLoginPage() {
         <div className="absolute pointer-events-none" style={{ bottom: '-20%', right: '-10%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(245,166,35,0.07) 0%, transparent 65%)' }} />
 
         <Link href="/" className="relative z-10 font-display text-[24px] font-extrabold text-[color:var(--text)] no-underline mt-4" style={{ letterSpacing: '-0.5px' }}>
-          Few<span style={{ color: 'var(--amber)' }}>sion</span><span className="text-[var(--text)] text-sm ml-2 tracking-widest uppercase">Admin</span>
+          Few<span style={{ color: 'var(--amber)' }}>sion</span><span className="text-[var(--text)] text-xs ml-2 tracking-widest uppercase px-2 py-0.5 rounded bg-[var(--amber)]/10 text-[var(--amber)] border border-[var(--amber)]/20">Super Admin</span>
         </Link>
 
         <div className="relative z-10">
-          <div className="text-[12px] font-semibold uppercase mb-5" style={{ letterSpacing: '0.1em', color: 'var(--green)' }}>
-            Restricted Area
+          <div className="text-[12px] font-bold uppercase mb-4 tracking-widest" style={{ color: 'var(--green)' }}>
+            Restricted Control Center
           </div>
           <h2
             className="font-display font-extrabold text-[color:var(--text)]"
             style={{ fontSize: 'clamp(32px,3.5vw,48px)', letterSpacing: '-1.5px', lineHeight: '1.1', marginBottom: '20px' }}
           >
             Platform Control<br />
-            <em className="text-gradient-green" style={{ fontStyle: 'normal' }}>Center</em>
+            <em className="text-gradient-green" style={{ fontStyle: 'normal' }}>Console</em>
           </h2>
-          <p className="text-[15px] text-[var(--muted)] leading-[1.7] max-w-[380px]">
-            Manage users, monitor platform metrics, and oversee operations across the Fewsion ecosystem.
+          <p className="text-[14px] text-[var(--muted)] leading-[1.7] max-w-[380px]">
+            Manage users, monitor platform metrics, review creators & brands, and manage security across the Fewsion ecosystem.
           </p>
         </div>
 
         <div className="relative z-10 flex gap-8">
           <div className="flex items-center gap-2 text-[13px] text-[var(--muted)]">
-            <span className="w-2 h-2 rounded-full bg-[var(--green)]"></span>
-            All systems operational
+            <span className="w-2 h-2 rounded-full bg-[var(--green)] animate-pulse"></span>
+            All Supabase & API services operational
           </div>
         </div>
       </div>
 
       {/* ── RIGHT panel ── */}
       <div
-        className="flex items-center justify-center px-10 py-12"
+        className="flex items-center justify-center px-8 py-12 col-span-2 md:col-span-1"
         style={{ background: 'var(--black)' }}
       >
         <div className="w-full max-w-[400px]">
-          <h1 className="font-display text-[28px] font-extrabold text-[color:var(--text)] mb-[6px]" style={{ letterSpacing: '-0.8px' }}>
-            Super Admin Login
+          <div className="md:hidden mb-6">
+            <Link href="/" className="font-display text-[22px] font-extrabold text-[color:var(--text)] no-underline">
+              Few<span style={{ color: 'var(--amber)' }}>sion</span> <span className="text-xs uppercase text-[var(--amber)] font-bold ml-1">Admin</span>
+            </Link>
+          </div>
+
+          <h1 className="font-display text-[26px] font-extrabold text-[color:var(--text)] mb-[6px]" style={{ letterSpacing: '-0.8px' }}>
+            Super Admin Sign In
           </h1>
-          <p className="text-[14px] text-[var(--muted)] mb-8">
-            Please authenticate to access the admin portal.
+          <p className="text-[13px] text-[var(--muted)] mb-8">
+            Please enter your administrator credentials to continue.
           </p>
 
           <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }}>
             {/* Email */}
             <div className="mb-[18px]">
-              <label className="form-label">Email address</label>
+              <label className="form-label">Admin Email Address</label>
               <input
                 type="email"
                 placeholder="admin@fewsion.in"
@@ -176,10 +191,16 @@ export default function SuperAdminLoginPage() {
                   <span>Authenticating...</span>
                 </div>
               ) : (
-                'Sign In'
+                'Sign In to Super Admin'
               )}
             </button>
           </form>
+
+          <div className="mt-8 pt-6 border-t border-[var(--border)] text-center">
+            <Link href="/" className="text-xs text-[var(--muted)] hover:text-[var(--text)] transition-colors">
+              ← Return to Main Website
+            </Link>
+          </div>
         </div>
       </div>
 
