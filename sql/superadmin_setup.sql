@@ -3,11 +3,17 @@
 -- Run this in Supabase Dashboard -> SQL Editor
 -- ============================================================================
 
--- 1. Extend user_role ENUM to include 'super_admin'
+-- 1. Safely create or extend user_role ENUM to include 'super_admin'
 DO $$ BEGIN
-    ALTER TYPE user_role ADD VALUE IF NOT EXISTS 'super_admin';
-EXCEPTION
-    WHEN duplicate_object THEN null;
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'user_role') THEN
+        CREATE TYPE user_role AS ENUM ('brand', 'creator', 'editor', 'admin', 'super_admin');
+    ELSE
+        BEGIN
+            ALTER TYPE user_role ADD VALUE IF NOT EXISTS 'super_admin';
+        EXCEPTION
+            WHEN duplicate_object THEN null;
+        END;
+    END IF;
 END $$;
 
 -- 2. Audit Logs Table
@@ -48,50 +54,58 @@ ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.platform_settings ENABLE ROW LEVEL SECURITY;
 
 -- 5. RLS Policies for Super Admin Access
--- Policy: Super Admin & Admin can view and insert audit logs
-CREATE POLICY "Admins read audit logs" ON public.audit_logs
-    FOR SELECT USING (
-        EXISTS (
-            SELECT 1 FROM public.users 
-            WHERE users.id = auth.uid() AND users.role IN ('super_admin', 'admin')
-        )
-    );
+DO $$ BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE policyname = 'Admins read audit logs'
+    ) THEN
+        CREATE POLICY "Admins read audit logs" ON public.audit_logs
+            FOR SELECT USING (
+                EXISTS (
+                    SELECT 1 FROM public.users 
+                    WHERE users.id = auth.uid() AND users.role IN ('super_admin', 'admin')
+                )
+            );
+    END IF;
+END $$;
 
-CREATE POLICY "Admins insert audit logs" ON public.audit_logs
-    FOR INSERT WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM public.users 
-            WHERE users.id = auth.uid() AND users.role IN ('super_admin', 'admin')
-        )
-    );
+DO $$ BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE policyname = 'Admins insert audit logs'
+    ) THEN
+        CREATE POLICY "Admins insert audit logs" ON public.audit_logs
+            FOR INSERT WITH CHECK (
+                EXISTS (
+                    SELECT 1 FROM public.users 
+                    WHERE users.id = auth.uid() AND users.role IN ('super_admin', 'admin')
+                )
+            );
+    END IF;
+END $$;
 
--- Policy: Admins read platform settings
-CREATE POLICY "Admins read platform settings" ON public.platform_settings
-    FOR SELECT USING (
-        EXISTS (
-            SELECT 1 FROM public.users 
-            WHERE users.id = auth.uid() AND users.role IN ('super_admin', 'admin')
-        )
-    );
+DO $$ BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE policyname = 'Admins read platform settings'
+    ) THEN
+        CREATE POLICY "Admins read platform settings" ON public.platform_settings
+            FOR SELECT USING (
+                EXISTS (
+                    SELECT 1 FROM public.users 
+                    WHERE users.id = auth.uid() AND users.role IN ('super_admin', 'admin')
+                )
+            );
+    END IF;
+END $$;
 
--- Policy: Only Super Admin can write/update platform settings
-CREATE POLICY "Super admin update platform settings" ON public.platform_settings
-    FOR ALL USING (
-        EXISTS (
-            SELECT 1 FROM public.users 
-            WHERE users.id = auth.uid() AND users.role = 'super_admin'
-        )
-    );
-
--- Policy: Allow Super Admin full access on public.users
-CREATE POLICY "Super admin manage users" ON public.users
-    FOR ALL USING (
-        EXISTS (
-            SELECT 1 FROM public.users AS u 
-            WHERE u.id = auth.uid() AND u.role IN ('super_admin', 'admin')
-        )
-    );
-
--- 6. Helper instructions to promote an admin:
--- Run the following line in Supabase SQL Editor to make your user a Super Admin:
--- UPDATE public.users SET role = 'super_admin' WHERE email = 'admin@fewsion.in';
+DO $$ BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE policyname = 'Super admin update platform settings'
+    ) THEN
+        CREATE POLICY "Super admin update platform settings" ON public.platform_settings
+            FOR ALL USING (
+                EXISTS (
+                    SELECT 1 FROM public.users 
+                    WHERE users.id = auth.uid() AND users.role = 'super_admin'
+                )
+            );
+    END IF;
+END $$;
