@@ -14,8 +14,8 @@ import {
   Shield, 
   MoreVertical, 
   Eye, 
-  CheckCircle, 
-  XCircle,
+  CircleCheck, 
+  CircleX,
   ChevronLeft,
   ChevronRight,
   UserPlus
@@ -324,12 +324,12 @@ export default function SuperAdminUsersPage() {
                       }`}>
                         {user.is_verified ? (
                           <>
-                            <CheckCircle className="w-3 h-3" />
+                            <CircleCheck className="w-3 h-3" />
                             Verified
                           </>
                         ) : (
                           <>
-                            <XCircle className="w-3 h-3" />
+                            <CircleX className="w-3 h-3" />
                             Unverified
                           </>
                         )}

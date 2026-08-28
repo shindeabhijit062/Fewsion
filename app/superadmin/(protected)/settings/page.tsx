@@ -10,7 +10,6 @@ import {
   Sliders, 
   Save, 
   Loader2, 
-  CheckCircle2, 
   AlertTriangle,
   Lock,
   Percent

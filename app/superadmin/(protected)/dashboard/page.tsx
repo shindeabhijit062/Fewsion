@@ -8,7 +8,7 @@ import {
   Clapperboard, 
   Building2, 
   Handshake, 
-  CheckCircle2, 
+  CircleCheck, 
   AlertCircle, 
   Activity, 
   ArrowRight,
@@ -294,7 +294,7 @@ export default function SuperAdminDashboard() {
             <div className="flex flex-col gap-3">
               <div className="flex justify-between items-center p-3 rounded-xl bg-[var(--card2)] border border-[var(--border)]">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[var(--green)]" />
+                  <CircleCheck className="w-4 h-4 text-[var(--green)]" />
                   <span className="text-xs font-medium text-[var(--text)]">Supabase Database</span>
                 </div>
                 <span className="text-[10px] font-bold bg-[var(--green-glow)] text-[var(--green)] px-2 py-0.5 rounded-full">
@@ -304,7 +304,7 @@ export default function SuperAdminDashboard() {
               
               <div className="flex justify-between items-center p-3 rounded-xl bg-[var(--card2)] border border-[var(--border)]">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[var(--green)]" />
+                  <CircleCheck className="w-4 h-4 text-[var(--green)]" />
                   <span className="text-xs font-medium text-[var(--text)]">Supabase Auth SSR</span>
                 </div>
                 <span className="text-[10px] font-bold bg-[var(--green-glow)] text-[var(--green)] px-2 py-0.5 rounded-full">
@@ -314,7 +314,7 @@ export default function SuperAdminDashboard() {
 
               <div className="flex justify-between items-center p-3 rounded-xl bg-[var(--card2)] border border-[var(--border)]">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-[var(--green)]" />
+                  <CircleCheck className="w-4 h-4 text-[var(--green)]" />
                   <span className="text-xs font-medium text-[var(--text)]">AI Engine API</span>
                 </div>
                 <span className="text-[10px] font-bold bg-[var(--green-glow)] text-[var(--green)] px-2 py-0.5 rounded-full">

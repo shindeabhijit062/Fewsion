@@ -11,7 +11,6 @@ import {
   Eye, 
   IndianRupee,
   Clock,
-  CheckCircle2,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';

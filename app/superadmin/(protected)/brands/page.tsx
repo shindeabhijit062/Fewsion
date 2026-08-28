@@ -11,9 +11,7 @@ import {
   Filter, 
   Loader2, 
   ExternalLink, 
-  CheckCircle, 
   Eye, 
-  XCircle,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
