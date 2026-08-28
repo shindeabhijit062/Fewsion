@@ -91,8 +91,7 @@ export default function SuperAdminLoginPage() {
         setTimeout(() => {
           window.location.href = `/superadmin/dashboard`;
         }, 1000);
-      }
-    } catch {
+      } catch {
       showToast('Authentication failed. Please try again.', 'error');
     } finally {
       setLoading(false);
