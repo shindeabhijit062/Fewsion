@@ -61,18 +61,36 @@ export default function SuperAdminCreatorsPage() {
   const fetchCreators = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data: creatorData, error: creatorErr } = await supabase
         .from('creator_profiles')
-        .select(`
-          *,
-          user:users(email, full_name, is_verified)
-        `)
+        .select('*')
         .order('ai_score', { ascending: false });
 
-      if (error) {
-        showToast(`Error fetching creators: ${error.message}`, 'error');
+      if (creatorErr) {
+        showToast(`Error fetching creators: ${creatorErr.message}`, 'error');
+        return;
+      }
+
+      if (creatorData && creatorData.length > 0) {
+        const userIds = creatorData.map((c) => c.user_id).filter(Boolean);
+        const { data: userData, error: userErr } = await supabase
+          .from('users')
+          .select('id, email, full_name, is_verified')
+          .in('id', userIds);
+
+        if (userErr) {
+          showToast(`Error fetching associated users: ${userErr.message}`, 'error');
+          return;
+        }
+
+        const userMap = new Map(userData?.map((u) => [u.id, u]) || []);
+        const enrichedCreators = creatorData.map((c) => ({
+          ...c,
+          user: userMap.get(c.user_id),
+        }));
+        setCreators(enrichedCreators);
       } else {
-        setCreators(data || []);
+        setCreators([]);
       }
     } catch (err: any) {
       showToast('Error connecting to database', 'error');

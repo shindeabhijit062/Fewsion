@@ -54,23 +54,40 @@ export default function SuperAdminBrandsPage() {
   const fetchBrands = useCallback(async () => {
     setLoading(true);
     try {
-      // Query brand profiles with linked user account info
       const { data: brandData, error: brandErr } = await supabase
         .from('brand_profiles')
-        .select(`
-          *,
-          user:users(email, full_name, is_verified)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (brandErr) {
         showToast(`Error loading brand profiles: ${brandErr.message}`, 'error');
+        return;
+      }
+
+      if (brandData && brandData.length > 0) {
+        const userIds = brandData.map((b) => b.user_id).filter(Boolean);
+        const { data: userData, error: userErr } = await supabase
+          .from('users')
+          .select('id, email, full_name, is_verified')
+          .in('id', userIds);
+
+        if (userErr) {
+          showToast(`Error loading associated users: ${userErr.message}`, 'error');
+          return;
+        }
+
+        const userMap = new Map(userData?.map((u) => [u.id, u]) || []);
+        const enrichedBrands = brandData.map((b) => ({
+          ...b,
+          user: userMap.get(b.user_id),
+        }));
+        setBrands(enrichedBrands);
       } else {
-        setBrands(brandData || []);
+        setBrands([]);
       }
     } catch (err: any) {
       showToast('Error connecting to database', 'error');
-    } fontally: {
+    } finally {
       setLoading(false);
     }
   }, []);
