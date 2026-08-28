@@ -119,7 +119,7 @@ export default function SuperAdminCreatorsPage() {
       const nextStatus = !selectedCreator.user?.is_verified;
       const { error } = await supabase
         .from('users')
-        .update({ is_verified: nextStatus, updated_at: new Date().toISOString() })
+        .update({ is_verified: nextStatus })
         .eq('id', selectedCreator.user_id);
 
       if (error) throw error;

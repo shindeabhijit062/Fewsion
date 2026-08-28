@@ -113,7 +113,7 @@ export default function SuperAdminBrandsPage() {
       const nextStatus = !selectedBrand.user?.is_verified;
       const { error } = await supabase
         .from('users')
-        .update({ is_verified: nextStatus, updated_at: new Date().toISOString() })
+        .update({ is_verified: nextStatus })
         .eq('id', selectedBrand.user_id);
 
       if (error) throw error;

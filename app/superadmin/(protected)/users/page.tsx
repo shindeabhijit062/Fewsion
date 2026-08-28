@@ -128,7 +128,7 @@ export default function SuperAdminUsersPage() {
         const nextStatus = !selectedUser.is_verified;
         const { error } = await supabase
           .from('users')
-          .update({ is_verified: nextStatus, updated_at: new Date().toISOString() })
+          .update({ is_verified: nextStatus })
           .eq('id', selectedUser.id);
 
         if (error) throw error;
@@ -149,7 +149,7 @@ export default function SuperAdminUsersPage() {
       } else if (confirmModal.actionType === 'change_role' && confirmModal.newRole) {
         const { error } = await supabase
           .from('users')
-          .update({ role: confirmModal.newRole, updated_at: new Date().toISOString() })
+          .update({ role: confirmModal.newRole })
           .eq('id', selectedUser.id);
 
         if (error) throw error;
