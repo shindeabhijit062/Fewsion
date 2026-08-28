@@ -51,21 +51,38 @@ export default function SuperAdminAuditLogsPage() {
   const fetchAuditLogs = useCallback(async () => {
     setLoading(true);
     try {
-      // Fetch audit logs with actor user details
-      const { data, error } = await supabase
+      const { data: logData, error: logErr } = await supabase
         .from('audit_logs')
-        .select(`
-          *,
-          actor:users(email, full_name, role)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        // Table might not be migrated yet or empty
-        console.warn('Audit logs read warning:', error.message);
+      if (logErr) {
+        console.warn('Audit logs read warning:', logErr.message);
         setLogs([]);
+        return;
+      }
+
+      if (logData && logData.length > 0) {
+        const actorIds = logData.map((l) => l.actor_user_id).filter(Boolean);
+        const { data: userData, error: userErr } = await supabase
+          .from('users')
+          .select('id, email, full_name, role')
+          .in('id', actorIds);
+
+        if (userErr) {
+          console.warn('Audit logs users fetch warning:', userErr.message);
+          setLogs(logData);
+          return;
+        }
+
+        const userMap = new Map(userData?.map((u) => [u.id, u]) || []);
+        const enrichedLogs = logData.map((l) => ({
+          ...l,
+          actor: l.actor_user_id ? userMap.get(l.actor_user_id) : undefined,
+        }));
+        setLogs(enrichedLogs);
       } else {
-        setLogs(data || []);
+        setLogs([]);
       }
     } catch (err: any) {
       showToast('Error connecting to database', 'error');

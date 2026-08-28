@@ -51,19 +51,36 @@ export default function SuperAdminCollaborationsPage() {
   const fetchCampaigns = useCallback(async () => {
     setLoading(true);
     try {
-      // Query campaigns table with brand info
-      const { data, error } = await supabase
+      const { data: campaignData, error: campaignErr } = await supabase
         .from('campaigns')
-        .select(`
-          *,
-          brand:users(full_name, email)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) {
-        showToast(`Error loading campaigns: ${error.message}`, 'error');
+      if (campaignErr) {
+        showToast(`Error loading campaigns: ${campaignErr.message}`, 'error');
+        return;
+      }
+
+      if (campaignData && campaignData.length > 0) {
+        const brandIds = campaignData.map((c) => c.brand_id).filter(Boolean);
+        const { data: userData, error: userErr } = await supabase
+          .from('users')
+          .select('id, full_name, email')
+          .in('id', brandIds);
+
+        if (userErr) {
+          showToast(`Error loading associated brands: ${userErr.message}`, 'error');
+          return;
+        }
+
+        const userMap = new Map(userData?.map((u) => [u.id, u]) || []);
+        const enrichedCampaigns = campaignData.map((c) => ({
+          ...c,
+          brand: userMap.get(c.brand_id),
+        }));
+        setCampaigns(enrichedCampaigns);
       } else {
-        setCampaigns(data || []);
+        setCampaigns([]);
       }
     } catch (err: any) {
       showToast('Error connecting to database', 'error');
