@@ -24,7 +24,7 @@ export default function CSVExporter({
 
     // Extract headers
     const headers = Object.keys(data[0]);
-    const csvRows = [];
+    const csvRows: string[] = [];
 
     // Header row
     csvRows.push(headers.join(','));
