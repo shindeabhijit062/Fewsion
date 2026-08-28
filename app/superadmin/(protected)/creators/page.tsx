@@ -64,7 +64,7 @@ export default function SuperAdminCreatorsPage() {
       const { data: creatorData, error: creatorErr } = await supabase
         .from('creator_profiles')
         .select('*')
-        .order('ai_score', { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (creatorErr) {
         showToast(`Error fetching creators: ${creatorErr.message}`, 'error');
