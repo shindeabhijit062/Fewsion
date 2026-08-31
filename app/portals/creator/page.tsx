@@ -17,6 +17,10 @@ const TAB_COPY: Record<TabId, { title: string; subtitle: string }> = {
   kyc: { title: 'KYC Verification', subtitle: 'Verify identity and bank payout account to participate in campaigns.' },
 };
 
+const fmtDate = (d?: string) => (d ? new Date(d).toLocaleDateString() : '—');
+const fmtTime = (d?: string) => (d ? new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '');
+const fmtINR = (n?: number) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
+
 function StatCard({ label, value, className = 'text-white' }: { label: string; value: string; className?: string }) {
   return (
     <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.1_0.01_80)] p-6">

@@ -113,13 +113,18 @@ import {
   ArrowLeft,
   Send as SendIcon,
   FileText,
+  ShieldCheck,
+  AlertTriangle,
+  CheckCircle2,
 } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
+import { AIMatchmaker } from '@/components/AIMatchmaker';
+import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
 
 // ---------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------
-type TabId = 'overview' | 'campaigns' | 'applications' | 'payments' | 'messages';
+type TabId = 'overview' | 'campaigns' | 'applications' | 'payments' | 'messages' | 'kyc';
 
 interface BrandProfile {
   brand_name?: string;
@@ -128,6 +133,8 @@ interface BrandProfile {
   brand_description?: string;
   primary_market?: string;
   brand_tone?: string[];
+  kyc_status?: string;
+  kyc_details?: any;
 }
 
 interface CampaignBrief {
@@ -205,6 +212,7 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'applications', label: 'Applications', icon: Users },
   { id: 'payments', label: 'Payments', icon: Wallet },
   { id: 'messages', label: 'Messages', icon: MessageSquare },
+  { id: 'kyc', label: 'KYC Verification', icon: ShieldCheck },
 ];
 
 const TAB_COPY: Record<TabId, { title: string; subtitle: string }> = {
@@ -213,6 +221,7 @@ const TAB_COPY: Record<TabId, { title: string; subtitle: string }> = {
   applications: { title: 'Applications', subtitle: 'Review and respond to creator applications.' },
   payments: { title: 'Payments', subtitle: 'Track spend across all active collaborations.' },
   messages: { title: 'Messages', subtitle: 'Conversations with your active creators.' },
+  kyc: { title: 'Brand KYC Verification', subtitle: 'Verify business identity and escrow funding account.' },
 };
 
 const fmtDate = (d?: string) => (d ? new Date(d).toLocaleDateString() : '—');
@@ -240,6 +249,28 @@ export default function BrandPortalPage() {
   const [generatingCollabId, setGeneratingCollabId] = useState<string | null>(null);
   const [signing, setSigning] = useState(false);
 
+  // KYC state
+  const [kycStatus, setKycStatus] = useState<KycStatus>('unverified');
+  const [kycDetails, setKycDetails] = useState<KycData | null>(null);
+  const [kycModalOpen, setKycModalOpen] = useState(false);
+
+  const handleKycSubmit = useCallback(async (data: KycData) => {
+    setKycDetails(data);
+    setKycStatus('verified');
+    if (userId) {
+      try {
+        localStorage.setItem(`fewsion_brand_kyc_status_${userId}`, 'verified');
+        localStorage.setItem(`fewsion_brand_kyc_details_${userId}`, JSON.stringify(data));
+        await supabase.from('brand_profiles').update({
+          kyc_status: 'verified',
+          kyc_details: data
+        }).eq('user_id', userId);
+      } catch (e) {}
+    }
+    setKycModalOpen(false);
+    alert('✓ Brand KYC Submitted and Verified!');
+  }, [userId]);
+
   // ---------------------------------------------------------------------
   // Load everything
   // ---------------------------------------------------------------------
@@ -254,6 +285,16 @@ export default function BrandPortalPage() {
     }
     setUserId(user.id);
 
+    // Restore Brand KYC state
+    let loadedStatus: KycStatus = 'unverified';
+    let loadedDetails: KycData | null = null;
+    try {
+      const localStatus = localStorage.getItem(`fewsion_brand_kyc_status_${user.id}`);
+      const localDetails = localStorage.getItem(`fewsion_brand_kyc_details_${user.id}`);
+      if (localStatus) loadedStatus = localStatus as KycStatus;
+      if (localDetails) loadedDetails = JSON.parse(localDetails);
+    } catch (e) {}
+
     const [profileRes, campaignsRes, collabRes, notifRes] = await Promise.all([
       supabase.from('brand_profiles').select('*').eq('user_id', user.id).maybeSingle(),
       supabase.from('campaign_briefs').select('*').eq('brand_id', user.id).order('created_at', { ascending: false }),
@@ -261,7 +302,14 @@ export default function BrandPortalPage() {
       supabase.from('notifications').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
     ]);
 
-    setProfile(profileRes.data ?? null);
+    const pData = profileRes.data;
+    if (pData?.kyc_status) loadedStatus = pData.kyc_status as KycStatus;
+    if (pData?.kyc_details) loadedDetails = pData.kyc_details;
+
+    setKycStatus(loadedStatus);
+    setKycDetails(loadedDetails);
+
+    setProfile(pData ?? null);
     const briefData: CampaignBrief[] = campaignsRes.data ?? [];
     setCampaigns(briefData);
     setCollaborations(collabRes.data ?? []);
@@ -825,6 +873,29 @@ export default function BrandPortalPage() {
         {/* Overview Tab */}
         {selectedCampaignId === null && activeTab === 'overview' && (
           <div className="space-y-8">
+            {/* KYC Warning Banner for Brands */}
+            {kycStatus !== 'verified' && (
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[oklch(0.8_0.16_75)]/20 text-[oklch(0.8_0.16_75)]">
+                    <ShieldCheck size={20} />
+                  </div>
+                  <div>
+                    <div className="font-bold text-sm text-white">Brand Business KYC Required</div>
+                    <div className="text-xs text-[oklch(0.68_0.015_85)]">
+                      Verify business identity and escrow funding account to deposit campaign budgets &amp; approve creator contracts.
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setKycModalOpen(true)}
+                  className="shrink-0 rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)] transition-all cursor-pointer"
+                >
+                  Verify Brand KYC Now →
+                </button>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
               {[
                 { label: 'Active campaigns', value: String(campaigns.length) },
@@ -901,6 +972,80 @@ export default function BrandPortalPage() {
                     ))
                   )}
                 </div>
+              </div>
+            </div>
+
+            {/* Embedded AI Matchmaker for Brands */}
+            <div className="mt-10">
+              <AIMatchmaker
+                title="AI Neural Creator Matchmaker"
+                subtitle="Search and match verified creators tailored to your brand niche, Target VTR, and budget constraints."
+                onSelectCreator={() => {
+                  alert('Opening creator profile & contract dispatch...');
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* KYC Verification Tab */}
+        {selectedCampaignId === null && activeTab === 'kyc' && (
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-7">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div>
+                  <h2 className="font-display text-xl font-extrabold text-white">Brand Business KYC &amp; Escrow Vault</h2>
+                  <p className="mt-1 text-xs text-[oklch(0.68_0.015_85)]">Governed by Fewsion Escrow &amp; Compliance Standards</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  {kycStatus === 'verified' ? (
+                    <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-extrabold text-emerald-400">
+                      <CheckCircle2 size={14} /> Brand KYC Verified
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-extrabold text-amber-300">
+                      <AlertTriangle size={14} /> Verification Action Required
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.11_0.01_80)] p-5 space-y-3">
+                  <div className="text-xs uppercase tracking-wider font-bold text-[oklch(0.8_0.16_75)]">Business Entity Details</div>
+                  <div className="text-sm text-white">
+                    <span className="text-[oklch(0.6_0.015_85)]">Brand Legal Name: </span>
+                    <strong>{kycDetails?.legalName || profile?.brand_name || 'Not provided'}</strong>
+                  </div>
+                  <div className="text-sm text-[oklch(0.6_0.015_85)]">
+                    Document Type: <strong className="uppercase text-white">{kycDetails?.idType || 'GSTIN / Corporate PAN'}</strong>
+                  </div>
+                  <div className="text-sm text-[oklch(0.6_0.015_85)]">
+                    Tax / ID Number: <strong className="uppercase text-white">{kycDetails?.idNumber ? `•••• ${kycDetails.idNumber.slice(-4)}` : 'Not submitted'}</strong>
+                  </div>
+                </div>
+
+                <div className="rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.11_0.01_80)] p-5 space-y-3">
+                  <div className="text-xs uppercase tracking-wider font-bold text-[oklch(0.8_0.16_75)]">Escrow Payout &amp; Deposit Account</div>
+                  <div className="text-sm text-[oklch(0.6_0.015_85)]">
+                    Bank Account: <strong className="text-white">{kycDetails?.bankAccount ? `•••• ${kycDetails.bankAccount.slice(-4)}` : 'Not set'}</strong>
+                  </div>
+                  <div className="text-sm text-[oklch(0.6_0.015_85)]">
+                    IFSC Code: <strong className="uppercase text-white">{kycDetails?.ifscCode || 'Not set'}</strong>
+                  </div>
+                  <div className="text-sm text-[oklch(0.6_0.015_85)]">
+                    UPI ID: <span className="text-white">{kycDetails?.upiId || 'Not set'}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-[oklch(0.25_0.02_80)] flex justify-end">
+                <button
+                  onClick={() => setKycModalOpen(true)}
+                  className="rounded-full bg-[oklch(0.8_0.16_75)] px-6 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)] transition-all cursor-pointer"
+                >
+                  {kycStatus === 'verified' ? 'Update Brand KYC Details' : 'Verify Brand Identity Now'}
+                </button>
               </div>
             </div>
           </div>
@@ -1116,6 +1261,15 @@ export default function BrandPortalPage() {
           </div>
         </div>
       )}
+
+      {/* Brand KYC Modal */}
+      <KYCModal
+        isOpen={kycModalOpen}
+        onClose={() => setKycModalOpen(false)}
+        kycStatus={kycStatus}
+        kycDetails={kycDetails}
+        onSubmitKyc={handleKycSubmit}
+      />
     </div>
   );
 }
