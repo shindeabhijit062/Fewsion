@@ -1,8 +1,7 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
+import { AIMatchmaker } from '@/components/AIMatchmaker';
 
 const NICHES = ['All', 'Beauty', 'Fitness', 'Tech', 'Food', 'Travel', 'Finance', 'Gaming', 'Fashion'];
 const PLATFORMS = ['All', 'Instagram', 'YouTube', 'Multi-platform'];
@@ -138,6 +137,14 @@ export default function CreatorsPage() {
             <Link href="/signup?role=creator" className="btn-ghost">Join as a Creator</Link>
           </div>
         </div>
+      </section>
+
+      {/* ── AI MATCHMAKER DEMO SECTION ── */}
+      <section className="px-4 sm:px-6 lg:px-8 py-10 max-w-7xl mx-auto">
+        <AIMatchmaker
+          title="Match Talent with Fewsion AI Engine"
+          subtitle="Real-time neural recommendation system matching brands and creators by niche, engagement VTR, and budget."
+        />
       </section>
 
       {/* ── SEARCH + FILTERS ── */}

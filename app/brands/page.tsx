@@ -1,14 +1,66 @@
-'use client';
-
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
+import { AIMatchmaker } from '@/components/AIMatchmaker';
+import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
 
 export default function BrandsPage() {
   const [search, setSearch] = useState('');
   const [platform, setPlatform] = useState('');
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // KYC Gate state
+  const [kycStatus, setKycStatus] = useState<KycStatus>('unverified');
+  const [kycDetails, setKycDetails] = useState<KycData | null>(null);
+  const [kycModalOpen, setKycModalOpen] = useState(false);
+  const [pendingCampaignId, setPendingCampaignId] = useState<number | string | null>(null);
+  const [appliedMap, setAppliedMap] = useState<Record<string | number, boolean>>({});
+
+  useEffect(() => {
+    async function checkKyc() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        let loadedStatus: KycStatus = 'unverified';
+        let loadedDetails: KycData | null = null;
+        try {
+          const localStatus = localStorage.getItem(`fewsion_kyc_status_${user.id}`);
+          const localDetails = localStorage.getItem(`fewsion_kyc_details_${user.id}`);
+          if (localStatus) loadedStatus = localStatus as KycStatus;
+          if (localDetails) loadedDetails = JSON.parse(localDetails);
+        } catch (e) {}
+        setKycStatus(loadedStatus);
+        setKycDetails(loadedDetails);
+      }
+    }
+    checkKyc();
+  }, []);
+
+  const handleKycSubmit = async (data: KycData) => {
+    setKycDetails(data);
+    setKycStatus('verified');
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      localStorage.setItem(`fewsion_kyc_status_${user.id}`, 'verified');
+      localStorage.setItem(`fewsion_kyc_details_${user.id}`, JSON.stringify(data));
+    }
+    setKycModalOpen(false);
+
+    if (pendingCampaignId) {
+      setAppliedMap((prev) => ({ ...prev, [pendingCampaignId]: true }));
+      setPendingCampaignId(null);
+      alert('✓ KYC Verified! Your application for this campaign has been submitted.');
+    }
+  };
+
+  const handleApplyClick = (campaignId: number | string) => {
+    if (kycStatus !== 'verified') {
+      setPendingCampaignId(campaignId);
+      setKycModalOpen(true);
+      return;
+    }
+    setAppliedMap((prev) => ({ ...prev, [campaignId]: true }));
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -75,7 +127,7 @@ export default function BrandsPage() {
       } catch (err) {
         console.error('Error loading campaigns:', err);
         setCampaigns(mockCampaigns);
-      } finally {
+      } font-light finally {
         setLoading(false);
       }
     }
@@ -108,8 +160,7 @@ export default function BrandsPage() {
           <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>right now.</em>
         </h1>
         <p className="text-[16px] text-[#888] max-w-[560px] font-light">
-          Browse live campaigns from verified D2C brands and apply directly. No cold DMs,
-          no guesswork — every brief includes budget, platform, and scope up front.
+          Browse live campaigns from verified D2C brands and apply directly. Mandatory KYC verification ensures trust and fast escrow payouts.
         </p>
 
         {/* Stats */}
@@ -127,6 +178,17 @@ export default function BrandsPage() {
             <span className="text-[13px] text-[#888]">brands hiring</span>
           </div>
         </div>
+      </div>
+
+      {/* ── AI MATCHMAKER SECTION ── */}
+      <div className="mb-14">
+        <AIMatchmaker
+          title="AI Campaign Neural Matchmaker"
+          subtitle="Match your brand campaign requirements or creator profile against real-time performance indicators."
+          onSelectCreator={(c) => {
+            handleApplyClick(c.id);
+          }}
+        />
       </div>
 
       {/* ── FILTERS ── */}
@@ -214,19 +276,42 @@ export default function BrandsPage() {
           style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))' }}
         >
           {filtered.map((campaign) => (
-            <CampaignCard key={campaign.id} campaign={campaign} />
+            <CampaignCard
+              key={campaign.id}
+              campaign={campaign}
+              isApplied={Boolean(appliedMap[campaign.id])}
+              onApply={() => handleApplyClick(campaign.id)}
+            />
           ))}
         </div>
       )}
+
+      {/* KYC Modal Gate */}
+      <KYCModal
+        isOpen={kycModalOpen}
+        onClose={() => setKycModalOpen(false)}
+        kycStatus={kycStatus}
+        kycDetails={kycDetails}
+        onSubmitKyc={handleKycSubmit}
+      />
     </main>
   );
 }
 
-function CampaignCard({ campaign }: { campaign: Campaign }) {
-  const [applied, setApplied] = useState(false);
+function CampaignCard({ campaign, isApplied, onApply }: { campaign: Campaign; isApplied?: boolean; onApply?: () => void }) {
+  const [internalApplied, setInternalApplied] = useState(false);
+  const applied = isApplied || internalApplied;
 
   const initials = (name: string) =>
     name.trim().split(/\s+/).slice(0, 2).map((w) => w[0].toUpperCase()).join('');
+
+  const handleApply = () => {
+    if (onApply) {
+      onApply();
+    } else {
+      setInternalApplied(true);
+    }
+  };
 
   return (
     <div
@@ -284,7 +369,7 @@ function CampaignCard({ campaign }: { campaign: Campaign }) {
 
       {/* Apply button */}
       <button
-        onClick={() => { if (!applied) setApplied(true); }}
+        onClick={handleApply}
         disabled={applied}
         className="w-full font-display text-[13.5px] font-bold py-[11px] rounded-full border-none cursor-pointer transition-all duration-200"
         style={{

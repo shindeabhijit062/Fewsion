@@ -1,9 +1,9 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Bell, Send as SendIcon } from 'lucide-react';
+import { ArrowLeft, Bell, Send as SendIcon, ShieldCheck, AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
 import { useCreatorData, TabId, emptyBox } from './CreatorContext';
+import { KYCModal } from '@/components/KYCModal';
+import { AIMatchmaker } from '@/components/AIMatchmaker';
 
 const TAB_COPY: Record<TabId, { title: string; subtitle: string }> = {
   overview: { title: 'Overview', subtitle: 'Track active campaign deliverables and clear escrow releases.' },
@@ -12,11 +12,8 @@ const TAB_COPY: Record<TabId, { title: string; subtitle: string }> = {
   payments: { title: 'Earnings', subtitle: 'Track payments and escrow releases across collaborations.' },
   messages: { title: 'Messages', subtitle: 'Conversations with your active brand partners.' },
   reviews: { title: 'Reviews', subtitle: "Feedback left by brands you've worked with." },
+  kyc: { title: 'KYC Verification', subtitle: 'Verify identity and bank payout account to participate in campaigns.' },
 };
-
-const fmtDate = (d?: string) => (d ? new Date(d).toLocaleDateString() : '—');
-const fmtTime = (d?: string) => (d ? new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '');
-const fmtINR = (n?: number) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
 function StatCard({ label, value, className = 'text-white' }: { label: string; value: string; className?: string }) {
   return (
@@ -64,6 +61,7 @@ const TABS: { id: TabId; label: string }[] = [
   { id: 'payments', label: 'Earnings' },
   { id: 'messages', label: 'Messages' },
   { id: 'reviews', label: 'Reviews' },
+  { id: 'kyc', label: 'KYC Verification' },
 ];
 
 export default function CreatorDashboardPage() {
@@ -72,7 +70,8 @@ export default function CreatorDashboardPage() {
     notifications, reviews, notifOpen, toggleNotifPanel, unreadCount,
     selectedCollabId, setSelectedCollabId, threadMessages, threadInput, setThreadInput,
     sendMessage, openThread, viewContract, signContract, contractModal, signing,
-    totalEarnings, averageRating, userId, statusTagClasses
+    totalEarnings, averageRating, userId, statusTagClasses,
+    kycStatus, kycDetails, kycModalOpen, setKycModalOpen, submitKycData, requireKycGate
   } = useCreatorData();
 
   return (
@@ -145,6 +144,29 @@ export default function CreatorDashboardPage() {
         {/* Overview */}
         {activeTab === 'overview' && (
           <div className="space-y-8">
+            {/* KYC Warning Banner */}
+            {kycStatus !== 'verified' && (
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--amber)]/20 text-[var(--amber)]">
+                    <ShieldCheck size={20} />
+                  </div>
+                  <div>
+                    <div className="font-bold text-sm text-white">KYC Verification Required</div>
+                    <div className="text-xs text-[var(--muted)]">
+                      Complete your 2-minute KYC verification to participate in live campaigns &amp; unlock escrow payouts.
+                    </div>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setKycModalOpen(true)}
+                  className="shrink-0 rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:opacity-90 transition-all cursor-pointer"
+                >
+                  Verify KYC Now →
+                </button>
+              </div>
+            )}
+
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
               {[
                 { label: 'Creator score', value: `${profile?.ai_total_score ?? '--'}/100` },
@@ -180,8 +202,22 @@ export default function CreatorDashboardPage() {
                 <div className="space-y-4 text-sm">
                   <SnapshotRow icon="📁" main={`${applications.length} total applications submitted`} sub={`${collaborations.length} active collaborations`} />
                   <SnapshotRow icon="⭐" main={averageRating ? `${averageRating} average rating` : 'No ratings yet'} sub={`${reviews.length} review(s)`} />
+                  <SnapshotRow icon="🛡️" main={kycStatus === 'verified' ? 'KYC Verified ✓' : 'KYC Pending'} sub={kycStatus === 'verified' ? 'Unlocked for campaigns' : 'Action required'} />
                 </div>
               </div>
+            </div>
+
+            {/* AI Matchmaker embedded section */}
+            <div className="mt-10">
+              <AIMatchmaker
+                title="AI Campaign Matchmaker"
+                subtitle="Find top compatible brand campaigns and creators tuned to your niche and engagement metrics."
+                onSelectCreator={() => {
+                  requireKycGate(() => {
+                    alert('Connecting with campaign...');
+                  });
+                }}
+              />
             </div>
           </div>
         )}
@@ -393,6 +429,93 @@ export default function CreatorDashboardPage() {
             </div>
           </div>
         )}
+
+        {/* KYC Verification Tab */}
+        {activeTab === 'kyc' && (
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div>
+                  <h2 className="font-display text-xl font-extrabold text-[var(--text)]">KYC &amp; Identity Verification</h2>
+                  <p className="mt-1 text-xs text-[var(--muted)]">Governed by Fewsion Creator Escrow &amp; Compliance Policy</p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {kycStatus === 'verified' ? (
+                    <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-extrabold text-emerald-400">
+                      <CheckCircle2 size={14} /> KYC Verified
+                    </span>
+                  ) : (
+                    <span className="flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-extrabold text-amber-300">
+                      <AlertTriangle size={14} /> Verification Required
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Status breakdown card */}
+                <div className="rounded-xl border border-[var(--border2)] bg-[var(--card2)] p-5 space-y-3">
+                  <div className="text-xs uppercase tracking-wider font-bold text-[var(--amber)]">Verification Details</div>
+                  <div className="text-sm text-[var(--text)]">
+                    <span className="text-[var(--muted)]">Legal Name: </span>
+                    <strong>{kycDetails?.legalName || profile?.creator_name || 'Not provided'}</strong>
+                  </div>
+                  <div className="text-sm text-[var(--text)]">
+                    <span className="text-[var(--muted)]">Document Type: </span>
+                    <strong className="uppercase">{kycDetails?.idType || 'PAN / Aadhaar'}</strong>
+                  </div>
+                  <div className="text-sm text-[var(--text)]">
+                    <span className="text-[var(--muted)]">ID Number: </span>
+                    <strong>{kycDetails?.idNumber ? `•••• ${kycDetails.idNumber.slice(-4)}` : 'Not submitted'}</strong>
+                  </div>
+                  <div className="text-sm text-[var(--text)]">
+                    <span className="text-[var(--muted)]">Submitted: </span>
+                    <span>{kycDetails?.submittedAt ? new Date(kycDetails.submittedAt).toLocaleDateString() : 'Never'}</span>
+                  </div>
+                </div>
+
+                {/* Bank payout card */}
+                <div className="rounded-xl border border-[var(--border2)] bg-[var(--card2)] p-5 space-y-3">
+                  <div className="text-xs uppercase tracking-wider font-bold text-[var(--amber)]">Escrow Payout Account</div>
+                  <div className="text-sm text-[var(--text)]">
+                    <span className="text-[var(--muted)]">Bank Account: </span>
+                    <strong>{kycDetails?.bankAccount ? `•••• ${kycDetails.bankAccount.slice(-4)}` : 'Not set'}</strong>
+                  </div>
+                  <div className="text-sm text-[var(--text)]">
+                    <span className="text-[var(--muted)]">IFSC Code: </span>
+                    <strong className="uppercase">{kycDetails?.ifscCode || 'Not set'}</strong>
+                  </div>
+                  <div className="text-sm text-[var(--text)]">
+                    <span className="text-[var(--muted)]">UPI ID: </span>
+                    <span>{kycDetails?.upiId || 'Not set'}</span>
+                  </div>
+                  <div className="text-xs text-emerald-400 font-semibold pt-1">
+                    ✓ Escrow payout protection active
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 pt-6 border-t border-[var(--border)] flex justify-end">
+                <button
+                  onClick={() => setKycModalOpen(true)}
+                  className="rounded-full bg-[var(--amber)] px-6 py-2.5 text-xs font-bold text-black hover:opacity-90 transition-all cursor-pointer"
+                >
+                  {kycStatus === 'verified' ? 'Update KYC Details' : 'Complete KYC Verification Now'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Global KYC Verification Modal */}
+        <KYCModal
+          isOpen={kycModalOpen}
+          onClose={() => setKycModalOpen(false)}
+          kycStatus={kycStatus}
+          kycDetails={kycDetails}
+          onSubmitKyc={submitKycData}
+        />
       </main>
   );
 }
