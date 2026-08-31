@@ -9,6 +9,7 @@ import {
   Wallet,
   MessageSquare,
   Star,
+  ShieldCheck,
   LogOut,
   Bell
 } from 'lucide-react';
@@ -21,6 +22,7 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'payments', label: 'Earnings', icon: Wallet },
   { id: 'messages', label: 'Messages', icon: MessageSquare },
   { id: 'reviews', label: 'Reviews', icon: Star },
+  { id: 'kyc', label: 'KYC Verification', icon: ShieldCheck },
 ];
 
 function CreatorLayoutInner({ children }: { children: React.ReactNode }) {

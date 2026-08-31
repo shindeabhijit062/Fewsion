@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Bell, Send as SendIcon, ShieldCheck, AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
