@@ -114,13 +114,17 @@ import {
   FileText,
   Menu,
   X,
+  ShieldCheck,
+  AlertTriangle,
+  CheckCircle2,
 } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
+import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
 
 // ---------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------
-type TabId = 'overview' | 'portfolio' | 'campaigns' | 'payments' | 'messages' | 'reviews' | 'settings';
+type TabId = 'overview' | 'portfolio' | 'campaigns' | 'payments' | 'messages' | 'reviews' | 'settings' | 'kyc';
 
 interface EditorProfile {
   id: string;
@@ -141,6 +145,8 @@ interface EditorProfile {
   portfolio_url?: string;
   ai_total_score?: number;
   ai_grade?: string;
+  kyc_status?: string;
+  kyc_details?: any;
 }
 
 interface PortfolioItem {
@@ -224,6 +230,7 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'messages', label: 'Feedback Threads', icon: MessageSquare },
   { id: 'reviews', label: 'Reviews', icon: Star },
   { id: 'settings', label: 'Profile Settings', icon: Settings },
+  { id: 'kyc', label: 'KYC Verification', icon: ShieldCheck },
 ];
 
 const TAB_COPY: Record<TabId, { title: string; subtitle: string }> = {
@@ -234,6 +241,7 @@ const TAB_COPY: Record<TabId, { title: string; subtitle: string }> = {
   messages: { title: 'Feedback Threads', subtitle: "Conversations with the brands and creators you're editing for." },
   reviews: { title: 'Reviews', subtitle: "Feedback left by brands and creators you've worked with." },
   settings: { title: 'Profile Settings', subtitle: 'Your public editor profile, as brands and creators see it.' },
+  kyc: { title: 'Editor KYC & Escrow Payouts', subtitle: 'Verify identity and bank payout account to participate in campaign collabs.' },
 };
 
 const fmtDate = (d?: string) => (d ? new Date(d).toLocaleDateString() : '—');
@@ -273,6 +281,30 @@ export default function EditorPortalPage() {
   const [addingPortfolio, setAddingPortfolio] = useState(false);
 
   const [applyingCampaignId, setApplyingCampaignId] = useState<string | null>(null);
+
+  // Editor KYC State
+  const [kycStatus, setKycStatus] = useState<KycStatus>('unverified');
+  const [kycDetails, setKycDetails] = useState<KycData | null>(null);
+  const [kycModalOpen, setKycModalOpen] = useState(false);
+
+  const handleKycSubmit = useCallback(async (data: KycData) => {
+    setKycDetails(data);
+    setKycStatus('verified');
+    if (userId) {
+      try {
+        localStorage.setItem(`fewsion_editor_kyc_status_${userId}`, 'verified');
+        localStorage.setItem(`fewsion_editor_kyc_details_${userId}`, JSON.stringify(data));
+        await supabase.from('editor_profiles').update({
+          kyc_status: 'verified',
+          kyc_details: data,
+        }).eq('user_id', userId);
+      } catch (e) {
+        console.error('Failed to sync editor KYC with database:', e);
+      }
+    }
+    setKycModalOpen(false);
+    alert('✓ Editor Business KYC Verified Successfully!');
+  }, [userId]);
 
   // ---------------------------------------------------------------------
   // Data enrichment helper
@@ -339,9 +371,24 @@ export default function EditorPortalPage() {
       supabase.from('portfolio_items').select('*').eq('editor_id', user.id).order('created_at', { ascending: false }),
     ]);
 
+    let loadedStatus: KycStatus = 'unverified';
+    let loadedDetails: KycData | null = null;
+    try {
+      const cachedStatus = localStorage.getItem(`fewsion_editor_kyc_status_${user.id}`);
+      const cachedDetails = localStorage.getItem(`fewsion_editor_kyc_details_${user.id}`);
+      if (cachedStatus) loadedStatus = cachedStatus as KycStatus;
+      if (cachedDetails) loadedDetails = JSON.parse(cachedDetails);
+    } catch (e) {}
+
     if (profileRes.data) {
       setProfile(profileRes.data);
+      if (profileRes.data.kyc_status) loadedStatus = profileRes.data.kyc_status as KycStatus;
+      if (profileRes.data.kyc_details) loadedDetails = profileRes.data.kyc_details;
     }
+
+    setKycStatus(loadedStatus);
+    setKycDetails(loadedDetails);
+
     setNotifications(notifRes.data || []);
     setReviews(reviewsRes.data || []);
     setPortfolioItems(portfolioRes.data || []);
@@ -528,6 +575,12 @@ export default function EditorPortalPage() {
   // Invite Response Actions
   // ---------------------------------------------------------------------
   const respondToInvite = useCallback(async (collaborationId: string, accept: boolean) => {
+    if (accept && kycStatus !== 'verified') {
+      setKycModalOpen(true);
+      alert('🔒 KYC Verification Required: Only KYC completed editors can accept collaboration invites.');
+      return;
+    }
+
     const newInviteStatus = accept ? 'accepted' : 'declined';
     const updates: Record<string, any> = { editor_invite_status: newInviteStatus };
     if (!accept) updates.editor_id = null;
@@ -546,7 +599,7 @@ export default function EditorPortalPage() {
         return c;
       })
     );
-  }, []);
+  }, [kycStatus]);
 
   // ---------------------------------------------------------------------
   // Campaigns Browse & Apply Actions
@@ -586,6 +639,11 @@ export default function EditorPortalPage() {
 
   const applyToCampaign = useCallback(async (campaignId: string) => {
     if (!userId) return;
+    if (kycStatus !== 'verified') {
+      setKycModalOpen(true);
+      alert('🔒 KYC Verification Required: Only KYC completed editors can apply for brand campaign collaborations.');
+      return;
+    }
     setApplyingCampaignId(campaignId);
     const { error } = await supabase
       .from('campaign_applications')
@@ -605,7 +663,7 @@ export default function EditorPortalPage() {
         return c;
       })
     );
-  }, [userId]);
+  }, [userId, kycStatus]);
 
   useEffect(() => {
     if (activeTab === 'campaigns') {
@@ -923,6 +981,29 @@ export default function EditorPortalPage() {
           {/* TAB 1: OVERVIEW / WORKSPACE */}
           {activeTab === 'overview' && (
             <div className="space-y-8">
+              {/* KYC Warning Banner for Editors */}
+              {kycStatus !== 'verified' && (
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F5A623]/20 text-[#F5A623]">
+                      <ShieldCheck size={20} />
+                    </div>
+                    <div>
+                      <div className="font-bold text-sm text-white">Editor Business KYC Required</div>
+                      <div className="text-xs text-gray-300">
+                        Complete your identity &amp; bank payout verification to request campaign collaborations and accept invites.
+                      </div>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setKycModalOpen(true)}
+                    className="shrink-0 rounded-full bg-[#F5A623] px-5 py-2.5 text-xs font-bold text-black hover:bg-[#f5b342] transition-all cursor-pointer"
+                  >
+                    Verify Editor KYC Now →
+                  </button>
+                </div>
+              )}
+
               {/* Pending Invites */}
               {stats.pendingInvites.length > 0 && (
                 <div className="bg-[#141414] border border-[#F5A623]/30 rounded-2xl p-6 space-y-4">
@@ -1628,6 +1709,69 @@ export default function EditorPortalPage() {
               </div>
             </div>
           )}
+
+          {/* TAB 8: KYC VERIFICATION */}
+          {activeTab === 'kyc' && (
+            <div className="space-y-6">
+              <div className="rounded-2xl border border-white/5 bg-[#0e0e0e] p-7">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                  <div>
+                    <h2 className="font-display text-xl font-extrabold text-white">Editor Identity &amp; Payout Escrow KYC</h2>
+                    <p className="mt-1 text-xs text-gray-400">Governed by Fewsion Escrow &amp; Compliance Standards</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {kycStatus === 'verified' ? (
+                      <span className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-1 text-xs font-extrabold text-emerald-400">
+                        <CheckCircle2 size={14} /> Editor KYC Verified
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-extrabold text-amber-300">
+                        <AlertTriangle size={14} /> Verification Action Required
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="rounded-xl border border-white/5 bg-[#141414] p-5 space-y-3">
+                    <div className="text-xs uppercase tracking-wider font-bold text-[#F5A623]">Personal / Tax Details</div>
+                    <div className="text-sm text-white">
+                      <span className="text-gray-400">Legal Name: </span>
+                      <strong>{kycDetails?.legalName || profile?.editor_name || 'Not provided'}</strong>
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      Document Type: <strong className="uppercase text-white">{kycDetails?.idType || 'PAN Card'}</strong>
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      ID Number: <strong className="uppercase text-white">{kycDetails?.idNumber ? `•••• ${kycDetails.idNumber.slice(-4)}` : 'Not submitted'}</strong>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-white/5 bg-[#141414] p-5 space-y-3">
+                    <div className="text-xs uppercase tracking-wider font-bold text-[#F5A623]">Escrow Bank Payout Account</div>
+                    <div className="text-sm text-gray-400">
+                      Bank Account: <strong className="text-white">{kycDetails?.bankAccount ? `•••• ${kycDetails.bankAccount.slice(-4)}` : 'Not set'}</strong>
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      IFSC Code: <strong className="uppercase text-white">{kycDetails?.ifscCode || 'Not set'}</strong>
+                    </div>
+                    <div className="text-sm text-gray-400">
+                      UPI ID: <span className="text-white">{kycDetails?.upiId || 'Not set'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-6 border-t border-white/5 flex justify-end">
+                  <button
+                    onClick={() => setKycModalOpen(true)}
+                    className="rounded-full bg-[#F5A623] px-6 py-2.5 text-xs font-bold text-black hover:bg-[#f5b342] transition-all cursor-pointer"
+                  >
+                    {kycStatus === 'verified' ? 'Update KYC Details' : 'Verify Editor Identity Now'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
@@ -1677,6 +1821,15 @@ export default function EditorPortalPage() {
           </div>
         </div>
       )}
+
+      {/* Editor KYC Modal */}
+      <KYCModal
+        isOpen={kycModalOpen}
+        onClose={() => setKycModalOpen(false)}
+        kycStatus={kycStatus}
+        kycDetails={kycDetails}
+        onSubmitKyc={handleKycSubmit}
+      />
     </div>
   );
 }
