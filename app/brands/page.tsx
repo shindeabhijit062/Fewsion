@@ -129,7 +129,7 @@ export default function BrandsPage() {
       } catch (err) {
         console.error('Error loading campaigns:', err);
         setCampaigns(mockCampaigns);
-      } font-light finally {
+      } finally {
         setLoading(false);
       }
     }
