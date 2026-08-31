@@ -33,9 +33,9 @@ module.exports = {
         secondary: 'var(--card2)',
       },
       fontFamily: {
-        display: ['Syne', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        body: ['DM Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
-        sans: ['DM Sans', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        display: ["'Plus Jakarta Sans'", "'Outfit'", 'sans-serif'],
+        body: ["'Plus Jakarta Sans'", "'Outfit'", 'sans-serif'],
+        sans: ["'Plus Jakarta Sans'", "'Outfit'", 'sans-serif'],
       },
       fontSize: {
         'clamp-h1': 'clamp(36px, 5vw, 68px)',
