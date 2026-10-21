@@ -120,6 +120,7 @@ import {
 import { supabase } from '@/utils/supabase';
 import { AIMatchmaker } from '@/components/AIMatchmaker';
 import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
+import { ProfileAvatar } from '@/components/ProfileAvatar';
 
 // ---------------------------------------------------------------------
 // Types
@@ -675,9 +676,7 @@ export default function BrandPortalPage() {
 
         <div className="mt-auto pt-5 border-t border-[oklch(0.25_0.02_80)]">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[oklch(0.8_0.16_75)] to-[oklch(0.72_0.18_45)] font-display text-xs font-extrabold text-black">
-              {initials || 'B'}
-            </div>
+            <ProfileAvatar initials={initials || 'B'} size={40} editable />
             <div>
               <div className="text-sm font-semibold text-white">{profile.brand_name || 'Brand Partner'}</div>
               <div className="text-xs font-medium text-[oklch(0.62_0.015_85)]">

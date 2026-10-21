@@ -146,6 +146,7 @@ import {
   Bell
 } from 'lucide-react';
 import { CreatorProvider, useCreatorData, TabId } from './CreatorContext';
+import { ProfileAvatar } from '@/components/ProfileAvatar';
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -225,9 +226,7 @@ function CreatorLayoutInner({ children }: { children: React.ReactNode }) {
 
         <div className="mt-auto pt-5 border-t border-[var(--border)]">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[oklch(0.8_0.16_75)] to-[oklch(0.72_0.18_45)] font-display text-xs font-extrabold text-black">
-              {initials || 'C'}
-            </div>
+            <ProfileAvatar initials={initials || 'C'} size={40} editable />
             <div>
               <div className="text-sm font-semibold text-[var(--text)]">{profile.creator_name || 'Creator'}</div>
               <div className="text-xs font-medium text-[var(--amber)]">

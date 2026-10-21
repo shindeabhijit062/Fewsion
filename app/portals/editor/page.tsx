@@ -120,6 +120,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
 import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
+import { ProfileAvatar } from '@/components/ProfileAvatar';
 
 // ---------------------------------------------------------------------
 // Types
@@ -884,9 +885,12 @@ export default function EditorPortalPage() {
         {/* Sidebar Footer */}
         <div className="pt-6 border-t border-white/5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-gradient-to-br from-[#F5A623] to-[#FF6B35] rounded-full flex items-center justify-center text-black font-black text-xs">
-              {initials(profile?.editor_name || 'Editor')}
-            </div>
+            <ProfileAvatar
+              initials={initials(profile?.editor_name || 'Editor')}
+              size={40}
+              editable
+              className="bg-gradient-to-br from-[#F5A623] to-[#FF6B35] text-black"
+            />
             <div className="overflow-hidden">
               <div className="text-xs font-semibold text-white truncate">
                 {profile?.editor_name || 'Loading editor...'}

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, LogOut, ChevronDown, User } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
+import { ProfileAvatar } from '@/components/ProfileAvatar';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -209,9 +210,12 @@ export default function Navbar() {
                 onClick={() => setDropdownOpen(!dropdownOpen)}
                 className="flex items-center gap-2.5 rounded-full bg-[var(--card2)] border border-[var(--border2)] px-3 py-1.5 transition-all duration-200 hover:border-[var(--amber)] cursor-pointer"
               >
-                <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-tr from-[var(--amber)] to-amber-300 font-display text-xs font-black text-black uppercase shadow-sm">
-                  {userInitial}
-                </div>
+                <ProfileAvatar
+                  key={user.id}
+                  initials={userInitial}
+                  size={28}
+                  className="bg-gradient-to-tr from-[var(--amber)] to-amber-300 text-black shadow-sm"
+                />
                 <span className="text-xs font-bold text-[var(--text)] max-w-[100px] truncate hidden sm:inline-block">
                   {profileName || 'Profile'}
                 </span>
