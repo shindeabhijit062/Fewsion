@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const { messages, userId } = await req.json();
     
     // Use the OpenRouter API Key provided
-    const apiKey = process.env.OPENROUTER_API_KEY;
+    const apiKey = process.env.AI_API_KEY || process.env.OPENROUTER_API_KEY;
 
     let redis = getRedisClient();
     let globalContext = '';
@@ -141,34 +141,48 @@ export async function POST(req: Request) {
       }
     }
 
-    const response = await fetch('https://api.tokenrouter.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-        'HTTP-Referer': 'https://fewsion.in',
-        'X-Title': 'Fewsion Chatbot',
-      },
-      body: JSON.stringify({
-        model: process.env.AI_MODEL || 'deepseek/deepseek-v4.1-flash',
-        messages: [
-          { 
-            role: 'system', 
-            content: `You are Fewsion AI, an intelligent assistant for Fewsion, a performance-first creator marketplace. You help brands find creators, creators find campaigns, and provide accurate platform recommendations. Please reply concisely, clearly, and professionally.${userContextString}${globalContext}\n\nAt the end of your response, you MUST provide 2-3 quick reply suggestions for the user to tap on based on their role and current conversation. Format each suggestion exactly like this:\n[SUGGESTION: "suggestion text 1"]\n[SUGGESTION: "suggestion text 2"]` 
-          },
-          ...messages
-        ],
-      }),
-    });
+    const baseUrl = process.env.AI_BASE_URL || 'https://api.tokenrouter.com/v1';
+    // AI_MODEL can list several models separated by commas, e.g. "model-a,model-b".
+    // If one is busy or unavailable, the next one is tried automatically.
+    const models = (process.env.AI_MODEL || 'deepseek/deepseek-v4.1-flash')
+      .split(',')
+      .map((m) => m.trim())
+      .filter(Boolean);
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Chat API Error:', response.status, errorData);
-      return NextResponse.json({ error: 'Failed to communicate with AI API' }, { status: response.status });
+    const systemPrompt = `You are Fewsion AI, an intelligent assistant for Fewsion, a performance-first creator marketplace. You help brands find creators, creators find campaigns, and provide accurate platform recommendations. Please reply concisely, clearly, and professionally.${userContextString}${globalContext}\n\nAt the end of your response, you MUST provide 2-3 quick reply suggestions for the user to tap on based on their role and current conversation. Format each suggestion exactly like this:\n[SUGGESTION: "suggestion text 1"]\n[SUGGESTION: "suggestion text 2"]`;
+
+    let lastStatus = 500;
+    let lastError = '';
+    for (const model of models) {
+      const response = await fetch(`${baseUrl}/chat/completions`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model,
+          messages: [{ role: 'system', content: systemPrompt }, ...messages],
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        return NextResponse.json(data);
+      }
+
+      lastStatus = response.status;
+      lastError = await response.text();
+      console.error('Chat API Error:', model, response.status, lastError.slice(0, 300));
+
+      // Only try the next model for "busy" / "not available" errors
+      if (![404, 429, 500, 502, 503, 504].includes(response.status)) break;
     }
 
-    const data = await response.json();
-    return NextResponse.json(data);
+    return NextResponse.json(
+      { error: 'Failed to communicate with AI API', details: lastError.slice(0, 500) },
+      { status: lastStatus }
+    );
   } catch (error) {
     console.error('Chat API Error:', error);
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
