@@ -8,7 +8,7 @@ export async function POST(req: Request) {
     const { messages, userId } = await req.json();
     
     // Use the OpenRouter API Key provided
-    const apiKey = process.env.OPENROUTER_API_KEY || 'sk-bnJ1hw4HlQTpAEXnu5DQgaw30OdNdLVTNUIQa1muopKpUzXd';
+    const apiKey = process.env.OPENROUTER_API_KEY;
 
     let redis = getRedisClient();
     let globalContext = '';
@@ -150,7 +150,7 @@ export async function POST(req: Request) {
         'X-Title': 'Fewsion Chatbot',
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-v4-pro-0813-free',
+        model: process.env.AI_MODEL || 'deepseek/deepseek-v4.1-flash',
         messages: [
           { 
             role: 'system', 
@@ -171,7 +171,6 @@ export async function POST(req: Request) {
     return NextResponse.json(data);
   } catch (error) {
     console.error('Chat API Error:', error);
-    require('fs').writeFileSync('chat_error_log.txt', String(error?.stack || error));
     return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
   }
 }
