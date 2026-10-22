@@ -157,7 +157,7 @@ export function CreatorOfferDrawer({
             transition={{ type: 'spring', damping: 30, stiffness: 280 }}
           >
             {/* Header */}
-            <div className="flex items-start gap-4 border-b border-[var(--border)] p-6">
+            <div className="flex items-start gap-3 sm:gap-4 border-b border-[var(--border)] p-4 sm:p-6">
               <div
                 className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-lg font-black text-black"
                 style={{ background: gradientFor(creator.id) }}
@@ -179,22 +179,22 @@ export function CreatorOfferDrawer({
                 onClick={onClose}
                 disabled={sending}
                 aria-label="Close"
-                className="rounded-full p-1.5 text-[var(--muted)] hover:bg-white/5 hover:text-[var(--text)]"
+                className="shrink-0 rounded-full p-1.5 text-[var(--muted)] hover:bg-white/5 hover:text-[var(--text)]"
               >
                 <X size={18} />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6">
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6">
               {/* Stats */}
-              <div className="grid grid-cols-4 gap-2 text-center">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
                 {[
                   { label: 'Followers', value: creator.followers },
                   { label: 'Eng. rate', value: creator.engagementRate != null ? `${creator.engagementRate}%` : null },
                   { label: 'Score', value: creator.score != null ? `${creator.score}` : null },
                   { label: 'Rate', value: creator.rate },
                 ].map((s) => (
-                  <div key={s.label} className="rounded-xl border border-[var(--border)] bg-[var(--card2)] px-1 py-2.5">
+                  <div key={s.label} className="min-w-0 rounded-xl border border-[var(--border)] bg-[var(--card2)] px-1 py-2.5">
                     <div className="truncate text-sm font-extrabold text-[var(--text)]">{s.value ?? '—'}</div>
                     <div className="mt-0.5 text-[9px] uppercase tracking-wider text-[var(--muted2)]">{s.label}</div>
                   </div>
@@ -230,7 +230,7 @@ export function CreatorOfferDrawer({
                   <p className="mx-auto mt-2 max-w-xs text-xs text-[var(--muted)]">
                     They&apos;ll be notified and can accept, counter or decline. Chat opens once they accept.
                   </p>
-                  <div className="mt-6 flex justify-center gap-2.5">
+                  <div className="mt-6 flex flex-wrap justify-center gap-2.5">
                     <button
                       onClick={onClose}
                       className="rounded-full border border-[var(--border2)] px-5 py-2.5 text-xs font-semibold text-[var(--text)]"
@@ -293,7 +293,7 @@ export function CreatorOfferDrawer({
             </div>
 
             {!sentCollabId && !open && (
-              <div className="border-t border-[var(--border)] p-5">
+              <div className="border-t border-[var(--border)] p-4 sm:p-5">
                 {error && <p className="mb-3 text-xs text-red-400">{error}</p>}
                 <button
                   onClick={send}

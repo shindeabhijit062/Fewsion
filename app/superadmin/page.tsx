@@ -57,8 +57,8 @@ export default function SuperAdminRootPage() {
 
   if (unauthorized) {
     return (
-      <div className="min-h-screen bg-[var(--black)] flex items-center justify-center p-6 text-[var(--text)]">
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-8 max-w-md w-full text-center space-y-6">
+      <div className="min-h-screen bg-[var(--black)] flex items-center justify-center p-4 sm:p-6 text-[var(--text)]">
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 sm:p-8 max-w-md w-full text-center space-y-6">
           <div className="w-14 h-14 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center mx-auto">
             <ShieldAlert className="w-7 h-7" />
           </div>

@@ -46,7 +46,7 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }: SidebarPr
   const sidebarContent = (
     <div className="flex flex-col h-full bg-[var(--card)] border-r border-[var(--border)]">
       {/* Brand Header */}
-      <div className="h-16 flex items-center justify-between px-6 border-b border-[var(--border)]">
+      <div className="h-16 flex items-center justify-between gap-2 px-5 sm:px-6 border-b border-[var(--border)]">
         <Link href="/superadmin/dashboard" className="font-display text-xl font-extrabold text-[color:var(--text)] no-underline tracking-tight flex items-center gap-2">
           <span>Few<span style={{ color: 'var(--amber)' }}>sion</span></span>
           <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded bg-[var(--amber)]/10 text-[var(--amber)] border border-[var(--amber)]/20">
@@ -56,7 +56,8 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }: SidebarPr
         {setMobileOpen && (
           <button 
             onClick={() => setMobileOpen(false)}
-            className="lg:hidden text-[var(--muted)] hover:text-[var(--text)]"
+            className="lg:hidden shrink-0 p-1 text-[var(--muted)] hover:text-[var(--text)]"
+            aria-label="Close menu"
           >
             <X className="w-5 h-5" />
           </button>
@@ -83,7 +84,7 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }: SidebarPr
                   : 'text-[var(--muted)] hover:bg-[var(--card2)] hover:text-[var(--text)]'
               }`}
             >
-              <Icon className="w-4 h-4" />
+              <Icon className="w-4 h-4 shrink-0" />
               {item.name}
             </Link>
           );
@@ -117,7 +118,7 @@ export default function Sidebar({ mobileOpen = false, setMobileOpen }: SidebarPr
             className="fixed inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setMobileOpen && setMobileOpen(false)}
           />
-          <div className="relative w-64 max-w-[80vw] h-full z-10">
+          <div className="relative w-64 max-w-[80vw] h-full z-10 overflow-y-auto">
             {sidebarContent}
           </div>
         </div>

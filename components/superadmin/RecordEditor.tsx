@@ -156,22 +156,22 @@ export default function RecordEditor({ isOpen, table, record, title, onClose, on
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="fixed inset-0 bg-black/70 backdrop-blur-sm" onClick={() => !saving && onClose()} />
       <div className="relative z-10 flex max-h-[90vh] w-full max-w-2xl flex-col rounded-2xl border border-[var(--border)] bg-[var(--card)]">
-        <div className="flex items-center justify-between border-b border-[var(--border)] px-6 py-4">
-          <div>
-            <h3 className="text-base font-bold text-[var(--text)]">
+        <div className="flex items-center justify-between gap-3 border-b border-[var(--border)] px-4 py-4 sm:px-6">
+          <div className="min-w-0">
+            <h3 className="truncate text-base font-bold text-[var(--text)]">
               {title || `${isEdit ? 'Edit' : 'New'} ${prettyName(table).replace(/s$/, '')}`}
             </h3>
-            <p className="text-[11px] text-[var(--muted)]">
+            <p className="truncate text-[11px] text-[var(--muted)]">
               Table <span className="font-mono text-[var(--amber)]">{table}</span>
               {isEdit && info?.primaryKey ? ` · ${String(record?.[info.primaryKey]).slice(0, 13)}…` : ''}
             </p>
           </div>
-          <button onClick={onClose} disabled={saving} className="rounded-lg p-1.5 text-[var(--muted)] hover:bg-[var(--card2)] hover:text-[var(--text)]">
+          <button onClick={onClose} disabled={saving} className="shrink-0 rounded-lg p-1.5 text-[var(--muted)] hover:bg-[var(--card2)] hover:text-[var(--text)]">
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-6 py-5">
+        <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-5">
           {loadError ? (
             <p className="text-sm text-red-400">{loadError}</p>
           ) : !info ? (
@@ -186,7 +186,7 @@ export default function RecordEditor({ isOpen, table, record, title, onClose, on
                 const wide = isJsonCol(c) || isLongText(c, v);
                 return (
                   <div key={c.name} className={wide ? 'sm:col-span-2' : ''}>
-                    <label className="mb-1 flex items-center gap-1.5 text-[11px] font-semibold text-[var(--muted)]">
+                    <label className="mb-1 flex min-w-0 items-center gap-1.5 break-all text-[11px] font-semibold text-[var(--muted)]">
                       {c.isPrimaryKey && <KeyRound className="h-3 w-3 text-[var(--amber)]" />}
                       {prettyName(c.name)}
                       {c.required && !c.hasDefault && !readOnly && <span className="text-red-400">*</span>}
@@ -251,9 +251,9 @@ export default function RecordEditor({ isOpen, table, record, title, onClose, on
           )}
         </div>
 
-        <div className="flex items-center justify-between gap-3 border-t border-[var(--border)] px-6 py-4">
-          <p className="min-w-0 flex-1 truncate text-xs text-red-400">{error}</p>
-          <div className="flex shrink-0 gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] px-4 py-4 sm:px-6">
+          <p className="min-w-0 flex-1 basis-full break-words text-xs text-red-400 empty:hidden sm:basis-0 sm:truncate">{error}</p>
+          <div className="ml-auto flex shrink-0 gap-2">
             <button
               onClick={onClose}
               disabled={saving}

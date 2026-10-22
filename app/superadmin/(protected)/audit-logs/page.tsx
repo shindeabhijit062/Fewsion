@@ -132,7 +132,7 @@ export default function SuperAdminAuditLogsPage() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-extrabold font-display tracking-tight flex items-center gap-2">
-            <ShieldCheck className="w-6 h-6 text-[var(--green)]" />
+            <ShieldCheck className="w-6 h-6 shrink-0 text-[var(--green)]" />
             Audit Logs
           </h1>
           <p className="text-xs sm:text-sm text-[var(--muted)] mt-1">
@@ -140,7 +140,7 @@ export default function SuperAdminAuditLogsPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <CSVExporter 
             data={filteredLogs.map(l => ({
               ID: l.id,
@@ -169,7 +169,7 @@ export default function SuperAdminAuditLogsPage() {
           />
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-2 text-xs text-[var(--muted)] font-medium">
             <Filter className="w-3.5 h-3.5 text-[var(--amber)]" />
             <span>Action Type:</span>
@@ -177,7 +177,7 @@ export default function SuperAdminAuditLogsPage() {
           <select
             value={actionFilter}
             onChange={(e) => { setActionFilter(e.target.value); setCurrentPage(1); }}
-            className="bg-[var(--card2)] border border-[var(--border)] text-xs rounded-xl px-3 py-2 text-[var(--text)] focus:outline-none focus:border-[var(--amber)]"
+            className="flex-1 min-w-0 md:flex-none bg-[var(--card2)] border border-[var(--border)] text-xs rounded-xl px-3 py-2 text-[var(--text)] focus:outline-none focus:border-[var(--amber)]"
           >
             <option value="all">All Actions</option>
             {uniqueActions.map((act) => (
@@ -190,7 +190,7 @@ export default function SuperAdminAuditLogsPage() {
       {/* Audit Log Table */}
       <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
-          <table className="w-full text-xs sm:text-sm text-left">
+          <table className="w-full text-xs sm:text-sm text-left whitespace-nowrap">
             <thead className="text-[11px] uppercase bg-[var(--card2)] text-[var(--muted2)] border-b border-[var(--border)]">
               <tr>
                 <th className="px-6 py-4 font-semibold">Action</th>
@@ -250,7 +250,7 @@ export default function SuperAdminAuditLogsPage() {
         </div>
 
         {/* Pagination */}
-        <div className="px-6 py-4 border-t border-[var(--border)] flex items-center justify-between bg-[var(--card)]">
+        <div className="px-4 sm:px-6 py-4 border-t border-[var(--border)] flex flex-wrap items-center justify-between gap-3 bg-[var(--card)]">
           <div className="text-xs text-[var(--muted)]">
             Showing Page <span className="font-bold text-[var(--text)]">{currentPage}</span> of <span className="font-bold text-[var(--text)]">{totalPages}</span> ({filteredLogs.length} total)
           </div>
@@ -280,13 +280,13 @@ export default function SuperAdminAuditLogsPage() {
             className="fixed inset-0 bg-black/70 backdrop-blur-sm"
             onClick={() => setModalOpen(false)}
           />
-          <div className="relative bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 max-w-lg w-full z-10 space-y-4">
-            <div className="border-b border-[var(--border)] pb-4 flex justify-between items-start">
-              <div>
-                <h3 className="text-base font-bold text-[var(--text)]">{selectedLog.action}</h3>
+          <div className="relative bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 max-w-lg w-full max-h-[90vh] overflow-y-auto z-10 space-y-4">
+            <div className="border-b border-[var(--border)] pb-4 flex justify-between items-start gap-3">
+              <div className="min-w-0">
+                <h3 className="text-base font-bold text-[var(--text)] break-words">{selectedLog.action}</h3>
                 <p className="text-xs text-[var(--muted)]">{new Date(selectedLog.created_at).toLocaleString()}</p>
               </div>
-              <span className="px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-[var(--card2)] text-[var(--amber)] border border-[var(--border)]">
+              <span className="shrink-0 px-2 py-0.5 rounded text-[10px] font-mono uppercase bg-[var(--card2)] text-[var(--amber)] border border-[var(--border)]">
                 {selectedLog.target_type || 'SYSTEM'}
               </span>
             </div>
@@ -294,7 +294,7 @@ export default function SuperAdminAuditLogsPage() {
             <div className="space-y-3 text-xs">
               <div className="p-3 bg-[var(--card2)] rounded-xl border border-[var(--border)]">
                 <div className="text-[var(--muted2)] mb-1">Actor Email</div>
-                <div className="font-semibold text-[var(--text)]">{selectedLog.actor?.email || selectedLog.actor_user_id || 'System Routine'}</div>
+                <div className="font-semibold text-[var(--text)] break-all">{selectedLog.actor?.email || selectedLog.actor_user_id || 'System Routine'}</div>
               </div>
 
               <div className="p-3 bg-[var(--card2)] rounded-xl border border-[var(--border)]">
@@ -302,7 +302,7 @@ export default function SuperAdminAuditLogsPage() {
                   <Code className="w-3.5 h-3.5 text-[var(--amber)]" />
                   <span>Log Metadata (JSON)</span>
                 </div>
-                <pre className="font-mono text-[11px] text-[var(--green)] overflow-x-auto p-2 bg-[var(--black)] rounded-lg border border-[var(--border)] mt-1">
+                <pre className="font-mono text-[11px] text-[var(--green)] overflow-x-auto max-h-[40vh] overflow-y-auto p-2 bg-[var(--black)] rounded-lg border border-[var(--border)] mt-1">
                   {JSON.stringify(selectedLog.metadata, null, 2)}
                 </pre>
               </div>

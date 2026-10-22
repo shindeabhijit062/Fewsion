@@ -191,18 +191,18 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
   const leadMatch = matches[0];
 
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-[var(--border2)] bg-[#0c0c0e] p-6 sm:p-10 shadow-2xl">
+    <section className="relative overflow-hidden rounded-3xl border border-[var(--border2)] bg-[#0c0c0e] p-4 sm:p-6 lg:p-10 shadow-2xl">
       {/* Background glow */}
       <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[rgba(245,166,35,0.10)] blur-[100px] pointer-events-none" />
       <div className="absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-[#FF6B35]/10 blur-[100px] pointer-events-none" />
 
       {/* Header */}
-      <div className="relative z-10 mb-8 text-center max-w-2xl mx-auto">
+      <div className="relative z-10 mb-6 sm:mb-8 text-center max-w-2xl mx-auto">
         <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(245,166,35,0.30)] bg-[rgba(245,166,35,0.10)] px-3.5 py-1.5 text-xs font-semibold text-[var(--amber)] mb-3">
           <Zap size={14} />
           <span>Fewsion AI Neural Matchmaker</span>
         </div>
-        <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+        <h2 className="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight">
           {title || 'Match Brands & Creators'}
         </h2>
         <p className="mt-2 text-sm text-[var(--muted)]">
@@ -210,9 +210,9 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
         </p>
       </div>
 
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] gap-6">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] gap-4 sm:gap-6">
         {/* ── Brief ── */}
-        <div className="rounded-2xl border border-[var(--border)] bg-[rgba(20,20,20,0.6)] p-5 sm:p-6 space-y-6">
+        <div className="rounded-2xl border border-[var(--border)] bg-[rgba(20,20,20,0.6)] p-4 sm:p-6 space-y-6">
           <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--muted2)]">Your campaign brief</div>
 
           {/* Niche */}
@@ -250,7 +250,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                   key={g.value}
                   onClick={() => setGoal(g.value)}
                   disabled={phase === 'running'}
-                  className={`rounded-xl border px-3 py-2.5 text-left transition-all disabled:cursor-not-allowed ${goal === g.value
+                  className={`min-w-0 rounded-xl border px-3 py-2.5 text-left transition-all disabled:cursor-not-allowed ${goal === g.value
                     ? 'border-[var(--amber)] bg-[rgba(245,166,35,0.10)]'
                     : 'border-[var(--border)] bg-[var(--card)] hover:border-[rgba(245,166,35,0.40)]'
                     }`}
@@ -264,7 +264,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
 
           {/* Budget */}
           <div className="space-y-2.5">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--amber)]">
                 <IndianRupee size={14} />
                 <span>Budget per creator</span>
@@ -326,7 +326,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
         </div>
 
         {/* ── Results stage ── */}
-        <div ref={resultsRef} className="relative min-h-[420px] rounded-2xl border border-[var(--border)] bg-black/30 p-5 sm:p-6 overflow-hidden">
+        <div ref={resultsRef} className="relative min-h-[420px] rounded-2xl border border-[var(--border)] bg-black/30 p-4 sm:p-6 overflow-hidden">
           <AnimatePresence mode="wait">
             {phase === 'idle' && <IdleStage key="idle" />}
 
@@ -413,14 +413,14 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                 </div>
 
                 {matches.length === 0 ? (
-                  <div className="rounded-xl border border-dashed border-[var(--border2)] p-8 text-center text-sm text-[var(--muted)]">
+                  <div className="rounded-xl border border-dashed border-[var(--border2)] p-5 sm:p-8 text-center text-sm text-[var(--muted)]">
                     {niche === 'Any'
                       ? 'No creators have completed their profile yet, so there is nothing to match against.'
                       : `No creators in ${niche} yet. Try "Any" to match across every niche.`}
                   </div>
                 ) : (
                   <>
-                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4">
                       {matches.map((c, i) => (
                         <MatchCard key={c.id} creator={c} rank={i} onSelect={onSelectCreator} status={creatorStatus?.[c.id]} />
                       ))}
@@ -431,9 +431,9 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                         initial={{ opacity: 0, y: 12 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.25 + matches.length * 0.12 }}
-                        className="mt-5 rounded-2xl border border-[rgba(245,166,35,0.20)] bg-[rgba(245,166,35,0.05)] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                        className="mt-5 rounded-2xl border border-[rgba(245,166,35,0.20)] bg-[rgba(245,166,35,0.05)] p-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4"
                       >
-                        <div>
+                        <div className="min-w-0">
                           <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[var(--amber)]">
                             <Trophy size={14} />
                             <span>AI recommendation</span>
@@ -661,7 +661,7 @@ function MatchCard({
       {/* Signal breakdown */}
       <div className="mt-3 grid grid-cols-4 gap-2">
         {bars.map((b, i) => (
-          <div key={b.label}>
+          <div key={b.label} className="min-w-0">
             <div className="h-1 overflow-hidden rounded-full bg-[var(--card2)]">
               <motion.div
                 className="h-full rounded-full bg-[var(--amber)]"
@@ -670,21 +670,21 @@ function MatchCard({
                 transition={{ delay: delay + 0.25 + i * 0.06, duration: 0.6, ease: 'easeOut' }}
               />
             </div>
-            <div className="mt-1 text-[9px] uppercase tracking-wider text-[var(--muted2)]">{b.label}</div>
+            <div className="mt-1 truncate text-[9px] uppercase tracking-wider text-[var(--muted2)]">{b.label}</div>
           </div>
         ))}
       </div>
 
       <div className="mt-3 grid grid-cols-3 gap-2 text-center">
         {stats.map((s) => (
-          <div key={s.label} className="rounded-lg border border-[var(--border)] bg-[var(--card2)] p-1.5">
-            <div className="text-xs font-extrabold text-white">{s.value ?? '—'}</div>
-            <div className="text-[9px] text-[var(--muted2)] uppercase">{s.label}</div>
+          <div key={s.label} className="min-w-0 rounded-lg border border-[var(--border)] bg-[var(--card2)] p-1.5">
+            <div className="truncate text-xs font-extrabold text-white">{s.value ?? '—'}</div>
+            <div className="truncate text-[9px] text-[var(--muted2)] uppercase">{s.label}</div>
           </div>
         ))}
       </div>
 
-      <div className="mt-3 flex items-center justify-between border-t border-[var(--border)] pt-3">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border)] pt-3">
         <div className="text-xs font-extrabold text-white">
           {creator.rate ?? <span className="font-medium text-[var(--muted2)]">Rate not set</span>}
         </div>

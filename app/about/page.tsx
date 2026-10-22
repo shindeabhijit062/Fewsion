@@ -89,8 +89,7 @@ export default function AboutPage() {
         </h2>
 
         <div
-          className="grid gap-4"
-          style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
         >
           {values.map((v, i) => (
             <div
@@ -117,8 +116,7 @@ export default function AboutPage() {
         </h2>
 
         <div
-          className="grid gap-5"
-          style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
         >
           {team.map((member, i) => (
             <div
@@ -166,8 +164,7 @@ export default function AboutPage() {
         </h2>
 
         <div
-          className="grid gap-4"
-          style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4"
         >
           {stats.map((s, i) => (
             <div

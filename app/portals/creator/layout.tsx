@@ -254,7 +254,7 @@ function CreatorLayoutInner({ children }: { children: React.ReactNode }) {
       {/* Main */}
 
       {/* Main Container */}
-      <div className="flex-1 md:ml-64 w-full">
+      <div className="flex-1 md:ml-64 w-full min-w-0">
         {children}
       </div>
 

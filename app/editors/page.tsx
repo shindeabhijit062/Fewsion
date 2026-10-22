@@ -344,8 +344,8 @@ export default function EditorsPage() {
         </p>
 
         <div
-          className="grid gap-[1px] rounded-2xl overflow-hidden"
-          style={{ gridTemplateColumns: 'repeat(3, 1fr)', background: 'var(--border)', border: '1px solid var(--border)' }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[1px] rounded-2xl overflow-hidden"
+          style={{ background: 'var(--border)', border: '1px solid var(--border)' }}
         >
           {editorFeatures.map((feat) => (
             <FeatureCard key={feat.title} feat={feat} />
@@ -390,8 +390,7 @@ export default function EditorsPage() {
       {/* ── INCOME ── */}
       <section id="income" className="px-[5%] py-[100px]" style={{ background: 'var(--black)' }}>
         <div
-          className="grid gap-[60px] items-center"
-          style={{ gridTemplateColumns: '1fr 1fr' }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-[60px] items-center"
         >
           {/* Income cards */}
           <div className="grid grid-cols-2 gap-4">

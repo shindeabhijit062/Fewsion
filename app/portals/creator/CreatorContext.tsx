@@ -729,7 +729,7 @@ const fmtINR = (n?: number) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 const CreatorContext = createContext<CreatorContextType | undefined>(undefined);
 
 export const emptyBox = (text: string) => (
-  <div className="rounded-xl border border-dashed border-[var(--border2)] p-8 text-center text-sm text-[var(--muted)]">
+  <div className="rounded-xl border border-dashed border-[var(--border2)] p-6 sm:p-8 text-center text-sm text-[var(--muted)]">
     {text}
   </div>
 );

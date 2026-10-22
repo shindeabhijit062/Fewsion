@@ -55,7 +55,7 @@ export default function CSVExporter({
     <button
       onClick={exportToCSV}
       disabled={!data || data.length === 0}
-      className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--amber)] hover:bg-[var(--card2)] disabled:opacity-50 disabled:cursor-not-allowed transition-all ${className}`}
+      className={`flex items-center gap-2 whitespace-nowrap px-3.5 py-2 rounded-xl text-xs font-semibold bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--amber)] hover:bg-[var(--card2)] disabled:opacity-50 disabled:cursor-not-allowed transition-all ${className}`}
     >
       <Download className="w-3.5 h-3.5" />
       <span>{buttonText}</span>

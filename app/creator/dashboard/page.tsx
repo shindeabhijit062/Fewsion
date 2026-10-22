@@ -165,10 +165,10 @@ export default function CreatorDashboardPage() {
   const labelClass = 'mb-2 block text-xs font-semibold uppercase tracking-wide text-[var(--muted)]';
 
   return (
-    <main className="min-h-screen bg-[var(--black)] px-6 pb-20 pt-32 text-[var(--text)]">
+    <main className="min-h-screen bg-[var(--black)] px-4 sm:px-6 pb-16 sm:pb-20 pt-28 sm:pt-32 text-[var(--text)]">
       <div className="mx-auto max-w-xl">
         <span className="text-xs font-bold uppercase tracking-widest text-[var(--amber)]">AI Profile</span>
-        <h1 className="mt-2 font-display text-3xl font-extrabold">Set up your creator profile</h1>
+        <h1 className="mt-2 font-display text-2xl sm:text-3xl font-extrabold">Set up your creator profile</h1>
         <p className="mt-2 text-sm text-[var(--muted)]">
           Tell us about your account. We use this to calculate your Creator Score and match you with brands.
         </p>
@@ -205,7 +205,7 @@ export default function CreatorDashboardPage() {
             </select>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className={labelClass}>Followers</label>
               <input type="number" className={inputClass} value={form.followers} onChange={(e) => update('followers', e.target.value)} />

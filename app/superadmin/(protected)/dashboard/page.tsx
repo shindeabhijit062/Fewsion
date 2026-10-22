@@ -127,7 +127,7 @@ export default function SuperAdminDashboard() {
     <div className="flex flex-col gap-6 max-w-7xl mx-auto w-full">
       
       {/* Welcome Banner */}
-      <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+      <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-8 relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--amber)] opacity-5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
         <div className="relative z-10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
@@ -155,14 +155,14 @@ export default function SuperAdminDashboard() {
 
       {/* Error state alert if any query failed */}
       {error && (
-        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 min-w-0">
             <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
           <button 
             onClick={fetchDashboardData}
-            className="underline hover:text-red-300 font-semibold"
+            className="underline hover:text-red-300 font-semibold shrink-0"
           >
             Retry
           </button>
@@ -170,7 +170,7 @@ export default function SuperAdminDashboard() {
       )}
 
       {/* Stats Cards Grid (6 real Supabase metrics) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 2xl:grid-cols-6 gap-3 sm:gap-4">
         <StatCard 
           label="Total Users"
           value={stats.totalUsers}
@@ -231,15 +231,15 @@ export default function SuperAdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Left Col - Activity Table */}
-        <div className="lg:col-span-2 bg-[var(--card)] border border-[var(--border)] rounded-2xl flex flex-col overflow-hidden">
-          <div className="px-6 py-4 border-b border-[var(--border)] flex justify-between items-center bg-[var(--card)]">
+        <div className="lg:col-span-2 min-w-0 bg-[var(--card)] border border-[var(--border)] rounded-2xl flex flex-col overflow-hidden">
+          <div className="px-4 sm:px-6 py-4 border-b border-[var(--border)] flex flex-wrap justify-between items-center gap-2 bg-[var(--card)]">
             <h3 className="text-base font-bold text-[var(--text)] flex items-center gap-2">
               <Activity className="w-4 h-4 text-[var(--amber)]" />
               Recent Platform Activity
             </h3>
             <Link 
               href="/superadmin/audit-logs" 
-              className="text-xs text-[var(--amber)] hover:underline flex items-center gap-1 font-semibold"
+              className="text-xs text-[var(--amber)] hover:underline flex items-center gap-1 font-semibold whitespace-nowrap"
             >
               View Audit Logs
               <ArrowRight className="w-3 h-3" />
@@ -257,7 +257,7 @@ export default function SuperAdminDashboard() {
                 No recent activity recorded yet.
               </div>
             ) : (
-              <table className="w-full text-left text-xs sm:text-sm text-[var(--muted)]">
+              <table className="w-full text-left text-xs sm:text-sm text-[var(--muted)] whitespace-nowrap">
                 <thead className="text-[11px] uppercase bg-[var(--card2)] text-[var(--muted2)] border-b border-[var(--border)]">
                   <tr>
                     <th className="px-6 py-3 font-semibold text-[var(--text)]">Actor</th>
@@ -272,7 +272,7 @@ export default function SuperAdminDashboard() {
                       <td className="px-6 py-3.5 font-medium text-[var(--text)] truncate max-w-[180px]">
                         {act.user_name}
                       </td>
-                      <td className="px-6 py-3.5 capitalize">{act.action}</td>
+                      <td className="px-6 py-3.5 capitalize whitespace-normal min-w-[160px]">{act.action}</td>
                       <td className="px-6 py-3.5 text-xs text-[var(--muted2)]">{act.created_at}</td>
                       <td className="px-6 py-3.5">
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[var(--green-glow)] text-[var(--green)]">
@@ -289,7 +289,7 @@ export default function SuperAdminDashboard() {
 
         {/* Right Col - System Health & Quick Actions */}
         <div className="flex flex-col gap-6">
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
             <h3 className="text-base font-bold text-[var(--text)] mb-4">System Operations</h3>
             <div className="flex flex-col gap-3">
               <div className="flex justify-between items-center p-3 rounded-xl bg-[var(--card2)] border border-[var(--border)]">
@@ -324,7 +324,7 @@ export default function SuperAdminDashboard() {
             </div>
           </div>
 
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 relative overflow-hidden">
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-[var(--amber)] opacity-10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
             <h3 className="text-base font-bold text-[var(--text)] mb-1 relative z-10">User Verification</h3>
             <p className="text-xs text-[var(--muted)] mb-4 relative z-10">

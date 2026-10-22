@@ -99,8 +99,8 @@ export default function SuperAdminDashboardLayout({
 
   if (!authorized) {
     return (
-      <div className="min-h-screen bg-[var(--black)] flex items-center justify-center p-6 text-[var(--text)]">
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-8 max-w-md w-full text-center space-y-6">
+      <div className="min-h-screen bg-[var(--black)] flex items-center justify-center p-4 sm:p-6 text-[var(--text)]">
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 sm:p-8 max-w-md w-full text-center space-y-6">
           <div className="w-14 h-14 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center mx-auto">
             <ShieldAlert className="w-7 h-7" />
           </div>
@@ -134,14 +134,14 @@ export default function SuperAdminDashboardLayout({
     <div className="flex min-h-screen bg-[var(--black)] text-[var(--text)]">
       <Sidebar mobileOpen={mobileMenuOpen} setMobileOpen={setMobileMenuOpen} />
       
-      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
+      <div className="flex-1 min-w-0 lg:ml-64 flex flex-col min-h-screen">
         <Header 
           title={title} 
           adminProfile={adminProfile} 
           onToggleMobileMenu={() => setMobileMenuOpen(!mobileMenuOpen)} 
         />
         
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-y-auto">
           {children}
         </main>
       </div>

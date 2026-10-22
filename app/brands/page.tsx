@@ -200,7 +200,7 @@ export default function BrandsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by brand or campaign title..."
-          className="flex-1 min-w-[200px]"
+          className="flex-1 min-w-0 basis-full sm:basis-auto sm:min-w-[200px] box-border"
           style={{
             background: 'var(--card)',
             border: '1px solid var(--border)',
@@ -218,6 +218,7 @@ export default function BrandsPage() {
         <select
           value={platform}
           onChange={(e) => setPlatform(e.target.value)}
+          className="w-full sm:w-auto max-w-full box-border"
           style={{
             background: 'var(--card)',
             border: '1px solid var(--border)',

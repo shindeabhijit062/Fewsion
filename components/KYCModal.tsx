@@ -70,18 +70,18 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
-      <div className="relative w-full max-w-xl rounded-3xl border border-[var(--border2)] bg-[#111114] p-6 sm:p-8 shadow-2xl">
+      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[var(--border2)] bg-[#111114] p-5 sm:p-8 shadow-2xl">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:text-white"
+          className="absolute right-4 top-4 sm:right-5 sm:top-5 flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:text-white"
         >
           <X size={16} />
         </button>
 
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-[var(--amber)]/30 bg-[var(--amber)]/10 text-[var(--amber)]">
+        <div className="flex items-center gap-3 mb-6 pr-10">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-[var(--amber)]/30 bg-[var(--amber)]/10 text-[var(--amber)]">
             <ShieldCheck size={24} />
           </div>
           <div>
@@ -250,8 +250,8 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
           </div>
 
           {/* Submit CTA */}
-          <div className="pt-4 flex items-center justify-between gap-4">
-            <div className="flex items-center gap-1.5 text-[11px] text-[var(--muted2)]">
+          <div className="pt-4 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="flex items-center justify-center sm:justify-start gap-1.5 text-[11px] text-[var(--muted2)]">
               <Lock size={13} /> Encrypted 256-bit compliance data
             </div>
             <button

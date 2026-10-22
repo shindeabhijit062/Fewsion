@@ -37,7 +37,7 @@ export default function ConfirmModal({
       />
 
       {/* Modal Container */}
-      <div className="relative bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 max-w-md w-full shadow-2xl z-10 animate-in fade-in zoom-in-95 duration-200">
+      <div className="relative bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl z-10 animate-in fade-in zoom-in-95 duration-200">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-[var(--muted)] hover:text-[var(--text)] transition-colors p-1"
@@ -45,21 +45,21 @@ export default function ConfirmModal({
           <X className="w-5 h-5" />
         </button>
 
-        <div className="flex items-start gap-4">
-          <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${
+        <div className="flex items-start gap-3 sm:gap-4 pr-6">
+          <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center shrink-0 ${
             isDestructive ? 'bg-red-500/10 text-red-500' : 'bg-[var(--amber)]/10 text-[var(--amber)]'
           }`}>
             <AlertTriangle className="w-6 h-6" />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <h3 className="text-lg font-bold text-[var(--text)]">{title}</h3>
-            <p className="text-xs sm:text-sm text-[var(--muted)] mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[var(--muted)] mt-1 leading-relaxed break-words">
               {message}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-[var(--border)]">
+        <div className="flex flex-wrap items-center justify-end gap-3 mt-5 sm:mt-6 pt-4 border-t border-[var(--border)]">
           <button
             onClick={onClose}
             disabled={loading}

@@ -134,7 +134,7 @@ export default function SuperAdminReportsPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {/* Timeframe Selector */}
           <div className="flex items-center gap-1 bg-[var(--card)] border border-[var(--border)] p-1 rounded-xl">
             {(['7d', '30d', '90d', 'all'] as const).map((t) => (
@@ -167,7 +167,7 @@ export default function SuperAdminReportsPage() {
       </div>
 
       {/* Top Metric Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatCard 
           label={`New Signups (${timeframe.toUpperCase()})`}
           value={metrics.newUsersPeriod}
@@ -210,8 +210,8 @@ export default function SuperAdminReportsPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
         {/* User Role Distribution */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h3 className="text-base font-bold text-[var(--text)] flex items-center gap-2">
               <PieChart className="w-4 h-4 text-[var(--amber)]" />
               Role Distribution ({timeframe.toUpperCase()})
@@ -233,9 +233,9 @@ export default function SuperAdminReportsPage() {
                 const percentage = Math.round((item.count / (metrics.newUsersPeriod || 1)) * 100);
                 return (
                   <div key={item.role} className="space-y-1.5">
-                    <div className="flex justify-between text-xs font-medium">
-                      <span className="capitalize text-[var(--text)] font-semibold">{item.role}</span>
-                      <span className="text-[var(--muted)]">{item.count} users ({percentage}%)</span>
+                    <div className="flex justify-between gap-3 text-xs font-medium">
+                      <span className="capitalize text-[var(--text)] font-semibold min-w-0 truncate">{item.role}</span>
+                      <span className="text-[var(--muted)] shrink-0">{item.count} users ({percentage}%)</span>
                     </div>
                     <div className="w-full h-2 rounded-full bg-[var(--card2)] overflow-hidden border border-[var(--border)]">
                       <div 
@@ -251,8 +251,8 @@ export default function SuperAdminReportsPage() {
         </div>
 
         {/* Creator Niche Breakdown */}
-        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <h3 className="text-base font-bold text-[var(--text)] flex items-center gap-2">
               <TrendingUp className="w-4 h-4 text-[var(--green)]" />
               Creator Niche Popularity
@@ -274,9 +274,9 @@ export default function SuperAdminReportsPage() {
                 const percentage = Math.round((item.count / (metrics.totalCreators || 1)) * 100);
                 return (
                   <div key={item.niche} className="space-y-1.5">
-                    <div className="flex justify-between text-xs font-medium">
-                      <span className="capitalize text-[var(--text)] font-semibold">{item.niche}</span>
-                      <span className="text-[var(--muted)]">{item.count} creators ({percentage}%)</span>
+                    <div className="flex justify-between gap-3 text-xs font-medium">
+                      <span className="capitalize text-[var(--text)] font-semibold min-w-0 truncate">{item.niche}</span>
+                      <span className="text-[var(--muted)] shrink-0">{item.count} creators ({percentage}%)</span>
                     </div>
                     <div className="w-full h-2 rounded-full bg-[var(--card2)] overflow-hidden border border-[var(--border)]">
                       <div 

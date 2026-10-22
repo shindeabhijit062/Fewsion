@@ -86,7 +86,7 @@ export default function SuperAdminAIKnowledgePage() {
           <p className="text-sm text-[var(--muted)] mt-1">Manage the context data and rules that power the AI.</p>
         </div>
         <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="relative flex-1 sm:flex-none">
+          <div className="relative flex-1 min-w-0 sm:flex-none">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted)]" />
             <input 
               type="text" 
@@ -98,7 +98,7 @@ export default function SuperAdminAIKnowledgePage() {
           </div>
           <button 
             onClick={() => handleOpenModal()}
-            className="flex items-center gap-2 px-4 py-2 bg-[var(--amber)] text-black rounded-lg text-sm font-semibold hover:bg-[var(--amber)]/90 transition-colors"
+            className="flex items-center gap-2 shrink-0 whitespace-nowrap px-4 py-2 bg-[var(--amber)] text-black rounded-lg text-sm font-semibold hover:bg-[var(--amber)]/90 transition-colors"
           >
             <Plus className="w-4 h-4" />
             Add Entry
@@ -134,18 +134,18 @@ export default function SuperAdminAIKnowledgePage() {
               ) : (
                 filteredKnowledge.map((item) => (
                   <tr key={item.id} className="hover:bg-[var(--card2)] transition-colors">
-                    <td className="px-6 py-4">
+                    <td className="px-6 py-4 min-w-[160px]">
                       <div className="font-medium text-[var(--text)]">{item.topic || 'Untitled'}</div>
                       <div className="text-[var(--muted)] text-xs mt-0.5">{new Date(item.created_at).toLocaleDateString()}</div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-[var(--muted)] line-clamp-2 max-w-lg">
+                      <div className="text-[var(--muted)] line-clamp-2 max-w-lg min-w-[220px]">
                         {item.content || 'No content provided'}
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       {item.tags ? (
-                        <span className="px-2.5 py-1 rounded-full text-xs font-medium border bg-blue-500/10 border-blue-500/20 text-blue-400">
+                        <span className="whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-medium border bg-blue-500/10 border-blue-500/20 text-blue-400">
                           {item.tags}
                         </span>
                       ) : <span className="text-[var(--muted2)]">—</span>}
@@ -170,13 +170,13 @@ export default function SuperAdminAIKnowledgePage() {
 
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl">
-            <div className="p-6 border-b border-[var(--border)]">
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+            <div className="p-4 sm:p-6 border-b border-[var(--border)]">
               <h2 className="text-xl font-bold font-display">{editingId ? 'Edit AI Knowledge' : 'Add AI Knowledge'}</h2>
               <p className="text-sm text-[var(--muted)] mt-1">This data will be used as context for the platform's AI features.</p>
             </div>
             
-            <div className="p-6 space-y-4">
+            <div className="p-4 sm:p-6 space-y-4 flex-1 overflow-y-auto">
               <div>
                 <label className="block text-sm font-medium text-[var(--muted)] mb-1">Topic / Subject</label>
                 <input 
@@ -211,7 +211,7 @@ export default function SuperAdminAIKnowledgePage() {
               </div>
             </div>
             
-            <div className="p-6 border-t border-[var(--border)] flex justify-end gap-3 bg-[var(--card2)]/50">
+            <div className="p-4 sm:p-6 border-t border-[var(--border)] flex flex-wrap justify-end gap-3 bg-[var(--card2)]/50">
               <button 
                 onClick={() => setIsModalOpen(false)}
                 className="px-4 py-2 text-sm font-medium text-[var(--muted)] hover:text-white transition-colors"

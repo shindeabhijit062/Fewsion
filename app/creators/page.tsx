@@ -365,7 +365,7 @@ export default function CreatorsPage() {
           Fewsion&apos;s Creator Score combines view-through rate, CTR, engagement rate, posting consistency,
           and brand collaboration history into a single verifiable metric.
         </p>
-        <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {howCards.map((card, i) => (
             <div
               key={card.title}

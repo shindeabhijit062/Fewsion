@@ -121,7 +121,7 @@ export default function AIScoreWidget() {
             <span className="badge-green" style={{ marginTop: '8px', display: 'inline-block' }}>Authenticity Verified: {result.metrics.authenticity_rating}</span>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', fontSize: '13px', color: 'var(--color-muted)' }}>
+          <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: '12px', fontSize: '13px', color: 'var(--color-muted)' }}>
             <div>Followers: <strong style={{ color: '#fff' }}>{result.metrics.followers.toLocaleString()}</strong></div>
             <div>Accounts Reached: <strong style={{ color: '#fff' }}>{result.metrics.accounts_reached.toLocaleString()}</strong></div>
             <div>Engagement Rate: <strong style={{ color: '#fff' }}>{result.metrics.engagement_rate}%</strong></div>

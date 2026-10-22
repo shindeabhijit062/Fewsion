@@ -1010,7 +1010,7 @@ export default function EditorPortalPage() {
 
               {/* Pending Invites */}
               {stats.pendingInvites.length > 0 && (
-                <div className="bg-[#141414] border border-[#F5A623]/30 rounded-2xl p-6 space-y-4">
+                <div className="bg-[#141414] border border-[#F5A623]/30 rounded-2xl p-5 sm:p-6 space-y-4">
                   <h2 className="text-base font-bold text-white flex items-center gap-2">
                     <span className="w-2.5 h-2.5 bg-[#F5A623] rounded-full animate-ping"></span>
                     <span>Pending Collaboration Invites ({stats.pendingInvites.length})</span>
@@ -1047,7 +1047,7 @@ export default function EditorPortalPage() {
 
               {/* Stats Overview */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
+                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-2">Avg turnaround</span>
                   <div className="text-lg font-black text-white truncate">
                     {profile?.turnaround_time || '—'}
@@ -1059,7 +1059,7 @@ export default function EditorPortalPage() {
                   )}
                 </div>
 
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
+                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-2">Active edits</span>
                   <div className="text-2xl font-black text-white">{stats.activeCount}</div>
                   <div className="text-[10px] text-gray-400 mt-1">
@@ -1067,7 +1067,7 @@ export default function EditorPortalPage() {
                   </div>
                 </div>
 
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
+                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-2">Completed renders</span>
                   <div className="text-2xl font-black text-white">{stats.completedCount}</div>
                   {profile?.ai_grade && (
@@ -1077,7 +1077,7 @@ export default function EditorPortalPage() {
                   )}
                 </div>
 
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
+                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-2">Revenue Cleared</span>
                   <div className="text-2xl font-black text-[#F5A623]">{fmtINR(stats.releasedRevenue)}</div>
                   <div className="text-[10px] text-gray-400 mt-1">
@@ -1155,7 +1155,7 @@ export default function EditorPortalPage() {
                 {/* Notifications Feed */}
                 <div className="space-y-4">
                   <h2 className="text-sm font-black uppercase tracking-wider text-white">Project Notifications</h2>
-                  <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 space-y-4">
+                  <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-4">
                     {notifications.length === 0 ? (
                       <div className="text-center text-xs text-gray-500 py-8">No notifications yet.</div>
                     ) : (
@@ -1182,7 +1182,7 @@ export default function EditorPortalPage() {
           {activeTab === 'portfolio' && (
             <div className="space-y-8">
               {/* Niches Box */}
-              <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
+              <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
                 <h2 className="text-sm font-black uppercase tracking-wider text-white mb-4">Your niches</h2>
                 <div className="flex flex-wrap gap-2">
                   {profile?.edited_creator_niches && profile.edited_creator_niches.length > 0 ? (
@@ -1201,7 +1201,7 @@ export default function EditorPortalPage() {
               </div>
 
               {/* Add portfolio Piece form */}
-              <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 space-y-4">
+              <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-4">
                 <h2 className="text-sm font-black uppercase tracking-wider text-white">Add a portfolio piece</h2>
                 <form onSubmit={handleAddPortfolio} className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1351,7 +1351,7 @@ export default function EditorPortalPage() {
                   {campaigns.map((camp) => (
                     <div
                       key={camp.id}
-                      className="bg-[#141414] border border-white/5 rounded-2xl p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div className="space-y-1">
                         <h3 className="text-base font-extrabold text-white">{camp.title}</h3>
@@ -1392,15 +1392,15 @@ export default function EditorPortalPage() {
             <div className="space-y-8">
               {/* Payment Summary */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
+                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">Total logged</span>
                   <div className="text-2xl font-black text-[#F5A623]">{fmtINR(stats.totalRevenue)}</div>
                 </div>
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
+                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">Released</span>
                   <div className="text-2xl font-black text-emerald-400">{fmtINR(stats.releasedRevenue)}</div>
                 </div>
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
+                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">Pending escrow</span>
                   <div className="text-2xl font-black text-white">
                     {fmtINR(stats.totalRevenue - stats.releasedRevenue)}
@@ -1409,7 +1409,7 @@ export default function EditorPortalPage() {
               </div>
 
               {/* Payment Table */}
-              <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 space-y-4">
+              <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-4">
                 <h2 className="text-sm font-black uppercase tracking-wider text-white">Payment history</h2>
                 {payments.length === 0 ? (
                   <div className="text-center text-xs text-gray-500 py-8">No payments logged yet.</div>
@@ -1458,7 +1458,7 @@ export default function EditorPortalPage() {
           {activeTab === 'messages' && (
             <div className="space-y-6">
               {!selectedCollabId ? (
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 space-y-4">
+                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-4">
                   <h2 className="text-sm font-black uppercase tracking-wider text-white">Conversations</h2>
                   {collaborations.length === 0 ? (
                     <div className="text-center text-xs text-gray-500 py-8">
@@ -1559,14 +1559,14 @@ export default function EditorPortalPage() {
             <div className="space-y-8">
               {/* Average Stats */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
+                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">Average Rating</span>
                   <div className="text-3xl font-black text-white flex items-baseline gap-1">
                     <span>{stats.avgRating || '--'}</span>
                     <span className="text-xs text-gray-500 font-bold">/5</span>
                   </div>
                 </div>
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-6">
+                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
                   <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">Total Reviews</span>
                   <div className="text-3xl font-black text-[#F5A623]">
                     {reviews.length}
@@ -1575,7 +1575,7 @@ export default function EditorPortalPage() {
               </div>
 
               {/* Reviews List */}
-              <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 space-y-4">
+              <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-4">
                 <h2 className="text-sm font-black uppercase tracking-wider text-white">All Reviews</h2>
                 {reviews.length === 0 ? (
                   <div className="text-center text-xs text-gray-500 py-8">
@@ -1603,7 +1603,7 @@ export default function EditorPortalPage() {
 
           {/* TAB 7: PROFILE SETTINGS */}
           {activeTab === 'settings' && profile && (
-            <div className="bg-[#141414] border border-white/5 rounded-2xl p-6 space-y-6">
+            <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-6">
               <h2 className="text-sm font-black uppercase tracking-wider text-white border-b border-white/5 pb-4">
                 Your profile settings
               </h2>
@@ -1611,29 +1611,29 @@ export default function EditorPortalPage() {
               <div className="divide-y divide-white/5 text-xs">
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Editor name</span>
-                  <span className="font-bold text-white">{profile.editor_name || '—'}</span>
+                  <span className="font-bold text-white break-words">{profile.editor_name || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">City / State</span>
-                  <span className="font-bold text-white">{profile.city_state || '—'}</span>
+                  <span className="font-bold text-white break-words">{profile.city_state || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Experience Duration</span>
-                  <span className="font-bold text-white">{profile.experience_duration || '—'}</span>
+                  <span className="font-bold text-white break-words">{profile.experience_duration || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">One-line Bio</span>
-                  <span className="font-bold text-white">{profile.one_line_bio || '—'}</span>
+                  <span className="font-bold text-white break-words">{profile.one_line_bio || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Languages</span>
-                  <span className="font-bold text-white">
+                  <span className="font-bold text-white break-words">
                     {profile.languages && profile.languages.length > 0 ? profile.languages.join(', ') : '—'}
                   </span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Specialised Formats</span>
-                  <span className="font-bold text-white">
+                  <span className="font-bold text-white break-words">
                     {profile.specialised_formats && profile.specialised_formats.length > 0
                       ? profile.specialised_formats.join(', ')
                       : '—'}
@@ -1641,7 +1641,7 @@ export default function EditorPortalPage() {
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Primary Software</span>
-                  <span className="font-bold text-white">
+                  <span className="font-bold text-white break-words">
                     {profile.primary_software && profile.primary_software.length > 0
                       ? profile.primary_software.join(', ')
                       : '—'}
@@ -1649,13 +1649,13 @@ export default function EditorPortalPage() {
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Special Skills</span>
-                  <span className="font-bold text-white">
+                  <span className="font-bold text-white break-words">
                     {profile.special_skills && profile.special_skills.length > 0 ? profile.special_skills.join(', ') : '—'}
                   </span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Niches Edited For</span>
-                  <span className="font-bold text-white">
+                  <span className="font-bold text-white break-words">
                     {profile.edited_creator_niches && profile.edited_creator_niches.length > 0
                       ? profile.edited_creator_niches.join(', ')
                       : '—'}
@@ -1663,19 +1663,19 @@ export default function EditorPortalPage() {
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Total Videos Edited</span>
-                  <span className="font-bold text-white">{profile.total_videos_edited || 0}</span>
+                  <span className="font-bold text-white break-words">{profile.total_videos_edited || 0}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Turnaround Time</span>
-                  <span className="font-bold text-white">{profile.turnaround_time || '—'}</span>
+                  <span className="font-bold text-white break-words">{profile.turnaround_time || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Availability</span>
-                  <span className="font-bold text-white">{profile.availability_status || '—'}</span>
+                  <span className="font-bold text-white break-words">{profile.availability_status || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Rate Short Form</span>
-                  <span className="font-bold text-white">{profile.rate_short_form || '—'}</span>
+                  <span className="font-bold text-white break-words">{profile.rate_short_form || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">Portfolio Link</span>
@@ -1690,12 +1690,12 @@ export default function EditorPortalPage() {
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   ) : (
-                    <span className="font-bold text-white">—</span>
+                    <span className="font-bold text-white break-words">—</span>
                   )}
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
                   <span className="text-gray-500">AI Score</span>
-                  <span className="font-bold text-white">
+                  <span className="font-bold text-white break-words">
                     {profile.ai_total_score != null
                       ? `${profile.ai_total_score}/100 (${profile.ai_grade || '—'})`
                       : '—'}

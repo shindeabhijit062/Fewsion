@@ -99,13 +99,10 @@ export default function SuperAdminLoginPage() {
   };
 
   return (
-    <div
-      className="grid min-h-screen"
-      style={{ gridTemplateColumns: '1fr 1fr' }}
-    >
+    <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
       {/* ── LEFT panel ── */}
       <div
-        className="relative flex flex-col justify-between p-12 overflow-hidden hidden md:flex"
+        className="relative hidden lg:flex flex-col justify-between p-12 overflow-hidden"
         style={{
           background: 'linear-gradient(160deg, var(--deep) 0%, var(--black) 100%)',
           borderRight: '1px solid var(--border)',

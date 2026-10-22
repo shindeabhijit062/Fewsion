@@ -510,7 +510,7 @@ const STATUS_STYLES: Record<string, string> = {
 function StatusPill({ status }: { status?: string | null }) {
   const s = (status || 'active').toLowerCase();
   return (
-    <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${STATUS_STYLES[s] || 'bg-white/5 text-[var(--muted)]'}`}>
+    <span className={`shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${STATUS_STYLES[s] || 'bg-white/5 text-[var(--muted)]'}`}>
       {STATUS_LABEL[s] || s.replace(/_/g, ' ')}
     </span>
   );
@@ -599,9 +599,9 @@ export function MessagesInbox({
   }
 
   return (
-    <div className="grid h-[calc(100vh-220px)] min-h-[520px] grid-cols-1 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] md:grid-cols-[320px_minmax(0,1fr)]">
+    <div className="grid h-[calc(100dvh-180px)] min-h-[420px] md:h-[calc(100vh-220px)] md:min-h-[520px] grid-cols-1 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)] md:grid-cols-[320px_minmax(0,1fr)]">
       {/* ── Conversation list ── */}
-      <aside className={`flex min-h-0 flex-col border-r border-[var(--border)] ${selectedId ? 'hidden md:flex' : 'flex'}`}>
+      <aside className={`flex min-h-0 flex-col md:border-r border-[var(--border)] ${selectedId ? 'hidden md:flex' : 'flex'}`}>
         <div className="border-b border-[var(--border)] p-4">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="font-display text-base font-bold text-[var(--text)]">Inbox</h2>
@@ -689,10 +689,10 @@ export function MessagesInbox({
         ) : (
           <>
             {/* Header */}
-            <header className="flex items-center gap-3 border-b border-[var(--border)] px-4 py-3">
+            <header className="flex items-center gap-2 sm:gap-3 border-b border-[var(--border)] px-3 sm:px-4 py-3">
               <button
                 onClick={() => onSelect(null)}
-                className="rounded-full p-1.5 text-[var(--muted)] hover:bg-white/5 hover:text-[var(--text)] md:hidden"
+                className="shrink-0 rounded-full p-1.5 text-[var(--muted)] hover:bg-white/5 hover:text-[var(--text)] md:hidden"
                 aria-label="Back to conversations"
               >
                 <ArrowLeft size={16} />
@@ -717,7 +717,7 @@ export function MessagesInbox({
 
             {(negotiating || status === 'declined') && (
               <div
-                className={`flex items-center gap-2 border-b px-4 py-2 text-[11px] font-medium ${status === 'declined'
+                className={`flex items-center gap-2 border-b px-3 sm:px-4 py-2 text-[11px] font-medium ${status === 'declined'
                   ? 'border-red-500/20 bg-red-500/5 text-red-300'
                   : myTurn
                     ? 'border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.08)] text-[var(--amber)]'
@@ -733,7 +733,7 @@ export function MessagesInbox({
             )}
 
             {/* Messages */}
-            <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5" style={{ background: 'radial-gradient(ellipse at top, rgba(245,166,35,0.04), transparent 60%)' }}>
+            <div className="min-h-0 flex-1 overflow-y-auto px-3 sm:px-4 py-5" style={{ background: 'radial-gradient(ellipse at top, rgba(245,166,35,0.04), transparent 60%)' }}>
               {thread.length === 0 && (
                 <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
                   <Avatar id={selected.otherId || selected.collab.id} name={selected.name} url={selected.avatarUrl} size={56} />
@@ -785,7 +785,7 @@ export function MessagesInbox({
                           </div>
                         )}
                         <div
-                          className={`max-w-[75%] whitespace-pre-wrap break-words px-3.5 py-2 text-sm leading-relaxed ${mine
+                          className={`min-w-0 max-w-[80%] sm:max-w-[75%] whitespace-pre-wrap break-words px-3.5 py-2 text-sm leading-relaxed ${mine
                             ? `bg-gradient-to-br from-[#F5A623] to-[#FF8A3D] text-black ${lastInGroup ? 'rounded-2xl rounded-br-md' : 'rounded-2xl'}`
                             : `border border-[var(--border)] bg-[var(--card2)] text-[var(--text)] ${lastInGroup ? 'rounded-2xl rounded-bl-md' : 'rounded-2xl'}`
                             } ${m.pending ? 'opacity-70' : ''}`}
@@ -821,8 +821,8 @@ export function MessagesInbox({
                   : 'Chat opens once the offer is accepted. Use Accept, Counter or Decline above.'}
               </div>
             ) : (
-            <div className="border-t border-[var(--border)] p-3">
-              <div className="flex items-end gap-2 rounded-2xl border border-[var(--border2)] bg-[var(--black)] p-1.5 pl-4 focus-within:border-[rgba(245,166,35,0.5)]">
+            <div className="border-t border-[var(--border)] p-2 sm:p-3">
+              <div className="flex items-end gap-2 rounded-2xl border border-[var(--border2)] bg-[var(--black)] p-1.5 pl-3 sm:pl-4 focus-within:border-[rgba(245,166,35,0.5)]">
                 <textarea
                   ref={inputRef}
                   rows={1}
@@ -840,7 +840,7 @@ export function MessagesInbox({
                     }
                   }}
                   placeholder={`Message ${selected.name}…`}
-                  className="max-h-[120px] flex-1 resize-none bg-transparent py-2 text-sm text-[var(--text)] outline-none placeholder:text-[var(--muted)]"
+                  className="max-h-[120px] min-w-0 flex-1 resize-none bg-transparent py-2 text-sm text-[var(--text)] outline-none placeholder:text-[var(--muted)]"
                 />
                 <button
                   onClick={submit}
@@ -916,7 +916,7 @@ function OfferEventCard({
     return (
       <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="my-4 flex justify-center">
         <div
-          className={`max-w-md rounded-2xl border px-4 py-3 text-center text-xs ${accepted ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-300' : 'border-red-500/25 bg-red-500/10 text-red-300'
+          className={`w-full max-w-md rounded-2xl border px-4 py-3 text-center text-xs break-words ${accepted ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-300' : 'border-red-500/25 bg-red-500/10 text-red-300'
             }`}
         >
           <div className="font-bold">
@@ -950,7 +950,7 @@ function OfferEventCard({
         className={`w-full max-w-md overflow-hidden rounded-2xl border ${canRespond ? 'border-[rgba(245,166,35,0.5)] shadow-lg shadow-[rgba(245,166,35,0.08)]' : 'border-[var(--border2)]'
           } bg-[var(--card2)]`}
       >
-        <div className="flex items-center justify-between gap-2 border-b border-[var(--border)] bg-[rgba(245,166,35,0.06)] px-4 py-2.5">
+        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 border-b border-[var(--border)] bg-[rgba(245,166,35,0.06)] px-3 sm:px-4 py-2.5">
           <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--amber)]">
             {isCounter ? <Repeat size={12} /> : <FileText size={12} />}
             {isCounter ? 'Counter-offer' : 'Collaboration offer'}
@@ -960,12 +960,12 @@ function OfferEventCard({
           </span>
         </div>
 
-        <div className="space-y-3 px-4 py-3.5">
+        <div className="space-y-3 px-3 sm:px-4 py-3.5">
           {event.campaignTitle && <div className="text-xs text-[var(--muted)]">Campaign: <span className="font-semibold text-[var(--text)]">{event.campaignTitle}</span></div>}
-          <div className="flex items-end justify-between gap-3">
-            <div>
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div className="min-w-0">
               <div className="text-[10px] uppercase tracking-wider text-[var(--muted)]">Amount</div>
-              <div className="font-display text-2xl font-extrabold text-[var(--text)]">{formatINR(event.amount)}</div>
+              <div className="font-display text-xl sm:text-2xl font-extrabold text-[var(--text)]">{formatINR(event.amount)}</div>
             </div>
             <div className="text-right">
               <div className="text-[10px] uppercase tracking-wider text-[var(--muted)]">Deadline</div>
@@ -988,7 +988,7 @@ function OfferEventCard({
         </div>
 
         {canRespond && mode === 'idle' && (
-          <div className="grid grid-cols-3 gap-2 border-t border-[var(--border)] p-3">
+          <div className="grid grid-cols-3 gap-1.5 sm:gap-2 border-t border-[var(--border)] p-2.5 sm:p-3">
             <button
               disabled={busy}
               onClick={() => run(() => offersApi.accept(collabId))}
@@ -1014,10 +1014,10 @@ function OfferEventCard({
         )}
 
         {canRespond && mode === 'counter' && (
-          <div className="border-t border-[var(--border)] p-4">
+          <div className="border-t border-[var(--border)] p-3 sm:p-4">
             <div className="mb-3 text-xs font-bold text-[var(--text)]">Your counter-offer</div>
             <OfferForm value={counter} onChange={setCounter} disabled={busy} notePlaceholder="Explain your terms…" />
-            <div className="mt-3 flex justify-end gap-2">
+            <div className="mt-3 flex flex-wrap justify-end gap-2">
               <button onClick={() => setMode('idle')} disabled={busy} className="rounded-xl px-3 py-2 text-xs text-[var(--muted)] hover:text-[var(--text)]">
                 Cancel
               </button>
@@ -1044,7 +1044,7 @@ function OfferEventCard({
         )}
 
         {canRespond && mode === 'decline' && (
-          <div className="border-t border-[var(--border)] p-4">
+          <div className="border-t border-[var(--border)] p-3 sm:p-4">
             <textarea
               value={declineNote}
               onChange={(e) => setDeclineNote(e.target.value)}
@@ -1053,7 +1053,7 @@ function OfferEventCard({
               placeholder="Reason (optional), e.g. fully booked this month"
               className="w-full resize-none rounded-xl border border-[var(--border2)] bg-[var(--black)] px-3 py-2 text-xs text-[var(--text)] outline-none focus:border-red-400"
             />
-            <div className="mt-2 flex justify-end gap-2">
+            <div className="mt-2 flex flex-wrap justify-end gap-2">
               <button onClick={() => setMode('idle')} disabled={busy} className="rounded-xl px-3 py-2 text-xs text-[var(--muted)] hover:text-[var(--text)]">
                 Cancel
               </button>
@@ -1085,7 +1085,7 @@ export function MessageToasts({
   onDismiss: (id: string) => void;
 }) {
   return (
-    <div className="pointer-events-none fixed bottom-5 right-5 z-[200] flex w-[340px] max-w-[calc(100vw-40px)] flex-col gap-2">
+    <div className="pointer-events-none fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-[200] flex w-[340px] max-w-[calc(100vw-32px)] flex-col gap-2">
       <AnimatePresence>
         {toasts.map((t) => (
           <motion.div

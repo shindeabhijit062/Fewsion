@@ -24,7 +24,7 @@ const fmtINR = (n?: number) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
 function StatCard({ label, value, className = 'text-white' }: { label: string; value: string; className?: string }) {
   return (
-    <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.1_0.01_80)] p-6">
+    <div className="min-w-0 rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.1_0.01_80)] p-5 sm:p-6">
       <div className="text-xs uppercase tracking-wide text-[oklch(0.68_0.015_85)]">{label}</div>
       <div className={`mt-2 font-display text-2xl font-extrabold ${className}`}>{value}</div>
     </div>
@@ -34,15 +34,15 @@ function StatCard({ label, value, className = 'text-white' }: { label: string; v
 function ApplicationRow({ app, statusTagClasses }: { app: any; statusTagClasses: (s?: string) => string }) {
   return (
     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.1_0.01_80)] p-4 hover:border-[oklch(0.35_0.02_80)] transition-colors">
-      <div>
-        <h3 className="text-sm font-semibold text-white">{app.campaign_title || 'Untitled campaign'}</h3>
-        <div className="mt-1 flex items-center gap-2 text-xs text-[oklch(0.68_0.015_85)]">
+      <div className="min-w-0">
+        <h3 className="text-sm font-semibold text-white break-words">{app.campaign_title || 'Untitled campaign'}</h3>
+        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[oklch(0.68_0.015_85)]">
           <span>Brand: {app.brand_name || 'Brand partner'}</span>
           <span>•</span>
           <span>Applied: {fmtDate(app.applied_at)}</span>
         </div>
       </div>
-      <span className={`rounded-full border px-2.5 py-1 text-xs font-semibold capitalize ${statusTagClasses(app.status)}`}>
+      <span className={`self-start sm:self-auto shrink-0 rounded-full border px-2.5 py-1 text-xs font-semibold capitalize ${statusTagClasses(app.status)}`}>
         {app.status || 'pending'}
       </span>
     </div>
@@ -53,7 +53,7 @@ function SnapshotRow({ icon, main, sub }: { icon: string; main: string; sub: str
   return (
     <div className="flex items-start gap-3">
       <div className="mt-0.5">{icon}</div>
-      <div>
+      <div className="min-w-0">
         <div className="font-semibold text-white">{main}</div>
         <div className="text-xs text-[oklch(0.68_0.015_85)]">{sub}</div>
       </div>
@@ -82,16 +82,16 @@ export default function CreatorDashboardPage() {
   } = useCreatorData();
 
   return (
-      <main className="px-4 sm:px-6 lg:px-10 py-10 w-full">
-        <header className="flex items-start justify-between gap-4 mb-10">
-          <div>
+      <main className="px-4 sm:px-6 lg:px-10 py-6 sm:py-10 w-full min-w-0">
+        <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6 sm:mb-10">
+          <div className="min-w-0">
             <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[var(--text)] tracking-tight">
               {TAB_COPY[activeTab].title}
             </h1>
             <p className="mt-1 text-sm text-[var(--muted)]">{TAB_COPY[activeTab].subtitle}</p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 flex-wrap items-center gap-3">
             <div className="relative">
               <button
                 onClick={toggleNotifPanel}
@@ -103,7 +103,7 @@ export default function CreatorDashboardPage() {
                 )}
               </button>
               {notifOpen && (
-                <div className="absolute right-0 top-12 z-30 w-80 max-h-96 overflow-y-auto rounded-xl border border-[var(--border2)] bg-[var(--card)] p-3 shadow-2xl">
+                <div className="absolute left-0 sm:left-auto sm:right-0 top-12 z-30 w-[calc(100vw-2rem)] max-w-80 sm:w-80 max-h-96 overflow-y-auto rounded-xl border border-[var(--border2)] bg-[var(--card)] p-3 shadow-2xl">
                   {notifications.length === 0
                     ? emptyBox('No notifications yet.')
                     : notifications.slice(0, 15).map((n) => (
@@ -111,7 +111,7 @@ export default function CreatorDashboardPage() {
                         <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--amber)]/10 text-xs text-[var(--amber)]">
                           {n.is_read ? '✓' : '●'}
                         </div>
-                        <div>
+                        <div className="min-w-0 break-words">
                           <span className="font-medium text-[var(--text)]">{n.title || 'Notification'}</span>
                           {n.message ? ` — ${n.message}` : ''}
                           <div className="mt-0.5 text-xs text-[var(--muted)]">
@@ -133,7 +133,7 @@ export default function CreatorDashboardPage() {
         </header>
 
         {/* Mobile tab switcher */}
-        <div className="md:hidden mb-8 flex gap-2 overflow-x-auto pb-2">
+        <div className="md:hidden mb-6 -mx-4 px-4 sm:-mx-6 sm:px-6 flex gap-2 overflow-x-auto pb-2">
           {TABS.map((tab) => (
             <button
               key={tab.id}
@@ -154,8 +154,8 @@ export default function CreatorDashboardPage() {
           <div className="space-y-8">
             {/* KYC Warning Banner */}
             {kycStatus !== 'verified' && (
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5">
-                <div className="flex items-center gap-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 sm:p-5">
+                <div className="flex items-center gap-3 min-w-0">
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--amber)]/20 text-[var(--amber)]">
                     <ShieldCheck size={20} />
                   </div>
@@ -168,21 +168,21 @@ export default function CreatorDashboardPage() {
                 </div>
                 <button
                   onClick={() => setKycModalOpen(true)}
-                  className="shrink-0 rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:opacity-90 transition-all cursor-pointer"
+                  className="w-full sm:w-auto shrink-0 rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:opacity-90 transition-all cursor-pointer"
                 >
                   Verify KYC Now →
                 </button>
               </div>
             )}
 
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
               {[
                 { label: 'Creator score', value: `${profile?.ai_total_score ?? '--'}/100` },
                 { label: 'Follower scale', value: (profile?.follower_count ?? 0).toLocaleString() },
                 { label: 'Engagement rate', value: profile?.engagement_rate ? `${profile?.engagement_rate}%` : '--%' },
                 { label: 'Total earnings', value: fmtINR(totalEarnings()), accent: true },
               ].map((stat) => (
-                <div key={stat.label} className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6">
+                <div key={stat.label} className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-6">
                   <div className="text-xs uppercase tracking-wide text-[var(--muted)]">{stat.label}</div>
                   <div className={`mt-2 font-display text-2xl font-extrabold ${stat.accent ? 'text-[var(--amber)]' : 'text-[var(--text)]'}`}>
                     {stat.value}
@@ -191,8 +191,8 @@ export default function CreatorDashboardPage() {
               ))}
             </div>
 
-            <div className="grid lg:grid-cols-[2fr_1fr] gap-6">
-              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7">
+            <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
                 <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">Recent applications</h2>
                 {applications.length === 0
                   ? emptyBox('You haven\u2019t applied to any campaigns yet. Click "Find Collaboration" above to get started.')
@@ -205,7 +205,7 @@ export default function CreatorDashboardPage() {
                   )}
               </div>
 
-              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7">
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
                 <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">Snapshot</h2>
                 <div className="space-y-4 text-sm">
                   <SnapshotRow icon="📁" main={`${applications.length} total applications submitted`} sub={`${collaborations.length} active collaborations`} />
@@ -216,7 +216,7 @@ export default function CreatorDashboardPage() {
             </div>
 
             {/* AI Matchmaker embedded section */}
-            <div className="mt-10">
+            <div className="mt-6 sm:mt-10">
               <AIMatchmaker
                 title="AI Campaign Matchmaker"
                 subtitle="Find top compatible brand campaigns and creators tuned to your niche and engagement metrics."
@@ -232,7 +232,7 @@ export default function CreatorDashboardPage() {
 
         {/* Applications */}
         {activeTab === 'applications' && (
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
             <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">All applications</h2>
             {applications.length === 0
               ? emptyBox('No applications yet. Browse open campaigns to apply.')
@@ -248,7 +248,7 @@ export default function CreatorDashboardPage() {
 
         {/* Collaborations */}
         {activeTab === 'collaborations' && (
-          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7">
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
             <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">Active &amp; past collaborations</h2>
             {collaborations.length === 0
               ? emptyBox("No collaborations yet. They'll show up here once a brand approves your application.")
@@ -257,11 +257,11 @@ export default function CreatorDashboardPage() {
                   {collaborations.map((c) => (
                     <div
                       key={c.id}
-                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[var(--border)] bg-[var(--card)] p-5"
+                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[var(--border)] bg-[var(--card)] p-4 sm:p-5"
                     >
-                      <div>
-                        <h3 className="text-sm font-semibold text-[var(--text)]">{c.campaign_title || 'Untitled campaign'}</h3>
-                        <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-[var(--muted)]">
+                      <div className="min-w-0">
+                        <h3 className="text-sm font-semibold text-[var(--text)] break-words">{c.campaign_title || 'Untitled campaign'}</h3>
+                        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-[var(--muted)]">
                           <span>Brand: {c.brand_name || 'Brand partner'}</span>
                           <span>Payment: {c.payment ? fmtINR(c.payment) : '—'}</span>
                           <span>Deadline: {fmtDate(c.deadline)}</span>
@@ -270,7 +270,7 @@ export default function CreatorDashboardPage() {
                           </span>
                         </div>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2 shrink-0">
                         <button
                           onClick={() => openThread(c.id)}
                           className="rounded-full border border-[var(--border2)] bg-[var(--card)] px-4 py-2 text-xs font-semibold text-[var(--text)] hover:border-[var(--amber)]"
@@ -294,18 +294,18 @@ export default function CreatorDashboardPage() {
         {/* Payments */}
         {activeTab === 'payments' && (
           <div className="space-y-6">
-            <div className="grid grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
               <StatCard label="Total logged" value={fmtINR(totalEarnings())} className="text-[var(--amber)]" />
               <StatCard label="Released" value={fmtINR(totalEarnings(true))} className="text-emerald-400" />
               <StatCard label="Pending" value={fmtINR(totalEarnings() - totalEarnings(true))} />
             </div>
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
               <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">Payment history</h2>
               {payments.length === 0
                 ? emptyBox('No payments logged yet.')
                 : (
                   <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
+                    <table className="w-full min-w-[480px] text-sm">
                       <thead>
                         <tr className="text-left text-xs uppercase tracking-wide text-[var(--muted)] border-b border-[var(--border)]">
                           <th className="py-2.5 pr-3">Amount</th>
@@ -353,11 +353,11 @@ export default function CreatorDashboardPage() {
         {/* Reviews */}
         {activeTab === 'reviews' && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-2 gap-4 sm:gap-5">
               <StatCard label="Average rating" value={averageRating ? `${averageRating}/5` : '--'} />
               <StatCard label="Total reviews" value={String(reviews.length)} />
             </div>
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
               <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">All reviews</h2>
               {reviews.length === 0
                 ? emptyBox("No reviews yet. They'll appear here after you complete a collaboration.")
@@ -381,10 +381,10 @@ export default function CreatorDashboardPage() {
         {/* KYC Verification Tab */}
         {activeTab === 'kyc' && (
           <div className="space-y-6">
-            <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                  <h2 className="font-display text-xl font-extrabold text-[var(--text)]">KYC &amp; Identity Verification</h2>
+                  <h2 className="font-display text-lg sm:text-xl font-extrabold text-[var(--text)]">KYC &amp; Identity Verification</h2>
                   <p className="mt-1 text-xs text-[var(--muted)]">Governed by Fewsion Creator Escrow &amp; Compliance Policy</p>
                 </div>
 
@@ -403,7 +403,7 @@ export default function CreatorDashboardPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Status breakdown card */}
-                <div className="rounded-xl border border-[var(--border2)] bg-[var(--card2)] p-5 space-y-3">
+                <div className="rounded-xl border border-[var(--border2)] bg-[var(--card2)] p-4 sm:p-5 space-y-3 break-words">
                   <div className="text-xs uppercase tracking-wider font-bold text-[var(--amber)]">Verification Details</div>
                   <div className="text-sm text-[var(--text)]">
                     <span className="text-[var(--muted)]">Legal Name: </span>
@@ -424,7 +424,7 @@ export default function CreatorDashboardPage() {
                 </div>
 
                 {/* Bank payout card */}
-                <div className="rounded-xl border border-[var(--border2)] bg-[var(--card2)] p-5 space-y-3">
+                <div className="rounded-xl border border-[var(--border2)] bg-[var(--card2)] p-4 sm:p-5 space-y-3 break-words">
                   <div className="text-xs uppercase tracking-wider font-bold text-[var(--amber)]">Escrow Payout Account</div>
                   <div className="text-sm text-[var(--text)]">
                     <span className="text-[var(--muted)]">Bank Account: </span>
@@ -447,7 +447,7 @@ export default function CreatorDashboardPage() {
               <div className="mt-8 pt-6 border-t border-[var(--border)] flex justify-end">
                 <button
                   onClick={() => setKycModalOpen(true)}
-                  className="rounded-full bg-[var(--amber)] px-6 py-2.5 text-xs font-bold text-black hover:opacity-90 transition-all cursor-pointer"
+                  className="w-full sm:w-auto rounded-full bg-[var(--amber)] px-6 py-2.5 text-xs font-bold text-black hover:opacity-90 transition-all cursor-pointer"
                 >
                   {kycStatus === 'verified' ? 'Update KYC Details' : 'Complete KYC Verification Now'}
                 </button>
@@ -463,18 +463,18 @@ export default function CreatorDashboardPage() {
             onClick={() => setContractModal(null)}
           >
             <div
-              className="max-h-[85vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-[var(--border2)] bg-[var(--card)] p-7"
+              className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-[var(--border2)] bg-[var(--card)] p-4 sm:p-7"
               onClick={(e) => e.stopPropagation()}
             >
               <h2 className="font-display text-lg font-bold text-[var(--text)]">Collaboration Agreement</h2>
               <p className="mt-1 mb-4 text-xs text-[var(--muted)]">
                 Auto-generated from the campaign terms. Not a substitute for legal advice — review before signing.
               </p>
-              <pre className="mb-5 whitespace-pre-wrap rounded-lg bg-[var(--black)] p-4 font-sans text-sm leading-relaxed text-[var(--text)]">
+              <pre className="mb-5 whitespace-pre-wrap rounded-lg bg-[var(--black)] p-3 sm:p-4 font-sans text-sm break-words leading-relaxed text-[var(--text)]">
                 {contractModal.contract_text}
               </pre>
 
-              <div className="mb-5 grid grid-cols-2 gap-3 text-xs">
+              <div className="mb-5 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
                 {[
                   { who: 'Brand', at: contractModal.brand_signed_at, name: null },
                   { who: 'You', at: contractModal.counterparty_signed_at, name: contractModal.counterparty_signature_name },
@@ -482,7 +482,7 @@ export default function CreatorDashboardPage() {
                   <div key={s.who} className="rounded-lg border border-[var(--border)] p-3">
                     <div className="text-[var(--muted)]">{s.who}</div>
                     {s.at ? (
-                      <div className="mt-1 flex items-center gap-1.5 font-semibold text-emerald-400">
+                      <div className="mt-1 flex flex-wrap items-center gap-1.5 font-semibold text-emerald-400">
                         <CheckCircle2 size={13} /> Signed {new Date(s.at).toLocaleDateString()}
                         {s.name ? ` · ${s.name}` : ''}
                       </div>
@@ -495,7 +495,7 @@ export default function CreatorDashboardPage() {
                 ))}
               </div>
 
-              <div className="flex justify-end gap-2.5">
+              <div className="flex flex-wrap justify-end gap-2.5">
                 <button
                   onClick={() => setContractModal(null)}
                   className="rounded-full border border-[var(--border2)] px-5 py-2.5 text-xs font-semibold text-[var(--text)]"

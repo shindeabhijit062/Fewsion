@@ -98,7 +98,7 @@ export function OfferForm({
             }}
             maxLength={100}
             placeholder="Add a custom deliverable…"
-            className={`${input} py-2 text-xs`}
+            className={`${input} min-w-0 py-2 text-xs`}
           />
           <button
             type="button"

@@ -97,7 +97,7 @@ export default function PricingPage() {
         <div className="section-tag">Add-ons</div>
         <h2 className="section-title reveal">Pay only for<br /><em>what you need</em></h2>
         <p className="section-sub reveal reveal-delay-1">One-time tools and boosts available across all plan tiers.</p>
-        <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {addons.map((a, i) => (
             <div
               key={a.name}
@@ -137,7 +137,7 @@ export default function PricingPage() {
       <section id="faq" className="px-[5%] py-[80px]" style={{ background: 'var(--black)' }}>
         <div className="section-tag">Frequently Asked</div>
         <h2 className="section-title reveal">Got questions?<br /><em>We&apos;ve got answers.</em></h2>
-        <div className="grid gap-4 mt-12" style={{ gridTemplateColumns: '1fr 1fr' }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
           {faqs.map((faq, i) => (
             <FaqItem key={i} q={faq.q} a={faq.a} delay={i % 2 === 1 ? 'reveal-delay-1' : ''} />
           ))}
@@ -179,12 +179,7 @@ export default function PricingPage() {
 function PlansGrid({ plans, twoCol }: { plans: Plan[]; twoCol?: boolean }) {
   return (
     <div
-      className="grid gap-4"
-      style={{
-        gridTemplateColumns: twoCol ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-        maxWidth: twoCol ? '700px' : undefined,
-        margin: twoCol ? '0 auto' : undefined,
-      }}
+      className={`grid gap-4 grid-cols-1 ${twoCol ? 'md:grid-cols-2 max-w-[700px] mx-auto' : 'md:grid-cols-2 lg:grid-cols-3'}`}
     >
       {plans.map((plan, i) => (
         <PlanCard key={plan.name} plan={plan} index={i} />

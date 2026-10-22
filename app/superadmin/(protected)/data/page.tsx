@@ -152,9 +152,33 @@ export default function SuperAdminDataManagerPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
+        {/* Table picker (phones / tablets) */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3 lg:hidden">
+          {!tables.length ? (
+            <div className="flex justify-center py-2">
+              <Loader2 className="h-5 w-5 animate-spin text-[var(--amber)]" />
+            </div>
+          ) : (
+            <div className="relative">
+              <Database className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--amber)]" />
+              <select
+                value={active}
+                onChange={(e) => switchTable(e.target.value)}
+                className="w-full rounded-lg border border-[var(--border)] bg-[var(--card2)] py-2 pl-9 pr-3 font-mono text-xs text-[var(--text)] outline-none focus:border-[var(--amber)]"
+              >
+                {tables.map((t) => (
+                  <option key={t.name} value={t.name}>
+                    {t.name}{t.count != null ? ` (${t.count})` : ''}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+        </div>
+
         {/* Table list */}
-        <aside className="h-fit rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3">
+        <aside className="hidden h-fit rounded-2xl border border-[var(--border)] bg-[var(--card)] p-3">
           <input
             value={tableFilter}
             onChange={(e) => setTableFilter(e.target.value)}
@@ -189,20 +213,20 @@ export default function SuperAdminDataManagerPage() {
 
         {/* Rows */}
         <section className="min-w-0 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--card)]">
-          <div className="flex flex-col gap-3 border-b border-[var(--border)] p-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2">
-              <span className="font-mono text-sm font-bold text-[var(--amber)]">{active || '…'}</span>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[var(--border)] p-4">
+            <div className="flex min-w-0 flex-wrap items-center gap-2">
+              <span className="truncate font-mono text-sm font-bold text-[var(--amber)]">{active || '…'}</span>
               <span className="text-xs text-[var(--muted)]">{count} record{count === 1 ? '' : 's'}</span>
               {!pk && table && <span className="rounded bg-yellow-500/10 px-2 py-0.5 text-[10px] text-yellow-400">read-only (no primary key)</span>}
             </div>
-            <div className="flex items-center gap-2">
-              <div className="relative">
+            <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+              <div className="relative min-w-0 flex-1 sm:flex-none">
                 <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[var(--muted)]" />
                 <input
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Search text or exact id…"
-                  className="w-56 rounded-xl border border-[var(--border)] bg-[var(--card2)] py-2 pl-9 pr-3 text-xs text-[var(--text)] outline-none focus:border-[var(--amber)]"
+                  className="w-full sm:w-56 rounded-xl border border-[var(--border)] bg-[var(--card2)] py-2 pl-9 pr-3 text-xs text-[var(--text)] outline-none focus:border-[var(--amber)]"
                 />
               </div>
               <button
@@ -218,7 +242,7 @@ export default function SuperAdminDataManagerPage() {
                   setEditorOpen(true);
                 }}
                 disabled={!table}
-                className="flex items-center gap-1.5 rounded-xl bg-[var(--amber)] px-3.5 py-2 text-xs font-bold text-black hover:opacity-90 disabled:opacity-50"
+                className="flex items-center gap-1.5 whitespace-nowrap rounded-xl bg-[var(--amber)] px-3.5 py-2 text-xs font-bold text-black hover:opacity-90 disabled:opacity-50"
               >
                 <Plus className="h-3.5 w-3.5" /> Add record
               </button>
@@ -229,7 +253,7 @@ export default function SuperAdminDataManagerPage() {
             <table className="w-full text-left text-xs">
               <thead className="border-b border-[var(--border)] bg-[var(--card2)] text-[10px] uppercase text-[var(--muted2)]">
                 <tr>
-                  {pk && <th className="sticky left-0 z-10 bg-[var(--card2)] px-4 py-3 font-semibold">Actions</th>}
+                  {pk && <th className="sticky left-0 z-10 bg-[var(--card2)] px-3 sm:px-4 py-3 font-semibold">Actions</th>}
                   {columns.map((c) => (
                     <th key={c.name} className="whitespace-nowrap px-4 py-3 font-semibold">
                       {c.name}
@@ -260,7 +284,7 @@ export default function SuperAdminDataManagerPage() {
                   rows.map((r, i) => (
                     <tr key={pk ? String(r[pk]) : i} className="group hover:bg-[var(--card2)]">
                       {pk && (
-                        <td className="sticky left-0 z-10 bg-[var(--card)] px-4 py-2.5 group-hover:bg-[var(--card2)]">
+                        <td className="sticky left-0 z-10 bg-[var(--card)] px-3 sm:px-4 py-2.5 group-hover:bg-[var(--card2)]">
                           <div className="flex gap-1">
                             <button
                               onClick={() => {
@@ -288,7 +312,7 @@ export default function SuperAdminDataManagerPage() {
                           <td
                             key={c.name}
                             title={text.length > 40 ? text : undefined}
-                            className={`max-w-[260px] truncate whitespace-nowrap px-4 py-2.5 ${text === '—' ? 'text-[var(--muted2)]' : 'text-[var(--text)]'
+                            className={`max-w-[200px] sm:max-w-[260px] truncate whitespace-nowrap px-4 py-2.5 ${text === '—' ? 'text-[var(--muted2)]' : 'text-[var(--text)]'
                               } ${c.format === 'uuid' ? 'font-mono text-[11px]' : ''}`}
                           >
                             {text}
@@ -302,7 +326,7 @@ export default function SuperAdminDataManagerPage() {
             </table>
           </div>
 
-          <div className="flex items-center justify-between border-t border-[var(--border)] px-4 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] px-4 py-3">
             <span className="text-xs text-[var(--muted)]">
               Page <b className="text-[var(--text)]">{page + 1}</b> of <b className="text-[var(--text)]">{totalPages}</b>
             </span>
