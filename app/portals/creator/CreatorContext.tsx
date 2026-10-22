@@ -948,6 +948,7 @@ export function CreatorProvider({ children }: { children: React.ReactNode }) {
     myName: profile?.creator_name || 'A creator',
     collaborations,
     activeCollabId: activeTab === 'messages' ? selectedCollabId : null,
+    onDealsChanged: () => loadAll(true),
   });
 
   const sendMessage = useCallback(async () => {

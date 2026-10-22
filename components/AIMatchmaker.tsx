@@ -91,9 +91,11 @@ interface AIMatchmakerProps {
   onSelectCreator?: (creator: CreatorMatch) => void;
   title?: string;
   subtitle?: string;
+  /** Label to show instead of "Connect" for creators you already have a deal with, keyed by creator id */
+  creatorStatus?: Record<string, string>;
 }
 
-export function AIMatchmaker({ onSelectCreator, title, subtitle }: AIMatchmakerProps) {
+export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }: AIMatchmakerProps) {
   const [niche, setNiche] = useState('Any');
   const [goal, setGoal] = useState('Conversions');
   const [budget, setBudget] = useState(15000);
@@ -420,7 +422,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle }: AIMatchmakerP
                   <>
                     <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
                       {matches.map((c, i) => (
-                        <MatchCard key={c.id} creator={c} rank={i} onSelect={onSelectCreator} />
+                        <MatchCard key={c.id} creator={c} rank={i} onSelect={onSelectCreator} status={creatorStatus?.[c.id]} />
                       ))}
                     </div>
 
@@ -445,7 +447,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle }: AIMatchmakerP
                           onClick={() => onSelectCreator?.(leadMatch)}
                           className="shrink-0 rounded-full bg-[var(--amber)] px-5 py-2 text-xs font-extrabold text-black hover:opacity-90 transition-all cursor-pointer"
                         >
-                          Request collaboration →
+                          {creatorStatus?.[leadMatch.id] ? `${creatorStatus[leadMatch.id]} →` : 'Send offer →'}
                         </button>
                       </motion.div>
                     )}
@@ -597,10 +599,12 @@ function MatchCard({
   creator,
   rank,
   onSelect,
+  status,
 }: {
   creator: CreatorMatch;
   rank: number;
   onSelect?: (c: CreatorMatch) => void;
+  status?: string;
 }) {
   const delay = 0.1 + rank * 0.12;
   const subline = [creator.platform, creator.niche].filter(Boolean).join(' • ') || 'Fewsion creator';
@@ -684,13 +688,22 @@ function MatchCard({
         <div className="text-xs font-extrabold text-white">
           {creator.rate ?? <span className="font-medium text-[var(--muted2)]">Rate not set</span>}
         </div>
-        <button
-          onClick={() => onSelect?.(creator)}
-          className="flex items-center gap-1 text-xs font-bold text-[var(--amber)] hover:underline"
-        >
-          <span>Connect</span>
-          <ArrowRight size={13} />
-        </button>
+        {status ? (
+          <button
+            onClick={() => onSelect?.(creator)}
+            className="rounded-full bg-[rgba(245,166,35,0.12)] px-2.5 py-1 text-[11px] font-bold text-[var(--amber)] hover:bg-[rgba(245,166,35,0.2)]"
+          >
+            {status}
+          </button>
+        ) : (
+          <button
+            onClick={() => onSelect?.(creator)}
+            className="flex items-center gap-1 text-xs font-bold text-[var(--amber)] hover:underline"
+          >
+            <span>Connect</span>
+            <ArrowRight size={13} />
+          </button>
+        )}
       </div>
     </motion.div>
   );

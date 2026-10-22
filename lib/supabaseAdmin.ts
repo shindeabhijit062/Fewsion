@@ -91,3 +91,13 @@ export async function checkAdminCaller(req: Request): Promise<AdminCheck> {
       : `Account ${user.email} has no role in the users table. Set its role to super_admin in Supabase (Table Editor → users).`,
   };
 }
+
+/** The signed-in user behind a request's bearer token, or null */
+export async function getRequestUser(req: Request) {
+  const admin = getSupabaseAdmin();
+  if (!admin) return null;
+  const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
+  if (!token) return null;
+  const { data, error } = await admin.auth.getUser(token);
+  return error ? null : data.user;
+}

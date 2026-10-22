@@ -123,6 +123,8 @@ import { AIMatchmaker, CreatorMatch } from '@/components/AIMatchmaker';
 import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
 import { MessagesInbox, MessageToasts, useInbox } from '@/components/MessagesInbox';
+import { CreatorOfferDrawer } from '@/components/CreatorOfferDrawer';
+import { STATUS_LABEL } from '@/lib/offers';
 
 // ---------------------------------------------------------------------
 // Types
@@ -251,20 +253,16 @@ export default function BrandPortalPage() {
   const [signing, setSigning] = useState(false);
 
   // Collaboration request (from the AI Matchmaker)
-  const [requestTarget, setRequestTarget] = useState<CreatorMatch | null>(null);
-  const [requestCampaignId, setRequestCampaignId] = useState('');
-  const [requestNote, setRequestNote] = useState('');
-  const [requestSending, setRequestSending] = useState(false);
-  const [requestError, setRequestError] = useState('');
-  const [requestSentCollabId, setRequestSentCollabId] = useState<string | null>(null);
+  // Collaboration offer drawer (from the AI Matchmaker)
+  const [offerTarget, setOfferTarget] = useState<CreatorMatch | null>(null);
 
-  // Live messaging (conversations, unread counts, alerts)
   const inbox = useInbox({
     userId,
     role: 'brand',
     myName: profile?.brand_name || 'A brand',
     collaborations,
     activeCollabId: activeTab === 'messages' && selectedCampaignId === null ? selectedCollabId : null,
+    onDealsChanged: () => loadAll(true),
   });
 
   // KYC state
@@ -317,7 +315,7 @@ export default function BrandPortalPage() {
     const [profileRes, campaignsRes, collabRes, notifRes] = await Promise.all([
       supabase.from('brand_profiles').select('*').eq('user_id', user.id).maybeSingle(),
       supabase.from('campaign_briefs').select('*').eq('brand_id', user.id).order('created_at', { ascending: false }),
-      supabase.from('collaborations').select('*').eq('brand_id', user.id),
+      supabase.from('collaborations').select('*').eq('brand_id', user.id).order('created_at', { ascending: false }),
       supabase.from('notifications').select('*').eq('user_id', user.id).order('created_at', { ascending: false }),
     ]);
 
@@ -507,87 +505,25 @@ export default function BrandPortalPage() {
   }, []);
 
   // ---------------------------------------------------------------------
-  // Collaboration requests (AI Matchmaker → creator)
+  // Collaboration offers (AI Matchmaker → creator)
   // ---------------------------------------------------------------------
-  const openCollabRequest = useCallback((creator: CreatorMatch) => {
-    const firstCampaign = campaigns.find((c) => c.status_state === 'Live') || campaigns[0];
-    setRequestTarget(creator);
-    setRequestCampaignId(firstCampaign?.id || '');
-    setRequestNote(
-      `Hi ${creator.name}, we'd love to collaborate with you on ${firstCampaign?.campaign_title ? `"${firstCampaign.campaign_title}"` : 'our campaign'}. ` +
-      `Your content looks like a great fit for ${profile?.brand_name || 'our brand'}. Let us know if you're interested!`
-    );
-    setRequestError('');
-    setRequestSentCollabId(null);
-  }, [campaigns, profile]);
+  // Latest collaboration per creator, for "Offer pending" labels and the drawer
+  const latestCollabByCreator = useMemo(() => {
+    const map: Record<string, Collaboration> = {};
+    collaborations.forEach((c) => {
+      if (!map[c.creator_id]) map[c.creator_id] = c;
+    });
+    return map;
+  }, [collaborations]);
 
-  const closeCollabRequest = useCallback(() => {
-    if (requestSending) return;
-    setRequestTarget(null);
-  }, [requestSending]);
+  const creatorStatusLabels = useMemo(() => {
+    const out: Record<string, string> = {};
+    Object.entries(latestCollabByCreator).forEach(([creatorId, c]) => {
+      if (c.status !== 'declined') out[creatorId] = STATUS_LABEL[c.status || ''] || 'In progress';
+    });
+    return out;
+  }, [latestCollabByCreator]);
 
-  const sendCollabRequest = useCallback(async () => {
-    if (!requestTarget || !userId) return;
-    const campaign = campaigns.find((c) => c.id === requestCampaignId);
-    if (!campaign) {
-      setRequestError('Pick a campaign for this collaboration.');
-      return;
-    }
-    const note = requestNote.trim();
-    if (!note) {
-      setRequestError('Add a short note for the creator.');
-      return;
-    }
-
-    // Already working with this creator on this campaign: just open the chat
-    const existing = collaborations.find(
-      (c) => c.creator_id === requestTarget.id && c.campaign_id === campaign.id
-    );
-    if (existing) {
-      setRequestTarget(null);
-      openThread(existing.id);
-      return;
-    }
-
-    setRequestSending(true);
-    setRequestError('');
-
-    const { data: collab, error: collabError } = await supabase
-      .from('collaborations')
-      .insert({
-        campaign_id: campaign.id,
-        creator_id: requestTarget.id,
-        brand_id: userId,
-        status: 'requested',
-        payment: campaign.budget_allocated || null,
-      })
-      .select()
-      .single();
-
-    if (collabError || !collab) {
-      console.error('Collaboration request failed:', collabError);
-      setRequestError(collabError?.message || "Couldn't send the request. Please try again.");
-      setRequestSending(false);
-      return;
-    }
-
-    setCollaborations((prev) => [collab, ...prev]);
-
-    const [{ error: msgError }, { error: notifError }] = await Promise.all([
-      supabase.from('messages').insert({ collaboration_id: collab.id, sender_id: userId, content: note }),
-      supabase.from('notifications').insert({
-        user_id: requestTarget.id,
-        title: 'New collaboration request',
-        message: `${profile?.brand_name || 'A brand'} invited you to collaborate on "${campaign.campaign_title || 'a campaign'}".`,
-        is_read: false,
-      }),
-    ]);
-    if (msgError) console.error('Request message failed:', msgError);
-    if (notifError) console.error('Request notification failed:', notifError);
-
-    setRequestSending(false);
-    setRequestSentCollabId(collab.id);
-  }, [requestTarget, userId, campaigns, requestCampaignId, requestNote, collaborations, openThread, profile]);
 
   // ---------------------------------------------------------------------
   // Contracts
@@ -1048,7 +984,8 @@ export default function BrandPortalPage() {
               <AIMatchmaker
                 title="AI Neural Creator Matchmaker"
                 subtitle="Search and match verified creators tailored to your brand niche, Target VTR, and budget constraints."
-                onSelectCreator={openCollabRequest}
+                onSelectCreator={setOfferTarget}
+                creatorStatus={creatorStatusLabels}
               />
             </div>
           </div>
@@ -1268,137 +1205,20 @@ export default function BrandPortalPage() {
         </div>
       )}
 
-      {/* Collaboration request modal */}
-      {requestTarget && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4"
-          onClick={closeCollabRequest}
-        >
-          <div
-            className="relative w-full max-w-lg rounded-2xl border border-[oklch(0.28_0.02_80)] bg-[oklch(0.14_0.02_80)] p-7"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={closeCollabRequest}
-              aria-label="Close"
-              className="absolute right-4 top-4 rounded-full p-1.5 text-[oklch(0.6_0.015_85)] hover:bg-white/5 hover:text-white"
-            >
-              <X size={16} />
-            </button>
-
-            {requestSentCollabId ? (
-              <div className="py-4 text-center">
-                <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400">
-                  <CheckCircle2 size={24} />
-                </div>
-                <h2 className="font-display text-lg font-bold text-white">Request sent to {requestTarget.name}</h2>
-                <p className="mx-auto mt-2 max-w-sm text-xs text-[oklch(0.6_0.015_85)]">
-                  They&apos;ve been notified and can reply in Messages. Once they accept, you can generate the contract.
-                </p>
-                <div className="mt-6 flex justify-center gap-2.5">
-                  <button
-                    onClick={() => setRequestTarget(null)}
-                    className="rounded-full border border-[oklch(0.3_0.02_80)] px-5 py-2.5 text-xs font-semibold text-white"
-                  >
-                    Done
-                  </button>
-                  <button
-                    onClick={() => {
-                      const id = requestSentCollabId;
-                      setRequestTarget(null);
-                      openThread(id);
-                    }}
-                    className="rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)]"
-                  >
-                    Open conversation
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <>
-                <h2 className="font-display text-lg font-bold text-white">Request collaboration</h2>
-                <p className="mt-1 text-xs text-[oklch(0.55_0.01_85)]">
-                  Invite <span className="font-semibold text-white">{requestTarget.name}</span>
-                  {requestTarget.niche ? ` (${requestTarget.niche})` : ''} to one of your campaigns.
-                </p>
-
-                {/* Creator summary */}
-                <div className="mt-5 flex items-center justify-between gap-3 rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.17_0.02_80)] p-3.5 text-xs">
-                  <div className="text-[oklch(0.7_0.015_85)]">
-                    {[requestTarget.platform, requestTarget.followers && `${requestTarget.followers} followers`, requestTarget.rate && `${requestTarget.rate}/video`]
-                      .filter(Boolean)
-                      .join(' · ') || 'Fewsion creator'}
-                  </div>
-                  <span className="shrink-0 rounded-full bg-[oklch(0.8_0.16_75_/_0.12)] px-2.5 py-1 font-bold text-[oklch(0.8_0.16_75)]">
-                    {requestTarget.matchScore}% match
-                  </span>
-                </div>
-
-                {campaigns.length === 0 ? (
-                  <div className="mt-5 rounded-xl border border-dashed border-[oklch(0.3_0.02_80)] p-5 text-center">
-                    <p className="text-sm text-white">You don&apos;t have a campaign yet.</p>
-                    <p className="mt-1 text-xs text-[oklch(0.6_0.015_85)]">Create one first, then invite creators to it.</p>
-                    <Link
-                      href="../Brand/fewsion_brand_portal.html?new=true"
-                      className="mt-4 inline-block rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)]"
-                    >
-                      ✨ New AI Campaign
-                    </Link>
-                  </div>
-                ) : (
-                  <>
-                    <label className="mt-5 mb-1.5 block text-xs font-semibold text-[oklch(0.75_0.015_85)]">Campaign</label>
-                    <select
-                      value={requestCampaignId}
-                      onChange={(e) => setRequestCampaignId(e.target.value)}
-                      disabled={requestSending}
-                      className="w-full rounded-xl border border-[oklch(0.28_0.02_80)] bg-[oklch(0.17_0.02_80)] px-3.5 py-2.5 text-sm text-white outline-none focus:border-[oklch(0.8_0.16_75)]"
-                    >
-                      {campaigns.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.campaign_title || 'Untitled campaign'}
-                          {c.budget_allocated ? ` · ${fmtINR(c.budget_allocated)}` : ''}
-                          {c.status_state ? ` · ${c.status_state}` : ''}
-                        </option>
-                      ))}
-                    </select>
-
-                    <label className="mt-4 mb-1.5 block text-xs font-semibold text-[oklch(0.75_0.015_85)]">Message to creator</label>
-                    <textarea
-                      value={requestNote}
-                      onChange={(e) => setRequestNote(e.target.value)}
-                      disabled={requestSending}
-                      rows={4}
-                      maxLength={1000}
-                      className="w-full resize-none rounded-xl border border-[oklch(0.28_0.02_80)] bg-[oklch(0.17_0.02_80)] px-3.5 py-2.5 text-sm text-white outline-none focus:border-[oklch(0.8_0.16_75)]"
-                    />
-
-                    {requestError && <p className="mt-3 text-xs text-red-400">{requestError}</p>}
-
-                    <div className="mt-5 flex justify-end gap-2.5">
-                      <button
-                        onClick={closeCollabRequest}
-                        disabled={requestSending}
-                        className="rounded-full border border-[oklch(0.3_0.02_80)] px-5 py-2.5 text-xs font-semibold text-white disabled:opacity-50"
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        onClick={sendCollabRequest}
-                        disabled={requestSending}
-                        className="flex items-center gap-1.5 rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)] disabled:opacity-60"
-                      >
-                        <SendIcon size={13} />
-                        {requestSending ? 'Sending…' : 'Send request'}
-                      </button>
-                    </div>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-        </div>
-      )}
+      {/* Collaboration offer drawer */}
+      <CreatorOfferDrawer
+        creator={offerTarget}
+        campaigns={campaigns}
+        existing={offerTarget ? latestCollabByCreator[offerTarget.id] ?? null : null}
+        brandName={profile?.brand_name || 'our brand'}
+        onClose={() => setOfferTarget(null)}
+        onSent={(collab) => setCollaborations((prev) => [collab, ...prev.filter((c) => c.id !== collab.id)])}
+        onOpenConversation={(id) => {
+          setOfferTarget(null);
+          loadAll(true);
+          openThread(id);
+        }}
+      />
 
       {/* Live alerts for new messages */}
       <MessageToasts toasts={inbox.toasts} onOpen={openThread} onDismiss={inbox.dismissToast} />

@@ -16,8 +16,20 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ArrowLeft, Bell, FileText, MessageSquare, Search, Send, X } from 'lucide-react';
+import { ArrowLeft, Bell, Check, FileText, Lock, MessageSquare, Repeat, Search, Send, X } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
+import {
+  NEGOTIATING,
+  OfferEvent,
+  formatDeadline,
+  formatINR,
+  isChatOpen,
+  messagePreview,
+  parseOfferEvent,
+  STATUS_LABEL,
+} from '@/lib/offers';
+import { offersApi } from '@/lib/offersApi';
+import { OfferForm, OfferFormValue, validateOffer } from '@/components/OfferForm';
 
 // ---------------------------------------------------------------------
 // Types
@@ -137,6 +149,7 @@ export function useInbox({
   myName,
   collaborations,
   activeCollabId,
+  onDealsChanged,
 }: {
   userId: string | null;
   role: Role;
@@ -144,7 +157,12 @@ export function useInbox({
   collaborations: InboxCollab[];
   /** The conversation currently open on screen (null if the inbox isn't visible) */
   activeCollabId: string | null;
+  /** Called when collaborations need reloading (new offer, offer accepted, …) */
+  onDealsChanged?: () => void;
 }) {
+  const dealsChangedRef = useRef(onDealsChanged);
+  dealsChangedRef.current = onDealsChanged;
+  const dealsChanged = useCallback(() => dealsChangedRef.current?.(), []);
   const [messages, setMessages] = useState<InboxMessage[]>([]);
   const [people, setPeople] = useState<Record<string, Person>>({});
   const [campaignTitles, setCampaignTitles] = useState<Record<string, string>>({});
@@ -254,6 +272,7 @@ export function useInbox({
       });
 
       if (!alert) return;
+      if (fresh.some((m) => m.sender_id !== userId && parseOfferEvent(m.content))) dealsChanged();
       for (const m of fresh) {
         if (m.sender_id === userId) continue;
         const viewing = activeRef.current === m.collaboration_id && !document.hidden;
@@ -268,19 +287,19 @@ export function useInbox({
 
         setToasts((prev) => [
           ...prev.slice(-2),
-          { id: m.id, collabId: m.collaboration_id, name, avatarUrl: person?.avatarUrl ?? null, content: m.content },
+          { id: m.id, collabId: m.collaboration_id, name, avatarUrl: person?.avatarUrl ?? null, content: messagePreview(m.content) },
         ]);
 
         // Desktop notification when the tab is in the background
         if (document.hidden && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
           try {
-            const n = new Notification(`New message from ${name}`, { body: m.content.slice(0, 140), tag: m.collaboration_id });
+            const n = new Notification(`New message from ${name}`, { body: messagePreview(m.content).slice(0, 140), tag: m.collaboration_id });
             n.onclick = () => window.focus();
           } catch {}
         }
       }
     },
-    [userId, role, markRead]
+    [userId, role, markRead, dealsChanged]
   );
 
   // Initial load of all messages
@@ -311,7 +330,17 @@ export function useInbox({
 
   // Live updates: realtime first, with a light poll in case realtime is off
   useEffect(() => {
-    if (!userId || !collabIds.length) return;
+    if (!userId) return;
+    const known = new Set(collabIds);
+    const sideColumn = role === 'brand' ? 'brand_id' : 'creator_id';
+
+    // New collaborations (e.g. an offer sent to this creator)
+    const dealPoll = setInterval(async () => {
+      const { data } = await supabase.from('collaborations').select('id').eq(sideColumn, userId);
+      if (data?.some((c) => !known.has(c.id))) dealsChanged();
+    }, POLL_MS * 2);
+
+    if (!collabIds.length) return () => clearInterval(dealPoll);
 
     const channel = supabase
       .channel(`inbox-${userId}-${collabIds.length}`)
@@ -336,9 +365,10 @@ export function useInbox({
     return () => {
       supabase.removeChannel(channel);
       clearInterval(poll);
+      clearInterval(dealPoll);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userId, collabKey, ingest]);
+  }, [userId, collabKey, ingest, role, dealsChanged]);
 
   // Opening a conversation marks it read
   useEffect(() => {
@@ -434,7 +464,7 @@ export function useInbox({
     [send]
   );
 
-  return { conversations, messages, totalUnread, toasts, dismissToast, send, retry, loaded };
+  return { conversations, messages, totalUnread, toasts, dismissToast, send, retry, loaded, dealsChanged, role };
 }
 
 export type InboxState = ReturnType<typeof useInbox>;
@@ -468,6 +498,9 @@ function Avatar({ id, name, url, size = 40 }: { id: string; name: string; url: s
 
 const STATUS_STYLES: Record<string, string> = {
   requested: 'bg-[rgba(245,166,35,0.12)] text-[var(--amber)]',
+  offer_pending: 'bg-[rgba(245,166,35,0.12)] text-[var(--amber)]',
+  offer_countered: 'bg-violet-500/10 text-violet-300',
+  declined: 'bg-red-500/10 text-red-400',
   active: 'bg-emerald-500/10 text-emerald-400',
   approved: 'bg-emerald-500/10 text-emerald-400',
   completed: 'bg-sky-500/10 text-sky-400',
@@ -478,7 +511,7 @@ function StatusPill({ status }: { status?: string | null }) {
   const s = (status || 'active').toLowerCase();
   return (
     <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${STATUS_STYLES[s] || 'bg-white/5 text-[var(--muted)]'}`}>
-      {s}
+      {STATUS_LABEL[s] || s.replace(/_/g, ' ')}
     </span>
   );
 }
@@ -513,6 +546,19 @@ export function MessagesInbox({
     () => (selectedId ? inbox.messages.filter((m) => m.collaboration_id === selectedId) : []),
     [inbox.messages, selectedId]
   );
+
+  // Offer negotiation state for the open conversation
+  const status = selected?.collab.status ?? null;
+  const latestProposal = useMemo(() => {
+    for (let i = thread.length - 1; i >= 0; i--) {
+      const e = parseOfferEvent(thread[i].content);
+      if (e && (e.type === 'offer' || e.type === 'counter')) return thread[i];
+    }
+    return null;
+  }, [thread]);
+  const negotiating = !!status && NEGOTIATING.has(status);
+  const myTurn = negotiating && !!latestProposal && latestProposal.sender_id !== userId;
+  const chatOpen = isChatOpen(status);
 
   const filtered = inbox.conversations.filter((c) => {
     const q = query.trim().toLowerCase();
@@ -589,7 +635,7 @@ export function MessagesInbox({
           {filtered.map((c) => {
             const active = c.collab.id === selectedId;
             const last = c.lastMessage;
-            const preview = last ? `${last.sender_id === userId ? 'You: ' : ''}${last.content}` : 'No messages yet. Say hello 👋';
+            const preview = last ? `${last.sender_id === userId ? 'You: ' : ''}${messagePreview(last.content)}` : 'No messages yet. Say hello 👋';
             return (
               <button
                 key={c.collab.id}
@@ -669,6 +715,23 @@ export function MessagesInbox({
               )}
             </header>
 
+            {(negotiating || status === 'declined') && (
+              <div
+                className={`flex items-center gap-2 border-b px-4 py-2 text-[11px] font-medium ${status === 'declined'
+                  ? 'border-red-500/20 bg-red-500/5 text-red-300'
+                  : myTurn
+                    ? 'border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.08)] text-[var(--amber)]'
+                    : 'border-[var(--border)] bg-white/[0.02] text-[var(--muted)]'
+                  }`}
+              >
+                {status === 'declined'
+                  ? 'This offer was declined.'
+                  : myTurn
+                    ? `${selected.name} is waiting for your response to the ${status === 'offer_countered' ? 'counter-offer' : 'offer'} below.`
+                    : `Waiting for ${selected.name} to respond to your ${status === 'offer_countered' ? 'counter-offer' : 'offer'}.`}
+              </div>
+            )}
+
             {/* Messages */}
             <div className="min-h-0 flex-1 overflow-y-auto px-4 py-5" style={{ background: 'radial-gradient(ellipse at top, rgba(245,166,35,0.04), transparent 60%)' }}>
               {thread.length === 0 && (
@@ -696,6 +759,19 @@ export function MessagesInbox({
                           <div className="h-px flex-1 bg-[var(--border)]" />
                         </div>
                       )}
+                      {parseOfferEvent(m.content) ? (
+                        <OfferEventCard
+                          event={parseOfferEvent(m.content)!}
+                          mine={mine}
+                          senderName={mine ? 'You' : selected.name}
+                          collabId={selected.collab.id}
+                          canRespond={myTurn && latestProposal?.id === m.id}
+                          isBrand={inbox.role === 'brand'}
+                          time={timeOf(m.created_at)}
+                          onChanged={inbox.dealsChanged}
+                          onContract={onContract}
+                        />
+                      ) : (
                       <motion.div
                         layout="position"
                         initial={{ opacity: 0, y: 8, scale: 0.98 }}
@@ -728,6 +804,7 @@ export function MessagesInbox({
                           </div>
                         </div>
                       </motion.div>
+                      )}
                     </React.Fragment>
                   );
                 })}
@@ -736,6 +813,14 @@ export function MessagesInbox({
             </div>
 
             {/* Composer */}
+            {!chatOpen ? (
+              <div className="flex items-center justify-center gap-2 border-t border-[var(--border)] px-4 py-4 text-center text-xs text-[var(--muted)]">
+                <Lock size={13} className="shrink-0" />
+                {status === 'declined'
+                  ? 'Chat is closed because the offer was declined.'
+                  : 'Chat opens once the offer is accepted. Use Accept, Counter or Decline above.'}
+              </div>
+            ) : (
             <div className="border-t border-[var(--border)] p-3">
               <div className="flex items-end gap-2 rounded-2xl border border-[var(--border2)] bg-[var(--black)] p-1.5 pl-4 focus-within:border-[rgba(245,166,35,0.5)]">
                 <textarea
@@ -768,10 +853,224 @@ export function MessagesInbox({
               </div>
               <p className="mt-1.5 px-1 text-[10px] text-[var(--muted)]">Enter to send · Shift + Enter for a new line</p>
             </div>
+            )}
           </>
         )}
       </section>
     </div>
+  );
+}
+
+// ---------------------------------------------------------------------
+// Offer cards (offer / counter / accepted / declined)
+// ---------------------------------------------------------------------
+function OfferEventCard({
+  event,
+  mine,
+  senderName,
+  collabId,
+  canRespond,
+  isBrand,
+  time,
+  onChanged,
+  onContract,
+}: {
+  event: OfferEvent;
+  mine: boolean;
+  senderName: string;
+  collabId: string;
+  canRespond: boolean;
+  isBrand: boolean;
+  time: string;
+  onChanged: () => void;
+  onContract?: (collabId: string) => void;
+}) {
+  const [mode, setMode] = useState<'idle' | 'counter' | 'decline'>('idle');
+  const [counter, setCounter] = useState<OfferFormValue>({
+    amount: event.amount != null ? String(event.amount) : '',
+    deadline: event.deadline || '',
+    deliverables: event.deliverables || [],
+    note: '',
+  });
+  const [declineNote, setDeclineNote] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+
+  const run = async (fn: () => Promise<unknown>) => {
+    setBusy(true);
+    setError('');
+    try {
+      await fn();
+      setMode('idle');
+      onChanged();
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  // Accepted / declined: compact system line
+  if (event.type === 'accepted' || event.type === 'declined') {
+    const accepted = event.type === 'accepted';
+    return (
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="my-4 flex justify-center">
+        <div
+          className={`max-w-md rounded-2xl border px-4 py-3 text-center text-xs ${accepted ? 'border-emerald-500/25 bg-emerald-500/10 text-emerald-300' : 'border-red-500/25 bg-red-500/10 text-red-300'
+            }`}
+        >
+          <div className="font-bold">
+            {accepted ? '✅' : '❌'} {senderName} {accepted ? 'accepted the offer' : 'declined the offer'}
+            {accepted && event.amount != null ? ` · ${formatINR(event.amount)}` : ''}
+          </div>
+          {event.note && <p className="mt-1 text-[var(--muted)]">&ldquo;{event.note}&rdquo;</p>}
+          {accepted && (
+            <p className="mt-1 text-[var(--muted)]">
+              Chat is now open.{isBrand ? ' Generate the contract to lock in the terms.' : ' The brand will send the contract.'}
+            </p>
+          )}
+          {accepted && isBrand && onContract && (
+            <button
+              onClick={() => onContract(collabId)}
+              className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-emerald-500 px-4 py-1.5 text-[11px] font-bold text-black hover:opacity-90"
+            >
+              <FileText size={12} /> Generate contract
+            </button>
+          )}
+          <div className="mt-1 text-[10px] opacity-60">{time}</div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  const isCounter = event.type === 'counter';
+  return (
+    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className={`my-4 flex ${mine ? 'justify-end' : 'justify-start'}`}>
+      <div
+        className={`w-full max-w-md overflow-hidden rounded-2xl border ${canRespond ? 'border-[rgba(245,166,35,0.5)] shadow-lg shadow-[rgba(245,166,35,0.08)]' : 'border-[var(--border2)]'
+          } bg-[var(--card2)]`}
+      >
+        <div className="flex items-center justify-between gap-2 border-b border-[var(--border)] bg-[rgba(245,166,35,0.06)] px-4 py-2.5">
+          <span className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--amber)]">
+            {isCounter ? <Repeat size={12} /> : <FileText size={12} />}
+            {isCounter ? 'Counter-offer' : 'Collaboration offer'}
+          </span>
+          <span className="text-[10px] text-[var(--muted)]">
+            {mine ? 'You' : senderName} · {time}
+          </span>
+        </div>
+
+        <div className="space-y-3 px-4 py-3.5">
+          {event.campaignTitle && <div className="text-xs text-[var(--muted)]">Campaign: <span className="font-semibold text-[var(--text)]">{event.campaignTitle}</span></div>}
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <div className="text-[10px] uppercase tracking-wider text-[var(--muted)]">Amount</div>
+              <div className="font-display text-2xl font-extrabold text-[var(--text)]">{formatINR(event.amount)}</div>
+            </div>
+            <div className="text-right">
+              <div className="text-[10px] uppercase tracking-wider text-[var(--muted)]">Deadline</div>
+              <div className="text-sm font-semibold text-[var(--text)]">{formatDeadline(event.deadline)}</div>
+            </div>
+          </div>
+          {!!event.deliverables?.length && (
+            <div>
+              <div className="mb-1.5 text-[10px] uppercase tracking-wider text-[var(--muted)]">Deliverables</div>
+              <div className="flex flex-wrap gap-1.5">
+                {event.deliverables.map((d) => (
+                  <span key={d} className="rounded-full border border-[var(--border)] bg-[var(--black)] px-2.5 py-1 text-[11px] text-[var(--text)]">
+                    {d}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          {event.note && <p className="whitespace-pre-wrap rounded-xl bg-[var(--black)] px-3 py-2.5 text-xs leading-relaxed text-[var(--muted)]">{event.note}</p>}
+        </div>
+
+        {canRespond && mode === 'idle' && (
+          <div className="grid grid-cols-3 gap-2 border-t border-[var(--border)] p-3">
+            <button
+              disabled={busy}
+              onClick={() => run(() => offersApi.accept(collabId))}
+              className="flex items-center justify-center gap-1 rounded-xl bg-emerald-500 py-2 text-xs font-bold text-black hover:opacity-90 disabled:opacity-50"
+            >
+              <Check size={13} /> {busy ? '…' : 'Accept'}
+            </button>
+            <button
+              disabled={busy}
+              onClick={() => setMode('counter')}
+              className="flex items-center justify-center gap-1 rounded-xl border border-[var(--border2)] py-2 text-xs font-semibold text-[var(--text)] hover:border-[var(--amber)]"
+            >
+              <Repeat size={13} /> Counter
+            </button>
+            <button
+              disabled={busy}
+              onClick={() => setMode('decline')}
+              className="flex items-center justify-center gap-1 rounded-xl border border-red-500/30 py-2 text-xs font-semibold text-red-400 hover:bg-red-500/10"
+            >
+              <X size={13} /> Decline
+            </button>
+          </div>
+        )}
+
+        {canRespond && mode === 'counter' && (
+          <div className="border-t border-[var(--border)] p-4">
+            <div className="mb-3 text-xs font-bold text-[var(--text)]">Your counter-offer</div>
+            <OfferForm value={counter} onChange={setCounter} disabled={busy} notePlaceholder="Explain your terms…" />
+            <div className="mt-3 flex justify-end gap-2">
+              <button onClick={() => setMode('idle')} disabled={busy} className="rounded-xl px-3 py-2 text-xs text-[var(--muted)] hover:text-[var(--text)]">
+                Cancel
+              </button>
+              <button
+                disabled={busy}
+                onClick={() => {
+                  const problem = validateOffer(counter);
+                  if (problem) return setError(problem);
+                  run(() =>
+                    offersApi.counter(collabId, {
+                      amount: Number(counter.amount),
+                      deadline: counter.deadline || null,
+                      deliverables: counter.deliverables,
+                      note: counter.note.trim() || null,
+                    })
+                  );
+                }}
+                className="rounded-xl bg-[var(--amber)] px-4 py-2 text-xs font-bold text-black hover:opacity-90 disabled:opacity-50"
+              >
+                {busy ? 'Sending…' : 'Send counter-offer'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {canRespond && mode === 'decline' && (
+          <div className="border-t border-[var(--border)] p-4">
+            <textarea
+              value={declineNote}
+              onChange={(e) => setDeclineNote(e.target.value)}
+              rows={2}
+              maxLength={500}
+              placeholder="Reason (optional), e.g. fully booked this month"
+              className="w-full resize-none rounded-xl border border-[var(--border2)] bg-[var(--black)] px-3 py-2 text-xs text-[var(--text)] outline-none focus:border-red-400"
+            />
+            <div className="mt-2 flex justify-end gap-2">
+              <button onClick={() => setMode('idle')} disabled={busy} className="rounded-xl px-3 py-2 text-xs text-[var(--muted)] hover:text-[var(--text)]">
+                Cancel
+              </button>
+              <button
+                disabled={busy}
+                onClick={() => run(() => offersApi.decline(collabId, declineNote.trim() || undefined))}
+                className="rounded-xl bg-red-500 px-4 py-2 text-xs font-bold text-white hover:opacity-90 disabled:opacity-50"
+              >
+                {busy ? 'Declining…' : 'Decline offer'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {error && <p className="border-t border-[var(--border)] px-4 py-2 text-xs text-red-400">{error}</p>}
+      </div>
+    </motion.div>
   );
 }
 
