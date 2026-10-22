@@ -18,6 +18,19 @@ export function getSupabaseAdmin(): SupabaseClient | null {
 
 export type AdminRole = 'super_admin' | 'admin';
 
+// Which kind of Supabase key is configured: new-style keys have a prefix,
+// legacy keys are JWTs whose payload carries the role.
+function keyKind(key: string): 'service' | 'public' | 'unknown' {
+  if (key.startsWith('sb_secret_')) return 'service';
+  if (key.startsWith('sb_publishable_')) return 'public';
+  try {
+    const payload = JSON.parse(Buffer.from(key.split('.')[1], 'base64').toString('utf8'));
+    if (payload.role === 'service_role') return 'service';
+    if (payload.role === 'anon') return 'public';
+  } catch {}
+  return 'unknown';
+}
+
 const SUPER_ROLES = ['super_admin', 'superadmin'];
 const ADMIN_ROLES = ['admin'];
 
@@ -34,6 +47,13 @@ export type AdminCheck =
 export async function checkAdminCaller(req: Request): Promise<AdminCheck> {
   const admin = getSupabaseAdmin();
   if (!admin) return { ok: false, reason: 'Server is missing SUPABASE_SERVICE_ROLE_KEY.' };
+  if (keyKind(process.env.SUPABASE_SERVICE_ROLE_KEY || '') === 'public') {
+    return {
+      ok: false,
+      reason:
+        'SUPABASE_SERVICE_ROLE_KEY is set to the public anon key. Replace it in Vercel with the secret "service_role" key from Supabase → Project Settings → API Keys, then redeploy.',
+    };
+  }
 
   const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
   if (!token) return { ok: false, reason: 'You are not signed in. Sign in again from the Super Admin login.' };
@@ -45,10 +65,17 @@ export async function checkAdminCaller(req: Request): Promise<AdminCheck> {
   const user = data.user;
 
   let rawRole: unknown = null;
-  const { data: byId } = await admin.from('users').select('role').eq('id', user.id).maybeSingle();
+  const { data: byId, error: idErr } = await admin.from('users').select('role').eq('id', user.id).maybeSingle();
+  if (idErr) return { ok: false, reason: `Could not read the users table: ${idErr.message}` };
   rawRole = byId?.role;
   if (!rawRole && user.email) {
-    const { data: byEmail } = await admin.from('users').select('role').ilike('email', user.email).limit(1).maybeSingle();
+    const { data: byEmail, error: emailErr } = await admin
+      .from('users')
+      .select('role')
+      .ilike('email', user.email)
+      .limit(1)
+      .maybeSingle();
+    if (emailErr) return { ok: false, reason: `Could not read the users table: ${emailErr.message}` };
     rawRole = byEmail?.role;
   }
   if (!rawRole) rawRole = user.app_metadata?.role;
