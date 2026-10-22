@@ -1,435 +1,63 @@
-// 'use client';
-// // import { useRegisteredCreators } from '@/hooks/useRegisteredCreators';
-// import React, { useMemo, useState } from 'react';
-// import { Sparkles, CheckCircle2, ArrowRight, Zap, Target, DollarSign, Layers, Download, ShieldCheck, UserCheck } from 'lucide-react';
-
-// export interface CreatorMatch {
-//   id: string | number;
-//   name: string;
-//   niche: string;
-//   platform: string;
-//   followers: string;
-//   ctr: string;
-//   score: number;
-//   rate: string;
-//   matchScore: number;
-//   avatarBg: string;
-//   bio: string;
-//   verified: boolean;
-// }
-
-// const MOCK_MATCH_CREATORS: CreatorMatch[] = [
-//   {
-//     id: 1,
-//     name: 'Aarav Mehta',
-//     niche: 'Fitness & Health',
-//     platform: 'Instagram',
-//     followers: '68K',
-//     ctr: '6.4%',
-//     score: 88,
-//     rate: '₹12,000',
-//     matchScore: 97,
-//     avatarBg: 'linear-gradient(135deg, #F5A623, #FF6B35)',
-//     bio: 'High-converting UGC fitness reels, pre-workout showcases, and gym transformation shorts.',
-//     verified: true,
-//   },
-//   {
-//     id: 2,
-//     name: 'Priya Singh',
-//     niche: 'Beauty & Skincare',
-//     platform: 'Instagram',
-//     followers: '142K',
-//     ctr: '5.8%',
-//     score: 84,
-//     rate: '₹22,000',
-//     matchScore: 94,
-//     avatarBg: 'linear-gradient(135deg, #a855f7, #ec4899)',
-//     bio: 'Aesthetic skincare routines, before/after reviews, and organic D2C brand integrations.',
-//     verified: true,
-//   },
-//   {
-//     id: 3,
-//     name: 'Rohan Kumar',
-//     niche: 'Tech & Gadgets',
-//     platform: 'YouTube',
-//     followers: '89K',
-//     ctr: '7.2%',
-//     score: 91,
-//     rate: '₹18,000',
-//     matchScore: 98,
-//     avatarBg: 'linear-gradient(135deg, #3b82f6, #06b6d4)',
-//     bio: 'In-depth unboxing, smartphone comparisons, and tech accessory breakdown videos.',
-//     verified: true,
-//   },
-//   {
-//     id: 4,
-//     name: 'Sneha Joshi',
-//     niche: 'Food & Beverage',
-//     platform: 'Instagram',
-//     followers: '54K',
-//     ctr: '8.1%',
-//     score: 79,
-//     rate: '₹9,000',
-//     matchScore: 91,
-//     avatarBg: 'linear-gradient(135deg, #22c55e, #14b8a6)',
-//     bio: 'Cafe-style recipe reels, beverage unboxings, and high-engagement culinary content.',
-//     verified: true,
-//   },
-//   {
-//     id: 5,
-//     name: 'Ananya Rao',
-//     niche: 'Fashion & Lifestyle',
-//     platform: 'Instagram',
-//     followers: '95K',
-//     ctr: '6.0%',
-//     score: 82,
-//     rate: '₹16,000',
-//     matchScore: 93,
-//     avatarBg: 'linear-gradient(135deg, #ec4899, #8b5cf6)',
-//     bio: 'Streetwear lookbooks, seasonal haul videos, and D2C apparel styling reels.',
-//     verified: true,
-//   },
-//   {
-//     id: 6,
-//     name: 'Karan Sharma',
-//     niche: 'Gaming & Esport',
-//     platform: 'YouTube',
-//     followers: '177K',
-//     ctr: '5.5%',
-//     score: 76,
-//     rate: '₹28,000',
-//     matchScore: 89,
-//     avatarBg: 'linear-gradient(135deg, #10b981, #06b6d4)',
-//     bio: 'Gaming setup reviews, stream integrations, and gaming gear promos.',
-//     verified: true,
-//   },
-// ];
-
-// interface AIMatchmakerProps {
-//   onSelectCreator?: (creator: CreatorMatch) => void;
-//   title?: string;
-//   subtitle?: string;
-// }
-
-// export function AIMatchmaker({ onSelectCreator, title, subtitle }: AIMatchmakerProps) {
-//   const [selectedNiche, setSelectedNiche] = useState<string>('Fitness & Health');
-//   const [campaignGoal, setCampaignGoal] = useState<string>('Conversions');
-//   const [budgetRange, setBudgetRange] = useState<number>(15000);
-//   const [isMatching, setIsMatching] = useState<boolean>(false);
-//   const [matchedResults, setMatchedResults] = useState<CreatorMatch[]>(MOCK_MATCH_CREATORS.slice(0, 3));
-
-//   const leadMatch = matchedResults[0];
-
-//   const compatibilityIndex = useMemo(() => {
-//     const boostMap: Record<string, number> = {
-//       Conversions: 96,
-//       Retention: 94,
-//       Awareness: 98,
-//       'Brand Launch': 95,
-//     };
-//     return boostMap[campaignGoal] ?? 95;
-//   }, [campaignGoal]);
-
-//   const handleRunMatch = (nicheToSet?: string) => {
-//     const niche = nicheToSet || selectedNiche;
-//     if (nicheToSet) setSelectedNiche(nicheToSet);
-
-//     setIsMatching(true);
-//     setTimeout(() => {
-//       const filtered = MOCK_MATCH_CREATORS.filter(
-//         (c) => niche === 'All' || c.niche.toLowerCase().includes(niche.toLowerCase())
-//       );
-//       const results = filtered.length > 0 ? filtered : MOCK_MATCH_CREATORS.slice(0, 3);
-
-//       // Add slight dynamic variance based on budget & goal
-//       const reranked = results.map((item) => ({
-//         ...item,
-//         matchScore: Math.min(99, Math.max(82, item.matchScore + Math.floor(Math.random() * 5) - 2)),
-//       })).sort((a, b) => b.matchScore - a.matchScore);
-
-//       setMatchedResults(reranked);
-//       setIsMatching(false);
-//     }, 700);
-//   };
-
-//   const handleExport = () => {
-//     const data = JSON.stringify({ selectedNiche, campaignGoal, budgetRange, matchedResults }, null, 2);
-//     const blob = new Blob([data], { type: 'application/json' });
-//     const url = URL.createObjectURL(blob);
-//     const link = document.createElement('a');
-//     link.href = url;
-//     link.download = `fewsion-ai-match-${selectedNiche.toLowerCase().replace(/\s+/g, '-')}.json`;
-//     link.click();
-//     URL.revokeObjectURL(url);
-//   };
-
-//   return (
-//     <section className="relative overflow-hidden rounded-3xl border border-[var(--border2)] bg-[#0c0c0e] p-6 sm:p-10 shadow-2xl">
-//       {/* Subtle background glow */}
-//       <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[var(--amber)]/10 blur-[100px] pointer-events-none" />
-//       <div className="absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-[#FF6B35]/10 blur-[100px] pointer-events-none" />
-
-//       {/* Header */}
-//       <div className="relative z-10 mb-8 text-center max-w-2xl mx-auto">
-//         <div className="inline-flex items-center gap-2 rounded-full border border-[var(--amber)]/30 bg-[var(--amber)]/10 px-3.5 py-1.5 text-xs font-semibold text-[var(--amber)] mb-3">
-//           <Zap size={14} />
-//           <span>Fewsion AI Neural Matchmaker</span>
-//         </div>
-//         <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-//           {title || 'Match Brands & Creators with Neural AI'}
-//         </h2>
-//         <p className="mt-2 text-sm text-[var(--muted)]">
-//           {subtitle || 'Select your niche, target goal, and budget to compute real-time compatibility scores across our creator database.'}
-//         </p>
-//       </div>
-
-//       {/* Console Controls */}
-//       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-4 gap-6 pb-8 mb-8 border-b border-[var(--border)]">
-//         {/* Step 1: Niche */}
-//         <div className="space-y-2">
-//           <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--amber)]">
-//             <Target size={14} />
-//             <span>1. Niche &amp; Category</span>
-//           </label>
-//           <div className="flex flex-wrap gap-1.5">
-//             {['Fitness & Health', 'Beauty & Skincare', 'Tech & Gadgets', 'Food & Beverage', 'Fashion & Lifestyle'].map((n) => (
-//               <button
-//                 key={n}
-//                 onClick={() => handleRunMatch(n)}
-//                 className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition-all ${
-//                   selectedNiche === n
-//                     ? 'bg-[var(--amber)] text-black font-bold shadow-lg shadow-[var(--amber)]/20'
-//                     : 'bg-[var(--card)] text-[var(--muted)] border border-[var(--border)] hover:border-[var(--amber)]/40 hover:text-white'
-//                 }`}
-//               >
-//                 {n}
-//               </button>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Step 2: Goal */}
-//         <div className="space-y-2">
-//           <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--amber)]">
-//             <Sparkles size={14} />
-//             <span>2. Campaign Goal</span>
-//           </label>
-//           <select
-//             value={campaignGoal}
-//             onChange={(e) => setCampaignGoal(e.target.value)}
-//             className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-3.5 py-2.5 text-xs font-bold text-white outline-none focus:border-[var(--amber)]"
-//           >
-//             {['Conversions', 'Retention', 'Awareness', 'Brand Launch'].map((goal) => (
-//               <option key={goal} value={goal} className="bg-[#141414]">
-//                 {goal}
-//               </option>
-//             ))}
-//           </select>
-//           <p className="text-[11px] text-[var(--muted2)]">Reranks creator proof by ROI history.</p>
-//         </div>
-
-//         {/* Step 3: Budget Slider */}
-//         <div className="space-y-2">
-//           <div className="flex items-center justify-between">
-//             <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--amber)]">
-//               <DollarSign size={14} />
-//               <span>3. Campaign Budget</span>
-//             </label>
-//             <span className="rounded-lg border border-[var(--amber)]/30 bg-[var(--amber)]/10 px-2.5 py-0.5 text-xs font-extrabold text-[var(--amber)]">
-//               ₹{budgetRange.toLocaleString('en-IN')}
-//             </span>
-//           </div>
-//           <input
-//             type="range"
-//             min="5000"
-//             max="50000"
-//             step="2500"
-//             value={budgetRange}
-//             onChange={(e) => setBudgetRange(Number(e.target.value))}
-//             className="w-full accent-[var(--amber)] cursor-pointer h-2 bg-[var(--card2)] rounded-lg"
-//           />
-//           <div className="flex justify-between text-[10px] font-semibold text-[var(--muted2)]">
-//             <span>₹5,000 (Micro)</span>
-//             <span>₹25,000 (Pro)</span>
-//             <span>₹50,000+ (Scale)</span>
-//           </div>
-//         </div>
-
-//         {/* Step 4: Run Action */}
-//         <div className="flex flex-col justify-end">
-//           <button
-//             onClick={() => handleRunMatch()}
-//             disabled={isMatching}
-//             className="w-full py-3 rounded-xl bg-gradient-to-r from-[var(--amber)] to-[#FF6B35] text-black font-extrabold text-xs hover:opacity-95 shadow-lg shadow-[var(--amber)]/20 transition-all flex items-center justify-center gap-2 cursor-pointer"
-//           >
-//             <Zap size={14} className={isMatching ? 'animate-spin' : ''} />
-//             <span>{isMatching ? 'Matching Engine Running...' : 'Compute AI Matches'}</span>
-//           </button>
-//         </div>
-//       </div>
-
-//       {/* Results View */}
-//       <div className="relative z-10">
-//         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-//           <div className="flex items-center gap-2">
-//             <Layers size={16} className="text-[var(--amber)]" />
-//             <span className="text-sm font-bold text-white">Top Neural Matches ({matchedResults.length})</span>
-//           </div>
-//           <div className="flex items-center gap-2">
-//             <span className="flex items-center gap-1 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
-//               <CheckCircle2 size={13} /> {compatibilityIndex}.2% Compatibility Index
-//             </span>
-//             <button
-//               onClick={handleExport}
-//               className="flex items-center gap-1.5 rounded-full border border-[var(--border2)] bg-[var(--card)] px-3 py-1 text-xs font-semibold text-[var(--muted)] hover:text-white hover:border-[var(--amber)] transition"
-//             >
-//               <Download size={13} /> Export Shortlist
-//             </button>
-//           </div>
-//         </div>
-
-//         {isMatching ? (
-//           <div className="py-12 text-center space-y-4">
-//             <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-[var(--amber)] border-t-transparent" />
-//             <p className="text-xs font-semibold text-[var(--amber)] animate-pulse">
-//               Analyzing creator engagement, view-through rates &amp; audience fit...
-//             </p>
-//           </div>
-//         ) : (
-//           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-//             {matchedResults.map((creator) => (
-//               <div
-//                 key={creator.id}
-//                 className="group relative flex flex-col justify-between rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 transition-all hover:-translate-y-1 hover:border-[var(--amber)]/40 hover:shadow-xl"
-//               >
-//                 <div>
-//                   <div className="flex items-center justify-between mb-3">
-//                     <div className="flex items-center gap-3">
-//                       <div
-//                         className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-black text-black"
-//                         style={{ background: creator.avatarBg }}
-//                       >
-//                         {creator.name.split(' ').map((w) => w[0]).join('')}
-//                       </div>
-//                       <div>
-//                         <h4 className="text-sm font-bold text-white group-hover:text-[var(--amber)] transition-colors">
-//                           {creator.name}
-//                         </h4>
-//                         <div className="text-[11px] text-[var(--muted)]">{creator.platform} • {creator.niche}</div>
-//                       </div>
-//                     </div>
-//                     <div className="text-right">
-//                       <span className="rounded-md border border-[var(--amber)]/30 bg-[var(--amber)]/10 px-2 py-0.5 text-xs font-extrabold text-[var(--amber)]">
-//                         {creator.matchScore}%
-//                       </span>
-//                       <div className="text-[9px] uppercase tracking-wider text-[var(--muted2)] mt-0.5">Match</div>
-//                     </div>
-//                   </div>
-
-//                   <p className="text-xs text-[var(--muted)] leading-relaxed line-clamp-2 mb-4">
-//                     {creator.bio}
-//                   </p>
-
-//                   <div className="grid grid-cols-3 gap-2 mb-4 text-center">
-//                     <div className="rounded-lg border border-[var(--border)] bg-[var(--card2)] p-1.5">
-//                       <div className="text-xs font-extrabold text-white">{creator.followers}</div>
-//                       <div className="text-[9px] text-[var(--muted2)] uppercase">Followers</div>
-//                     </div>
-//                     <div className="rounded-lg border border-[var(--border)] bg-[var(--card2)] p-1.5">
-//                       <div className="text-xs font-extrabold text-white">{creator.ctr}</div>
-//                       <div className="text-[9px] text-[var(--muted2)] uppercase">CTR</div>
-//                     </div>
-//                     <div className="rounded-lg border border-[var(--border)] bg-[var(--card2)] p-1.5">
-//                       <div className="text-xs font-extrabold text-white">{creator.score}/100</div>
-//                       <div className="text-[9px] text-[var(--muted2)] uppercase">AI Score</div>
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 <div className="flex items-center justify-between pt-3 border-t border-[var(--border)]">
-//                   <div className="text-xs font-extrabold text-white">{creator.rate}</div>
-//                   <button
-//                     onClick={() => onSelectCreator && onSelectCreator(creator)}
-//                     className="flex items-center gap-1 text-xs font-bold text-[var(--amber)] hover:underline"
-//                   >
-//                     <span>Connect</span>
-//                     <ArrowRight size={13} />
-//                   </button>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         )}
-
-//         {leadMatch && !isMatching && (
-//           <div className="mt-6 rounded-2xl border border-[var(--amber)]/20 bg-[var(--amber)]/5 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-//             <div>
-//               <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[var(--amber)]">
-//                 <ShieldCheck size={14} />
-//                 <span>AI Recommendation Engine</span>
-//               </div>
-//               <p className="text-xs text-white mt-1">
-//                 Top pick: <strong className="text-[var(--amber)]">{leadMatch.name}</strong> is optimal for a {campaignGoal.toLowerCase()} campaign with {leadMatch.ctr} average CTR.
-//               </p>
-//             </div>
-//             <button
-//               onClick={() => onSelectCreator && onSelectCreator(leadMatch)}
-//               className="shrink-0 rounded-full bg-[var(--amber)] px-5 py-2 text-xs font-extrabold text-black hover:opacity-90 transition-all cursor-pointer"
-//             >
-//               Request Collaboration →
-//             </button>
-//           </div>
-//         )}
-//       </div>
-//     </section>
-//   );
-// }
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import {
   Sparkles,
   ArrowRight,
   Target,
-  DollarSign,
-  Layers,
+  IndianRupee,
   Download,
-  ShieldCheck,
   Zap,
+  Check,
+  Loader2,
+  BrainCircuit,
+  RotateCcw,
+  Trophy,
 } from 'lucide-react';
-import { useRegisteredCreators } from '@/hooks/useRegisteredCreators';
 
 // ---------------------------------------------------------------------
-// A creator card. Only id, name, initials and joinedAt come from the
-// database today. The optional fields show "—" until creators actually
-// provide that data (add the columns to list_creators() and the hook).
+// AI Matchmaker: the brand describes the campaign, /api/match scores
+// every creator profile against it and the AI explains each pick.
+// Nobody is listed until a match has been run.
 // ---------------------------------------------------------------------
+
 export interface CreatorMatch {
   id: string;
   name: string;
-  initials: string;
-  joinedAt: string | null;
-  avatarBg: string;
-  niche?: string | null;
-  platform?: string | null;
-  bio?: string | null;
-  followers?: string | null;
-  ctr?: string | null;
-  score?: number | null;
-  rate?: string | null;
-  matchScore?: number | null;
+  niche: string | null;
+  platform: string | null;
+  followers: string | null;
+  engagementRate: number | null;
+  score: number | null;
+  rate: string | null;
+  bio: string | null;
+  matchScore: number;
+  reason: string;
+  signals: { niche: number; budget: number; engagement: number; reach: number; score: number };
 }
 
+// Same niche list creators pick from on their dashboard
 const NICHES = [
-  'All',
-  'Fitness & Health',
-  'Beauty & Skincare',
-  'Tech & Gadgets',
-  'Food & Beverage',
-  'Fashion & Lifestyle',
+  'Any',
+  'Tech & gadgets',
+  'Beauty & skincare',
+  'Finance & investing',
+  'Fitness & health',
+  'Food & recipes',
+  'Travel & lifestyle',
+  'Gaming',
+  'Education',
+  'Fashion',
+  'Parenting',
 ];
 
-const GOALS = ['Conversions', 'Retention', 'Awareness', 'Brand Launch'];
+const GOALS = [
+  { value: 'Conversions', hint: 'Prioritises engagement' },
+  { value: 'Awareness', hint: 'Prioritises reach' },
+  { value: 'Retention', hint: 'Prioritises trust & score' },
+  { value: 'Brand Launch', hint: 'Balanced reach & quality' },
+];
 
 const AVATAR_GRADIENTS = [
   'linear-gradient(135deg, #F5A623, #FF6B35)',
@@ -447,10 +75,17 @@ const pickGradient = (id: string) => {
   return AVATAR_GRADIENTS[hash % AVATAR_GRADIENTS.length];
 };
 
-const fmtJoined = (d: string | null) =>
-  d
-    ? `Joined ${new Date(d).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}`
-    : 'New creator';
+const initials = (name: string) =>
+  name
+    .split(' ')
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+type Phase = 'idle' | 'running' | 'done' | 'error';
 
 interface AIMatchmakerProps {
   onSelectCreator?: (creator: CreatorMatch) => void;
@@ -459,57 +94,109 @@ interface AIMatchmakerProps {
 }
 
 export function AIMatchmaker({ onSelectCreator, title, subtitle }: AIMatchmakerProps) {
-  const { creators, loading, error } = useRegisteredCreators();
+  const [niche, setNiche] = useState('Any');
+  const [goal, setGoal] = useState('Conversions');
+  const [budget, setBudget] = useState(15000);
 
-  const [selectedNiche, setSelectedNiche] = useState<string>('All');
-  const [campaignGoal, setCampaignGoal] = useState<string>('Conversions');
-  const [budgetRange, setBudgetRange] = useState<number>(15000);
+  const [phase, setPhase] = useState<Phase>('idle');
+  const [step, setStep] = useState(0);
+  const [matches, setMatches] = useState<CreatorMatch[]>([]);
+  const [scanned, setScanned] = useState<number | null>(null);
+  const [aiExplained, setAiExplained] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [briefChanged, setBriefChanged] = useState(false);
+  const runId = useRef(0);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
-  // Real creators from Supabase, with an avatar colour added
-  const allCreators: CreatorMatch[] = useMemo(
-    () => creators.map((c) => ({ ...c, avatarBg: pickGradient(c.id) })),
-    [creators]
-  );
+  const budgetLabel = `₹${budget.toLocaleString('en-IN')}`;
 
-  // Picking a niche shows only creators who listed that niche.
-  // Creators can't set a niche yet, so until they can, only "All" shows anyone.
-  const visibleCreators = useMemo(() => {
-    if (selectedNiche === 'All') return allCreators;
-    return allCreators.filter((c) => c.niche === selectedNiche);
-  }, [allCreators, selectedNiche]);
+  const steps = [
+    'Reading your campaign brief',
+    scanned != null ? `Scanning ${scanned} creator profiles` : 'Scanning creator profiles',
+    niche === 'Any' ? 'Scoring content fit across all niches' : `Scoring niche fit for ${niche}`,
+    `Weighting signals for ${goal.toLowerCase()}`,
+    `Checking creator rates against ${budgetLabel}`,
+    'Ranking matches & writing explanations',
+  ];
 
-  // Only recommend someone when there's a real match score behind it
-  const leadMatch = visibleCreators.find((c) => c.matchScore != null);
+  // Mark results as stale when the brief changes after a run
+  useEffect(() => {
+    if (phase === 'done') setBriefChanged(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [niche, goal, budget]);
+
+  const runMatch = async () => {
+    const id = ++runId.current;
+    setPhase('running');
+    setStep(0);
+    setMatches([]);
+    setScanned(null);
+    setErrorMsg('');
+    setBriefChanged(false);
+    resultsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    const request = fetch('/api/match', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ niche, goal, budget }),
+    }).then(async (res) => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || 'Matching failed');
+      return data as { matches: CreatorMatch[]; scanned: number; aiExplained: boolean };
+    });
+
+    // Learn how many profiles are being scanned as soon as we know it
+    request.then((d) => id === runId.current && setScanned(d.scanned)).catch(() => {});
+
+    try {
+      // Walk through the analysis steps; the last one waits for the API
+      for (let i = 0; i < steps.length - 1; i++) {
+        if (id !== runId.current) return;
+        setStep(i);
+        await sleep(520 + Math.random() * 260);
+      }
+      if (id !== runId.current) return;
+      setStep(steps.length - 1);
+      const data = await request;
+      await sleep(400);
+      if (id !== runId.current) return;
+
+      setMatches(data.matches);
+      setScanned(data.scanned);
+      setAiExplained(data.aiExplained);
+      setStep(steps.length);
+      await sleep(350);
+      if (id !== runId.current) return;
+      setPhase('done');
+    } catch (e) {
+      if (id !== runId.current) return;
+      setErrorMsg(e instanceof Error ? e.message : 'Matching failed');
+      setPhase('error');
+    }
+  };
 
   const handleExport = () => {
-    const data = JSON.stringify(
-      { selectedNiche, campaignGoal, budgetRange, creators: visibleCreators },
-      null,
-      2
-    );
+    const data = JSON.stringify({ brief: { niche, goal, budget }, matches }, null, 2);
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `fewsion-creators-${selectedNiche.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.json`;
+    link.download = `fewsion-ai-matches-${niche.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.json`;
     link.click();
     URL.revokeObjectURL(url);
   };
 
-  const emptyMessage =
-    selectedNiche === 'All'
-      ? 'No creators have signed up yet. They will appear here as soon as they register.'
-      : `No creators have listed ${selectedNiche} as their niche yet. Pick "All" to see everyone.`;
+  const leadMatch = matches[0];
 
   return (
     <section className="relative overflow-hidden rounded-3xl border border-[var(--border2)] bg-[#0c0c0e] p-6 sm:p-10 shadow-2xl">
-      {/* Subtle background glow */}
-      <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[var(--amber)]/10 blur-[100px] pointer-events-none" />
+      {/* Background glow */}
+      <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[rgba(245,166,35,0.10)] blur-[100px] pointer-events-none" />
       <div className="absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-[#FF6B35]/10 blur-[100px] pointer-events-none" />
 
       {/* Header */}
       <div className="relative z-10 mb-8 text-center max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-2 rounded-full border border-[var(--amber)]/30 bg-[var(--amber)]/10 px-3.5 py-1.5 text-xs font-semibold text-[var(--amber)] mb-3">
+        <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(245,166,35,0.30)] bg-[rgba(245,166,35,0.10)] px-3.5 py-1.5 text-xs font-semibold text-[var(--amber)] mb-3">
           <Zap size={14} />
           <span>Fewsion AI Neural Matchmaker</span>
         </div>
@@ -517,214 +204,494 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle }: AIMatchmakerP
           {title || 'Match Brands & Creators'}
         </h2>
         <p className="mt-2 text-sm text-[var(--muted)]">
-          {subtitle || 'Browse creators registered on Fewsion and filter them by niche.'}
+          {subtitle || 'Describe your campaign and Fewsion AI will rank the creators who fit it best.'}
         </p>
       </div>
 
-      {/* Controls */}
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-3 gap-6 pb-8 mb-8 border-b border-[var(--border)]">
-        {/* Niche */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--amber)]">
-            <Target size={14} />
-            <span>1. Niche &amp; Category</span>
-          </label>
-          <div className="flex flex-wrap gap-1.5">
-            {NICHES.map((n) => (
-              <button
-                key={n}
-                onClick={() => setSelectedNiche(n)}
-                className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition-all ${selectedNiche === n
-                    ? 'bg-[var(--amber)] text-black font-bold shadow-lg shadow-[var(--amber)]/20'
-                    : 'bg-[var(--card)] text-[var(--muted)] border border-[var(--border)] hover:border-[var(--amber)]/40 hover:text-white'
-                  }`}
-              >
-                {n}
-              </button>
-            ))}
-          </div>
-        </div>
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] gap-6">
+        {/* ── Brief ── */}
+        <div className="rounded-2xl border border-[var(--border)] bg-[rgba(20,20,20,0.6)] p-5 sm:p-6 space-y-6">
+          <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--muted2)]">Your campaign brief</div>
 
-        {/* Goal */}
-        <div className="space-y-2">
-          <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--amber)]">
-            <Sparkles size={14} />
-            <span>2. Campaign Goal</span>
-          </label>
-          <select
-            value={campaignGoal}
-            onChange={(e) => setCampaignGoal(e.target.value)}
-            className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-3.5 py-2.5 text-xs font-bold text-white outline-none focus:border-[var(--amber)]"
-          >
-            {GOALS.map((goal) => (
-              <option key={goal} value={goal} className="bg-[#141414]">
-                {goal}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Budget */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
+          {/* Niche */}
+          <div className="space-y-2.5">
             <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--amber)]">
-              <DollarSign size={14} />
-              <span>3. Campaign Budget</span>
+              <Target size={14} />
+              <span>Niche</span>
             </label>
-            <span className="rounded-lg border border-[var(--amber)]/30 bg-[var(--amber)]/10 px-2.5 py-0.5 text-xs font-extrabold text-[var(--amber)]">
-              ₹{budgetRange.toLocaleString('en-IN')}
-            </span>
-          </div>
-          <input
-            type="range"
-            min="5000"
-            max="50000"
-            step="2500"
-            value={budgetRange}
-            onChange={(e) => setBudgetRange(Number(e.target.value))}
-            className="w-full accent-[var(--amber)] cursor-pointer h-2 bg-[var(--card2)] rounded-lg"
-          />
-          <div className="flex justify-between text-[10px] font-semibold text-[var(--muted2)]">
-            <span>₹5,000 (Micro)</span>
-            <span>₹25,000 (Pro)</span>
-            <span>₹50,000+ (Scale)</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Results */}
-      <div className="relative z-10">
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-          <div className="flex items-center gap-2">
-            <Layers size={16} className="text-[var(--amber)]" />
-            <span className="text-sm font-bold text-white">
-              Registered Creators ({loading ? '…' : visibleCreators.length})
-            </span>
-          </div>
-          <button
-            onClick={handleExport}
-            disabled={loading || visibleCreators.length === 0}
-            className="flex items-center gap-1.5 rounded-full border border-[var(--border2)] bg-[var(--card)] px-3 py-1 text-xs font-semibold text-[var(--muted)] hover:text-white hover:border-[var(--amber)] transition disabled:opacity-40 disabled:cursor-not-allowed"
-          >
-            <Download size={13} /> Export Shortlist
-          </button>
-        </div>
-
-        {loading ? (
-          <div className="py-12 text-center space-y-4">
-            <div className="inline-block h-10 w-10 animate-spin rounded-full border-4 border-[var(--amber)] border-t-transparent" />
-            <p className="text-xs font-semibold text-[var(--amber)]">Loading registered creators…</p>
-          </div>
-        ) : error ? (
-          <div className="rounded-xl border border-red-500/20 bg-red-500/10 p-6 text-center text-sm text-red-400">
-            Couldn&apos;t load creators: {error}
-          </div>
-        ) : visibleCreators.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-[var(--border2)] p-8 text-center text-sm text-[var(--muted)]">
-            {emptyMessage}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {visibleCreators.map((creator) => {
-              const subline =
-                [creator.platform, creator.niche].filter(Boolean).join(' • ') ||
-                fmtJoined(creator.joinedAt);
-
-              const stats = [
-                { label: 'Followers', value: creator.followers },
-                { label: 'CTR', value: creator.ctr },
-                { label: 'AI Score', value: creator.score != null ? `${creator.score}/100` : null },
-              ];
-
-              return (
-                <div
-                  key={creator.id}
-                  className="group relative flex flex-col justify-between rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 transition-all hover:-translate-y-1 hover:border-[var(--amber)]/40 hover:shadow-xl"
+            <div className="flex flex-wrap gap-1.5">
+              {NICHES.map((n) => (
+                <button
+                  key={n}
+                  onClick={() => setNiche(n)}
+                  disabled={phase === 'running'}
+                  className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition-all disabled:cursor-not-allowed ${niche === n
+                    ? 'bg-[var(--amber)] text-black font-bold shadow-lg shadow-[rgba(245,166,35,0.20)]'
+                    : 'bg-[var(--card)] text-[var(--muted)] border border-[var(--border)] hover:border-[rgba(245,166,35,0.40)] hover:text-white'
+                    }`}
                 >
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-black text-black"
-                          style={{ background: creator.avatarBg }}
+                  {n}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Goal */}
+          <div className="space-y-2.5">
+            <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--amber)]">
+              <Sparkles size={14} />
+              <span>Campaign goal</span>
+            </label>
+            <div className="grid grid-cols-2 gap-2">
+              {GOALS.map((g) => (
+                <button
+                  key={g.value}
+                  onClick={() => setGoal(g.value)}
+                  disabled={phase === 'running'}
+                  className={`rounded-xl border px-3 py-2.5 text-left transition-all disabled:cursor-not-allowed ${goal === g.value
+                    ? 'border-[var(--amber)] bg-[rgba(245,166,35,0.10)]'
+                    : 'border-[var(--border)] bg-[var(--card)] hover:border-[rgba(245,166,35,0.40)]'
+                    }`}
+                >
+                  <div className={`text-xs font-bold ${goal === g.value ? 'text-[var(--amber)]' : 'text-white'}`}>{g.value}</div>
+                  <div className="text-[10px] text-[var(--muted2)] mt-0.5">{g.hint}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Budget */}
+          <div className="space-y-2.5">
+            <div className="flex items-center justify-between">
+              <label className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[var(--amber)]">
+                <IndianRupee size={14} />
+                <span>Budget per creator</span>
+              </label>
+              <span className="rounded-lg border border-[rgba(245,166,35,0.30)] bg-[rgba(245,166,35,0.10)] px-2.5 py-0.5 text-xs font-extrabold text-[var(--amber)]">
+                {budgetLabel}
+              </span>
+            </div>
+            <input
+              type="range"
+              min="5000"
+              max="50000"
+              step="2500"
+              value={budget}
+              disabled={phase === 'running'}
+              onChange={(e) => setBudget(Number(e.target.value))}
+              className="w-full accent-[var(--amber)] cursor-pointer h-2 bg-[var(--card2)] rounded-lg"
+            />
+            <div className="flex justify-between text-[10px] font-semibold text-[var(--muted2)]">
+              <span>₹5K Micro</span>
+              <span>₹25K Pro</span>
+              <span>₹50K+ Scale</span>
+            </div>
+          </div>
+
+          <button
+            onClick={runMatch}
+            disabled={phase === 'running'}
+            className="relative w-full overflow-hidden py-3.5 rounded-xl bg-gradient-to-r from-[var(--amber)] to-[#FF6B35] text-black font-extrabold text-sm hover:opacity-95 shadow-lg shadow-[rgba(245,166,35,0.20)] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:cursor-wait"
+          >
+            {phase === 'running' ? (
+              <>
+                <Loader2 size={16} className="animate-spin" />
+                <span>AI is matching…</span>
+              </>
+            ) : phase === 'done' ? (
+              <>
+                <RotateCcw size={16} />
+                <span>{briefChanged ? 'Update matches' : 'Run match again'}</span>
+              </>
+            ) : (
+              <>
+                <BrainCircuit size={16} />
+                <span>Find my AI matches</span>
+              </>
+            )}
+            {phase === 'idle' && (
+              <motion.span
+                className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                initial={{ x: '-150%' }}
+                animate={{ x: '350%' }}
+                transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 1.2, ease: 'easeInOut' }}
+              />
+            )}
+          </button>
+          {briefChanged && phase === 'done' && (
+            <p className="-mt-3 text-center text-[11px] text-[var(--amber)]">Brief changed. Update to re-rank creators.</p>
+          )}
+        </div>
+
+        {/* ── Results stage ── */}
+        <div ref={resultsRef} className="relative min-h-[420px] rounded-2xl border border-[var(--border)] bg-black/30 p-5 sm:p-6 overflow-hidden">
+          <AnimatePresence mode="wait">
+            {phase === 'idle' && <IdleStage key="idle" />}
+
+            {phase === 'running' && (
+              <motion.div
+                key="running"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                className="flex h-full min-h-[380px] flex-col items-center justify-center gap-8"
+              >
+                <NeuralScanner />
+                <div className="w-full max-w-sm space-y-2.5">
+                  {steps.map((label, i) => {
+                    const state = i < step ? 'done' : i === step ? 'active' : 'pending';
+                    return (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: state === 'pending' ? 0.35 : 1, x: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className="flex items-center gap-3 text-xs"
+                      >
+                        <span
+                          className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border ${state === 'done'
+                            ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-400'
+                            : state === 'active'
+                              ? 'border-[rgba(245,166,35,0.50)] bg-[rgba(245,166,35,0.10)] text-[var(--amber)]'
+                              : 'border-[var(--border2)] text-[var(--muted2)]'
+                            }`}
                         >
-                          {creator.initials}
-                        </div>
-                        <div>
-                          <h4 className="text-sm font-bold text-white group-hover:text-[var(--amber)] transition-colors">
-                            {creator.name}
-                          </h4>
-                          <div className="text-[11px] text-[var(--muted)]">{subline}</div>
-                        </div>
-                      </div>
-                      {creator.matchScore != null && (
-                        <div className="text-right">
-                          <span className="rounded-md border border-[var(--amber)]/30 bg-[var(--amber)]/10 px-2 py-0.5 text-xs font-extrabold text-[var(--amber)]">
-                            {creator.matchScore}%
-                          </span>
-                          <div className="text-[9px] uppercase tracking-wider text-[var(--muted2)] mt-0.5">Match</div>
-                        </div>
-                      )}
-                    </div>
-
-                    <p className="text-xs text-[var(--muted)] leading-relaxed line-clamp-2 mb-4">
-                      {creator.bio || "This creator hasn't added a bio yet."}
-                    </p>
-
-                    <div className="grid grid-cols-3 gap-2 mb-4 text-center">
-                      {stats.map((stat) => (
-                        <div
-                          key={stat.label}
-                          className="rounded-lg border border-[var(--border)] bg-[var(--card2)] p-1.5"
-                        >
-                          <div className="text-xs font-extrabold text-white">{stat.value ?? '—'}</div>
-                          <div className="text-[9px] text-[var(--muted2)] uppercase">{stat.label}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-3 border-t border-[var(--border)]">
-                    <div className="text-xs font-extrabold text-white">
-                      {creator.rate ?? <span className="font-medium text-[var(--muted2)]">Rate not set</span>}
-                    </div>
-                    <button
-                      onClick={() => onSelectCreator?.(creator)}
-                      className="flex items-center gap-1 text-xs font-bold text-[var(--amber)] hover:underline"
-                    >
-                      <span>Connect</span>
-                      <ArrowRight size={13} />
-                    </button>
+                          {state === 'done' ? <Check size={11} strokeWidth={3} /> : state === 'active' ? <Loader2 size={11} className="animate-spin" /> : null}
+                        </span>
+                        <span className={state === 'active' ? 'font-semibold text-white' : 'text-[var(--muted)]'}>{label}</span>
+                      </motion.div>
+                    );
+                  })}
+                  <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-[var(--card2)]">
+                    <motion.div
+                      className="h-full rounded-full bg-gradient-to-r from-[var(--amber)] to-[#FF6B35]"
+                      animate={{ width: `${Math.min(100, (step / steps.length) * 100 + 6)}%` }}
+                      transition={{ ease: 'easeOut', duration: 0.5 }}
+                    />
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        )}
+              </motion.div>
+            )}
 
-        {/* Shown only once creators have real match scores */}
-        {leadMatch && !loading && (
-          <div className="mt-6 rounded-2xl border border-[var(--amber)]/20 bg-[var(--amber)]/5 p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[var(--amber)]">
-                <ShieldCheck size={14} />
-                <span>AI Recommendation Engine</span>
-              </div>
-              <p className="text-xs text-white mt-1">
-                Top pick: <strong className="text-[var(--amber)]">{leadMatch.name}</strong> is the strongest fit for a{' '}
-                {campaignGoal.toLowerCase()} campaign
-                {leadMatch.ctr ? ` with ${leadMatch.ctr} average CTR` : ''}.
-              </p>
-            </div>
-            <button
-              onClick={() => onSelectCreator?.(leadMatch)}
-              className="shrink-0 rounded-full bg-[var(--amber)] px-5 py-2 text-xs font-extrabold text-black hover:opacity-90 transition-all cursor-pointer"
-            >
-              Request Collaboration →
-            </button>
-          </div>
-        )}
+            {phase === 'error' && (
+              <motion.div
+                key="error"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex min-h-[380px] flex-col items-center justify-center gap-3 text-center"
+              >
+                <p className="text-sm text-red-400">Couldn&apos;t run the match: {errorMsg}</p>
+                <button onClick={runMatch} className="text-xs font-bold text-[var(--amber)] hover:underline">
+                  Try again
+                </button>
+              </motion.div>
+            )}
+
+            {phase === 'done' && (
+              <motion.div key="done" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+                  <div>
+                    <div className="flex items-center gap-2 text-sm font-bold text-white">
+                      <BrainCircuit size={16} className="text-[var(--amber)]" />
+                      {matches.length > 1 ? `Top ${matches.length} AI matches` : matches.length ? 'Your AI match' : 'No matches yet'}
+                    </div>
+                    <div className="mt-0.5 text-[11px] text-[var(--muted2)]">
+                      {scanned} creator profile{scanned === 1 ? '' : 's'} analysed · {niche === 'Any' ? 'all niches' : niche} · {goal} · {budgetLabel}
+                    </div>
+                  </div>
+                  {matches.length > 0 && (
+                    <button
+                      onClick={handleExport}
+                      className="flex items-center gap-1.5 rounded-full border border-[var(--border2)] bg-[var(--card)] px-3 py-1 text-xs font-semibold text-[var(--muted)] hover:text-white hover:border-[var(--amber)] transition"
+                    >
+                      <Download size={13} /> Export shortlist
+                    </button>
+                  )}
+                </div>
+
+                {matches.length === 0 ? (
+                  <div className="rounded-xl border border-dashed border-[var(--border2)] p-8 text-center text-sm text-[var(--muted)]">
+                    {niche === 'Any'
+                      ? 'No creators have completed their profile yet, so there is nothing to match against.'
+                      : `No creators in ${niche} yet. Try "Any" to match across every niche.`}
+                  </div>
+                ) : (
+                  <>
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+                      {matches.map((c, i) => (
+                        <MatchCard key={c.id} creator={c} rank={i} onSelect={onSelectCreator} />
+                      ))}
+                    </div>
+
+                    {leadMatch && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25 + matches.length * 0.12 }}
+                        className="mt-5 rounded-2xl border border-[rgba(245,166,35,0.20)] bg-[rgba(245,166,35,0.05)] p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                      >
+                        <div>
+                          <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[var(--amber)]">
+                            <Trophy size={14} />
+                            <span>AI recommendation</span>
+                          </div>
+                          <p className="text-xs text-white mt-1">
+                            <strong className="text-[var(--amber)]">{leadMatch.name}</strong> is your strongest fit at{' '}
+                            {leadMatch.matchScore}% for this {goal.toLowerCase()} campaign.
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => onSelectCreator?.(leadMatch)}
+                          className="shrink-0 rounded-full bg-[var(--amber)] px-5 py-2 text-xs font-extrabold text-black hover:opacity-90 transition-all cursor-pointer"
+                        >
+                          Request collaboration →
+                        </button>
+                      </motion.div>
+                    )}
+
+                    <p className="mt-4 text-center text-[10px] text-[var(--muted2)]">
+                      Match % combines niche fit, rate vs budget, engagement, reach and Creator Score, weighted for your goal.
+                      {aiExplained ? ' Explanations written by Fewsion AI.' : ''}
+                    </p>
+                  </>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </section>
+  );
+}
+
+// ---------------------------------------------------------------------
+// Stage pieces
+// ---------------------------------------------------------------------
+
+function IdleStage() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="flex h-full min-h-[380px] flex-col items-center justify-center gap-5 text-center"
+    >
+      <div className="relative flex h-24 w-24 items-center justify-center">
+        <motion.span
+          className="absolute inset-0 rounded-full border border-[rgba(245,166,35,0.30)]"
+          animate={{ scale: [1, 1.35], opacity: [0.6, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
+        />
+        <motion.span
+          className="absolute inset-0 rounded-full border border-[rgba(245,166,35,0.30)]"
+          animate={{ scale: [1, 1.35], opacity: [0.6, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeOut', delay: 1 }}
+        />
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-[rgba(245,166,35,0.30)] bg-[rgba(245,166,35,0.10)]">
+          <BrainCircuit size={30} className="text-[var(--amber)]" />
+        </div>
+      </div>
+      <div>
+        <div className="text-sm font-bold text-white">Your matches will appear here</div>
+        <p className="mt-1 max-w-xs text-xs text-[var(--muted)]">
+          Set your niche, goal and budget, then let Fewsion AI score every creator profile and rank the best fits.
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+// Animated "network" of nodes lighting up while the match runs
+function NeuralScanner() {
+  const nodes = Array.from({ length: 18 }, (_, i) => {
+    const angle = (i / 18) * Math.PI * 2;
+    const r = i % 2 ? 38 : 54;
+    return { x: 70 + Math.cos(angle) * r, y: 70 + Math.sin(angle) * r, delay: (i % 6) * 0.18 };
+  });
+  return (
+    <div className="relative h-[140px] w-[140px]">
+      <svg viewBox="0 0 140 140" className="absolute inset-0 h-full w-full">
+        {nodes.map((n, i) => (
+          <motion.line
+            key={`l${i}`}
+            x1="70"
+            y1="70"
+            x2={n.x}
+            y2={n.y}
+            stroke="var(--amber)"
+            strokeWidth="0.6"
+            animate={{ opacity: [0.05, 0.5, 0.05] }}
+            transition={{ duration: 1.4, repeat: Infinity, delay: n.delay }}
+          />
+        ))}
+        {nodes.map((n, i) => (
+          <motion.circle
+            key={`c${i}`}
+            cx={n.x}
+            cy={n.y}
+            r="2.6"
+            fill="var(--amber)"
+            animate={{ opacity: [0.25, 1, 0.25], scale: [0.8, 1.3, 0.8] }}
+            transition={{ duration: 1.4, repeat: Infinity, delay: n.delay }}
+          />
+        ))}
+      </svg>
+      <motion.div
+        className="absolute inset-0 rounded-full"
+        style={{ background: 'conic-gradient(from 0deg, transparent 0deg, rgba(245,166,35,0.25) 60deg, transparent 90deg)' }}
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1.8, repeat: Infinity, ease: 'linear' }}
+      />
+      <div className="absolute left-1/2 top-1/2 flex h-11 w-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--amber)] to-[#FF6B35] shadow-lg shadow-[rgba(245,166,35,0.30)]">
+        <BrainCircuit size={22} className="text-black" />
+      </div>
+    </div>
+  );
+}
+
+function ScoreRing({ value, delay }: { value: number; delay: number }) {
+  const r = 20;
+  const circ = 2 * Math.PI * r;
+  const [shown, setShown] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+    const start = performance.now() + delay * 1000;
+    const tick = (now: number) => {
+      const t = Math.max(0, Math.min(1, (now - start) / 900));
+      setShown(Math.round(value * (1 - Math.pow(1 - t, 3))));
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [value, delay]);
+
+  return (
+    <div className="relative h-14 w-14 shrink-0">
+      <svg viewBox="0 0 48 48" className="h-full w-full -rotate-90">
+        <circle cx="24" cy="24" r={r} fill="none" stroke="var(--card2)" strokeWidth="4" />
+        <motion.circle
+          cx="24"
+          cy="24"
+          r={r}
+          fill="none"
+          stroke="var(--amber)"
+          strokeWidth="4"
+          strokeLinecap="round"
+          strokeDasharray={circ}
+          initial={{ strokeDashoffset: circ }}
+          animate={{ strokeDashoffset: circ * (1 - value / 100) }}
+          transition={{ duration: 0.9, delay, ease: 'easeOut' }}
+        />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-[13px] font-extrabold leading-none text-white">{shown}%</span>
+        <span className="mt-0.5 text-[7px] font-bold uppercase tracking-wider text-[var(--muted2)]">match</span>
+      </div>
+    </div>
+  );
+}
+
+function MatchCard({
+  creator,
+  rank,
+  onSelect,
+}: {
+  creator: CreatorMatch;
+  rank: number;
+  onSelect?: (c: CreatorMatch) => void;
+}) {
+  const delay = 0.1 + rank * 0.12;
+  const subline = [creator.platform, creator.niche].filter(Boolean).join(' • ') || 'Fewsion creator';
+  const bars = [
+    { label: 'Niche', value: creator.signals.niche },
+    { label: 'Budget', value: creator.signals.budget },
+    { label: 'Engage', value: creator.signals.engagement },
+    { label: 'Reach', value: creator.signals.reach },
+  ];
+  const stats = [
+    { label: 'Followers', value: creator.followers },
+    { label: 'Eng. rate', value: creator.engagementRate != null ? `${creator.engagementRate}%` : null },
+    { label: 'Score', value: creator.score != null ? `${creator.score}/100` : null },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24, scale: 0.97, filter: 'blur(6px)' }}
+      animate={{ opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }}
+      transition={{ delay, duration: 0.45, ease: 'easeOut' }}
+      className={`group relative flex flex-col rounded-2xl border bg-[var(--card)] p-4 transition-colors hover:border-[rgba(245,166,35,0.40)] ${rank === 0 ? 'border-[rgba(245,166,35,0.40)] shadow-lg shadow-[rgba(245,166,35,0.10)]' : 'border-[var(--border)]'
+        }`}
+    >
+      {rank === 0 && (
+        <span className="absolute -top-2.5 left-4 inline-flex items-center gap-1 rounded-full bg-[var(--amber)] px-2 py-0.5 text-[10px] font-extrabold text-black">
+          <Trophy size={10} /> Best match
+        </span>
+      )}
+
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <div
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xs font-black text-black"
+            style={{ background: pickGradient(creator.id) }}
+          >
+            {initials(creator.name)}
+          </div>
+          <div className="min-w-0">
+            <h4 className="truncate text-sm font-bold text-white group-hover:text-[var(--amber)] transition-colors">
+              {creator.name}
+            </h4>
+            <div className="truncate text-[11px] text-[var(--muted)]">{subline}</div>
+          </div>
+        </div>
+        <ScoreRing value={creator.matchScore} delay={delay + 0.15} />
+      </div>
+
+      {/* Why the AI picked them */}
+      <div className="mt-3 flex gap-2 rounded-xl border border-[rgba(245,166,35,0.15)] bg-[rgba(245,166,35,0.05)] p-2.5">
+        <Sparkles size={13} className="mt-0.5 shrink-0 text-[var(--amber)]" />
+        <p className="text-[11px] leading-relaxed text-[var(--text)]">{creator.reason}</p>
+      </div>
+
+      {/* Signal breakdown */}
+      <div className="mt-3 grid grid-cols-4 gap-2">
+        {bars.map((b, i) => (
+          <div key={b.label}>
+            <div className="h-1 overflow-hidden rounded-full bg-[var(--card2)]">
+              <motion.div
+                className="h-full rounded-full bg-[var(--amber)]"
+                initial={{ width: 0 }}
+                animate={{ width: `${b.value}%` }}
+                transition={{ delay: delay + 0.25 + i * 0.06, duration: 0.6, ease: 'easeOut' }}
+              />
+            </div>
+            <div className="mt-1 text-[9px] uppercase tracking-wider text-[var(--muted2)]">{b.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+        {stats.map((s) => (
+          <div key={s.label} className="rounded-lg border border-[var(--border)] bg-[var(--card2)] p-1.5">
+            <div className="text-xs font-extrabold text-white">{s.value ?? '—'}</div>
+            <div className="text-[9px] text-[var(--muted2)] uppercase">{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-3 flex items-center justify-between border-t border-[var(--border)] pt-3">
+        <div className="text-xs font-extrabold text-white">
+          {creator.rate ?? <span className="font-medium text-[var(--muted2)]">Rate not set</span>}
+        </div>
+        <button
+          onClick={() => onSelect?.(creator)}
+          className="flex items-center gap-1 text-xs font-bold text-[var(--amber)] hover:underline"
+        >
+          <span>Connect</span>
+          <ArrowRight size={13} />
+        </button>
+      </div>
+    </motion.div>
   );
 }
