@@ -583,6 +583,7 @@ import {
 import { supabase } from '@/utils/supabase';
 
 import { KycStatus, KycData } from '@/components/KYCModal';
+import { useInbox, InboxState } from '@/components/MessagesInbox';
 
 // ---------------------------------------------------------------------
 // Types
@@ -607,6 +608,9 @@ interface Application {
 }
 interface Collaboration {
   id: string;
+  campaign_id?: string;
+  brand_id?: string;
+  creator_id?: string;
   campaign_title?: string;
   brand_name?: string;
   payment?: number;
@@ -694,6 +698,7 @@ export interface CreatorContextType {
   submitKycData: (data: KycData) => Promise<void>;
   isKycVerified: boolean;
   requireKycGate: (onSuccessAction: () => void) => boolean;
+  inbox: InboxState;
 }
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
@@ -757,8 +762,9 @@ export function CreatorProvider({ children }: { children: React.ReactNode }) {
   // ---------------------------------------------------------------------
   // Load everything
   // ---------------------------------------------------------------------
-  const loadAll = useCallback(async () => {
-    setLoading(true);
+  // silent = refresh in the background (realtime) without the full-page loader
+  const loadAll = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -824,7 +830,12 @@ export function CreatorProvider({ children }: { children: React.ReactNode }) {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'notifications', filter: `user_id=eq.${userId}` },
-        () => loadAll()
+        () => loadAll(true)
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'collaborations', filter: `creator_id=eq.${userId}` },
+        () => loadAll(true)
       )
       .subscribe();
     return () => {
@@ -925,36 +936,19 @@ export function CreatorProvider({ children }: { children: React.ReactNode }) {
   // ---------------------------------------------------------------------
   // Messages
   // ---------------------------------------------------------------------
-  const openThread = useCallback(
-    async (collabId: string) => {
-      setSelectedCollabId(collabId);
-      setActiveTab('messages');
-      const { data } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('collaboration_id', collabId)
-        .order('created_at', { ascending: true });
-      setThreadMessages(data ?? []);
-    },
-    [supabase]
-  );
+  const openThread = useCallback((collabId: string) => {
+    setSelectedCollabId(collabId);
+    setActiveTab('messages');
+  }, []);
 
-  useEffect(() => {
-    if (!selectedCollabId) return;
-    const channel = supabase
-      .channel(`messages-${selectedCollabId}`)
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'messages', filter: `collaboration_id=eq.${selectedCollabId}` },
-        (payload) => {
-          setThreadMessages((prev) => [...prev, payload.new as MessageRow]);
-        }
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [selectedCollabId, supabase]);
+  // Live messaging (conversations, unread counts, alerts)
+  const inbox = useInbox({
+    userId,
+    role: 'creator',
+    myName: profile?.creator_name || 'A creator',
+    collaborations,
+    activeCollabId: activeTab === 'messages' ? selectedCollabId : null,
+  });
 
   const sendMessage = useCallback(async () => {
     const content = threadInput.trim();
@@ -1050,7 +1044,7 @@ export function CreatorProvider({ children }: { children: React.ReactNode }) {
     signing, setSigning, totalEarnings, averageRating, unreadCount, initials, markNotificationsRead,
     toggleNotifPanel, openThread, sendMessage, viewContract, signContract, handleLogout,
     statusTagClasses, kycStatus, setKycStatus, kycDetails, setKycDetails, kycModalOpen, setKycModalOpen,
-    submitKycData, isKycVerified, requireKycGate
+    submitKycData, isKycVerified, requireKycGate, inbox
   };
 
   return (

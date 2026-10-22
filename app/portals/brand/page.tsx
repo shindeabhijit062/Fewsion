@@ -122,6 +122,7 @@ import { supabase } from '@/utils/supabase';
 import { AIMatchmaker, CreatorMatch } from '@/components/AIMatchmaker';
 import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
+import { MessagesInbox, MessageToasts, useInbox } from '@/components/MessagesInbox';
 
 // ---------------------------------------------------------------------
 // Types
@@ -245,8 +246,6 @@ export default function BrandPortalPage() {
   const [selectedCampaignId, setSelectedCampaignId] = useState<string | null>(null);
   const [notifOpen, setNotifOpen] = useState(false);
   const [selectedCollabId, setSelectedCollabId] = useState<string | null>(null);
-  const [threadMessages, setThreadMessages] = useState<MessageRow[]>([]);
-  const [threadInput, setThreadInput] = useState('');
   const [contractModal, setContractModal] = useState<Contract | null>(null);
   const [generatingCollabId, setGeneratingCollabId] = useState<string | null>(null);
   const [signing, setSigning] = useState(false);
@@ -258,6 +257,15 @@ export default function BrandPortalPage() {
   const [requestSending, setRequestSending] = useState(false);
   const [requestError, setRequestError] = useState('');
   const [requestSentCollabId, setRequestSentCollabId] = useState<string | null>(null);
+
+  // Live messaging (conversations, unread counts, alerts)
+  const inbox = useInbox({
+    userId,
+    role: 'brand',
+    myName: profile?.brand_name || 'A brand',
+    collaborations,
+    activeCollabId: activeTab === 'messages' && selectedCampaignId === null ? selectedCollabId : null,
+  });
 
   // KYC state
   const [kycStatus, setKycStatus] = useState<KycStatus>('unverified');
@@ -284,8 +292,9 @@ export default function BrandPortalPage() {
   // ---------------------------------------------------------------------
   // Load everything
   // ---------------------------------------------------------------------
-  const loadAll = useCallback(async () => {
-    setLoading(true);
+  // silent = refresh in the background (realtime) without the full-page loader
+  const loadAll = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -361,22 +370,22 @@ export default function BrandPortalPage() {
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'notifications', filter: `user_id=eq.${userId}` },
-        () => loadAll()
+        () => loadAll(true)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'applications' },
-        () => loadAll()
+        () => loadAll(true)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'collaborations', filter: `brand_id=eq.${userId}` },
-        () => loadAll()
+        () => loadAll(true)
       )
       .on(
         'postgres_changes',
         { event: '*', schema: 'public', table: 'payments' },
-        () => loadAll()
+        () => loadAll(true)
       )
       .subscribe();
     return () => {
@@ -491,49 +500,11 @@ export default function BrandPortalPage() {
   // ---------------------------------------------------------------------
   // Messages
   // ---------------------------------------------------------------------
-  const openThread = useCallback(async (collabId: string) => {
+  const openThread = useCallback((collabId: string) => {
+    setSelectedCampaignId(null);
     setSelectedCollabId(collabId);
     setActiveTab('messages');
-    const { data } = await supabase
-      .from('messages')
-      .select('*')
-      .eq('collaboration_id', collabId)
-      .order('created_at', { ascending: true });
-    setThreadMessages(data ?? []);
   }, []);
-
-  useEffect(() => {
-    if (!selectedCollabId) return;
-    const channel = supabase
-      .channel(`messages-${selectedCollabId}`)
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'messages', filter: `collaboration_id=eq.${selectedCollabId}` },
-        (payload) => {
-          setThreadMessages((prev) => {
-            if (prev.some((m) => m.id === payload.new.id)) return prev;
-            return [...prev, payload.new as MessageRow];
-          });
-        }
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [selectedCollabId]);
-
-  const sendMessage = useCallback(async () => {
-    const content = threadInput.trim();
-    if (!content || !selectedCollabId || !userId) return;
-    setThreadInput('');
-    const { error } = await supabase
-      .from('messages')
-      .insert({ collaboration_id: selectedCollabId, sender_id: userId, content });
-    if (error) {
-      console.error(error);
-      alert('Message failed to send.');
-    }
-  }, [threadInput, selectedCollabId, userId]);
 
   // ---------------------------------------------------------------------
   // Collaboration requests (AI Matchmaker → creator)
@@ -761,6 +732,11 @@ export default function BrandPortalPage() {
               >
                 <Icon size={16} />
                 {tab.label}
+                {tab.id === 'messages' && inbox.totalUnread > 0 && (
+                  <span className="ml-auto rounded-full bg-[oklch(0.8_0.16_75)] px-2 py-0.5 text-[10px] font-extrabold text-black">
+                    {inbox.totalUnread}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -854,6 +830,7 @@ export default function BrandPortalPage() {
                 }`}
             >
               {tab.label}
+              {tab.id === 'messages' && inbox.totalUnread > 0 ? ` (${inbox.totalUnread})` : ''}
             </button>
           ))}
         </div>
@@ -1244,74 +1221,14 @@ export default function BrandPortalPage() {
 
         {/* Messages Tab */}
         {selectedCampaignId === null && activeTab === 'messages' && (
-          <>
-            {!selectedCollabId ? (
-              <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-7">
-                <h2 className="font-display text-lg font-bold text-white mb-5">Conversations</h2>
-                {collaborations.length === 0
-                  ? emptyBox('Messages open up once you approve a creator into an active collaboration.')
-                  : (
-                    <div className="space-y-2">
-                      {collaborations.map((c) => (
-                        <button
-                          key={c.id}
-                          onClick={() => openThread(c.id)}
-                          className="w-full flex items-center justify-between rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.11_0.01_80)] px-4 py-3.5 text-left hover:border-[oklch(0.3_0.02_80)]"
-                        >
-                          <div>
-                            <div className="text-sm font-semibold text-white">Collaboration {c.id.slice(0, 8)}…</div>
-                            <div className="text-xs text-[oklch(0.6_0.015_85)]">Status: {c.status || 'active'}</div>
-                          </div>
-                          <span className="text-xs text-[oklch(0.6_0.015_85)]">Open &rarr;</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-              </div>
-            ) : (
-              <div>
-                <button
-                  onClick={() => setSelectedCollabId(null)}
-                  className="mb-5 flex items-center gap-2 text-xs text-[oklch(0.6_0.015_85)] hover:text-white"
-                >
-                  <ArrowLeft size={14} /> All conversations
-                </button>
-                <div className="flex h-[480px] flex-col overflow-hidden rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.11_0.01_80)]">
-                  <div className="flex-1 space-y-2.5 overflow-y-auto p-5">
-                    {threadMessages.length === 0
-                      ? emptyBox('No messages yet. Say hello!')
-                      : threadMessages.map((m) => (
-                        <div
-                          key={m.id}
-                          className={`max-w-[70%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${m.sender_id === userId
-                              ? 'ml-auto bg-[oklch(0.8_0.16_75)] text-black'
-                              : 'bg-[oklch(0.18_0.02_80)] text-white'
-                            }`}
-                        >
-                          {m.content}
-                          <div className="mt-1 text-[10px] opacity-60">{fmtTime(m.created_at)}</div>
-                        </div>
-                      ))}
-                  </div>
-                  <div className="flex gap-2 border-t border-[oklch(0.25_0.02_80)] p-3.5">
-                    <input
-                      value={threadInput}
-                      onChange={(e) => setThreadInput(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                      placeholder="Type a message..."
-                      className="flex-1 rounded-full border border-[oklch(0.3_0.02_80)] bg-[oklch(0.16_0.02_80)] px-4 py-2.5 text-sm text-white outline-none placeholder:text-[oklch(0.5_0.01_85)]"
-                    />
-                    <button
-                      onClick={sendMessage}
-                      className="flex items-center gap-1.5 rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)]"
-                    >
-                      <SendIcon size={13} /> Send
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
+          <MessagesInbox
+            inbox={inbox}
+            userId={userId}
+            selectedId={selectedCollabId}
+            onSelect={setSelectedCollabId}
+            onContract={handleContractAction}
+            emptyText="No conversations yet. Request a collaboration from the AI Matchmaker or approve an application to start chatting with creators."
+          />
         )}
       </main>
 
@@ -1482,6 +1399,9 @@ export default function BrandPortalPage() {
           </div>
         </div>
       )}
+
+      {/* Live alerts for new messages */}
+      <MessageToasts toasts={inbox.toasts} onOpen={openThread} onDismiss={inbox.dismissToast} />
 
       {/* Brand KYC Modal */}
       <KYCModal

@@ -147,6 +147,7 @@ import {
 } from 'lucide-react';
 import { CreatorProvider, useCreatorData, TabId } from './CreatorContext';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
+import { MessageToasts } from '@/components/MessagesInbox';
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -167,6 +168,8 @@ function CreatorLayoutInner({ children }: { children: React.ReactNode }) {
     setActiveTab,
     setSelectedCollabId,
     handleLogout,
+    inbox,
+    openThread,
   } = useCreatorData();
 
   if (loading) {
@@ -219,6 +222,11 @@ function CreatorLayoutInner({ children }: { children: React.ReactNode }) {
               >
                 <Icon size={16} />
                 {tab.label}
+                {tab.id === 'messages' && inbox.totalUnread > 0 && (
+                  <span className="ml-auto rounded-full bg-[var(--amber)] px-2 py-0.5 text-[10px] font-extrabold text-black">
+                    {inbox.totalUnread}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -249,6 +257,9 @@ function CreatorLayoutInner({ children }: { children: React.ReactNode }) {
       <div className="flex-1 md:ml-64 w-full">
         {children}
       </div>
+
+      {/* Live alerts for new messages */}
+      <MessageToasts toasts={inbox.toasts} onOpen={openThread} onDismiss={inbox.dismissToast} />
     </div>
   );
 }

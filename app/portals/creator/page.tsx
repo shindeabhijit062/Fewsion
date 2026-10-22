@@ -6,6 +6,7 @@ import { ArrowLeft, Bell, Send as SendIcon, ShieldCheck, AlertTriangle, CheckCir
 import { useCreatorData, TabId, emptyBox } from './CreatorContext';
 import { KYCModal } from '@/components/KYCModal';
 import { AIMatchmaker } from '@/components/AIMatchmaker';
+import { MessagesInbox } from '@/components/MessagesInbox';
 
 const TAB_COPY: Record<TabId, { title: string; subtitle: string }> = {
   overview: { title: 'Overview', subtitle: 'Track active campaign deliverables and clear escrow releases.' },
@@ -77,7 +78,7 @@ export default function CreatorDashboardPage() {
     selectedCollabId, setSelectedCollabId, threadMessages, threadInput, setThreadInput,
     sendMessage, openThread, viewContract, signContract, contractModal, signing,
     totalEarnings, averageRating, userId, statusTagClasses,
-    kycStatus, kycDetails, kycModalOpen, setKycModalOpen, submitKycData, requireKycGate
+    kycStatus, kycDetails, kycModalOpen, setKycModalOpen, submitKycData, requireKycGate, inbox
   } = useCreatorData();
 
   return (
@@ -143,6 +144,7 @@ export default function CreatorDashboardPage() {
                 }`}
             >
               {tab.label}
+              {tab.id === 'messages' && inbox.totalUnread > 0 ? ` (${inbox.totalUnread})` : ''}
             </button>
           ))}
         </div>
@@ -338,74 +340,14 @@ export default function CreatorDashboardPage() {
 
         {/* Messages */}
         {activeTab === 'messages' && (
-          <>
-            {!selectedCollabId ? (
-              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-7">
-                <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">Conversations</h2>
-                {collaborations.length === 0
-                  ? emptyBox('Messages open up once a brand approves you into an active collaboration.')
-                  : (
-                    <div className="space-y-2">
-                      {collaborations.map((c) => (
-                        <button
-                          key={c.id}
-                          onClick={() => openThread(c.id)}
-                          className="w-full flex items-center justify-between rounded-xl border border-[var(--border)] bg-[var(--card)] px-4 py-3.5 text-left hover:border-[var(--border2)]"
-                        >
-                          <div>
-                            <div className="text-sm font-semibold text-[var(--text)]">{c.brand_name || 'Brand partner'}</div>
-                            <div className="text-xs text-[var(--muted)]">{c.campaign_title || 'Untitled campaign'}</div>
-                          </div>
-                          <span className="text-xs text-[var(--muted)]">Open →</span>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-              </div>
-            ) : (
-              <div>
-                <button
-                  onClick={() => setSelectedCollabId(null)}
-                  className="mb-5 flex items-center gap-2 text-xs text-[var(--muted)] hover:text-[var(--text)]"
-                >
-                  <ArrowLeft size={14} /> All conversations
-                </button>
-                <div className="flex h-[480px] flex-col overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--card)]">
-                  <div className="flex-1 space-y-2.5 overflow-y-auto p-5">
-                    {threadMessages.length === 0
-                      ? emptyBox('No messages yet. Say hello!')
-                      : threadMessages.map((m) => (
-                        <div
-                          key={m.id}
-                          className={`max-w-[70%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${m.sender_id === userId
-                              ? 'ml-auto bg-[var(--amber)] text-black'
-                              : 'bg-[var(--card)] text-[var(--text)]'
-                            }`}
-                        >
-                          {m.content}
-                          <div className="mt-1 text-[10px] opacity-60">{fmtTime(m.created_at)}</div>
-                        </div>
-                      ))}
-                  </div>
-                  <div className="flex gap-2 border-t border-[var(--border)] p-3.5">
-                    <input
-                      value={threadInput}
-                      onChange={(e) => setThreadInput(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-                      placeholder="Type a message..."
-                      className="flex-1 rounded-full border border-[var(--border2)] bg-[var(--card)] px-4 py-2.5 text-sm text-[var(--text)] outline-none placeholder:text-[var(--muted)]"
-                    />
-                    <button
-                      onClick={sendMessage}
-                      className="flex items-center gap-1.5 rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:opacity-90"
-                    >
-                      <SendIcon size={13} /> Send
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </>
+          <MessagesInbox
+            inbox={inbox}
+            userId={userId}
+            selectedId={selectedCollabId}
+            onSelect={setSelectedCollabId}
+            onContract={viewContract}
+            emptyText="No conversations yet. They start when a brand sends you a collaboration request or approves your application."
+          />
         )}
 
         {/* Reviews */}
