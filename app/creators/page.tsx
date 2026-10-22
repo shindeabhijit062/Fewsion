@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
 import { AIMatchmaker } from '@/components/AIMatchmaker';
+import { CreatorOfferDrawer, OfferCreator } from '@/components/CreatorOfferDrawer';
+import { STATUS_LABEL } from '@/lib/offers';
 
 const NICHES = ['All', 'Beauty', 'Fitness', 'Tech', 'Food', 'Travel', 'Finance', 'Gaming', 'Fashion'];
 const PLATFORMS = ['All', 'Instagram', 'YouTube', 'Multi-platform'];
@@ -19,6 +21,20 @@ function formatCTR(rate: number | null | undefined): string {
   if (rate === null || rate === undefined) return '0%';
   return `${Number(rate).toFixed(1)}%`;
 }
+
+// Rates are free text ("20000", "₹20,000", "On request"…)
+function formatRate(raw: unknown): string {
+  if (raw === null || raw === undefined || String(raw).trim() === '') return 'On request';
+  const n = Number(String(raw).replace(/[^\d.]/g, ''));
+  return Number.isFinite(n) && n > 0 ? `₹${Math.round(n).toLocaleString('en-IN')}` : String(raw);
+}
+
+// Who is looking at the page decides what "Request collab" does
+type Viewer =
+  | { kind: 'loading' }
+  | { kind: 'guest' }
+  | { kind: 'brand'; userId: string; brandName: string }
+  | { kind: 'other'; role: string };
 
 function getNicheColors(niche: string) {
   const n = niche.toLowerCase();
@@ -39,6 +55,59 @@ export default function CreatorsPage() {
   const [search, setSearch] = useState('');
   const [creators, setCreators] = useState<Creator[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const [viewer, setViewer] = useState<Viewer>({ kind: 'loading' });
+  const [campaigns, setCampaigns] = useState<{ id: string; campaign_title?: string; budget_allocated?: number; status_state?: string }[]>([]);
+  const [collabs, setCollabs] = useState<{ id: string; creator_id: string; status?: string | null }[]>([]);
+  const [offerTarget, setOfferTarget] = useState<OfferCreator | null>(null);
+
+  const loadBrandDeals = useCallback(async (userId: string) => {
+    const [campaignsRes, collabsRes] = await Promise.all([
+      supabase.from('campaign_briefs').select('id, campaign_title, budget_allocated, status_state').eq('brand_id', userId).order('created_at', { ascending: false }),
+      supabase.from('collaborations').select('id, creator_id, status').eq('brand_id', userId).order('created_at', { ascending: false }),
+    ]);
+    setCampaigns(campaignsRes.data ?? []);
+    setCollabs(collabsRes.data ?? []);
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return setViewer({ kind: 'guest' });
+      const [{ data: row }, { data: brand }] = await Promise.all([
+        supabase.from('users').select('role').eq('id', user.id).maybeSingle(),
+        supabase.from('brand_profiles').select('brand_name').eq('user_id', user.id).maybeSingle(),
+      ]);
+      if (brand || row?.role === 'brand') {
+        setViewer({ kind: 'brand', userId: user.id, brandName: brand?.brand_name || 'our brand' });
+        loadBrandDeals(user.id);
+      } else {
+        setViewer({ kind: 'other', role: row?.role || user.user_metadata?.role || 'member' });
+      }
+    })();
+  }, [loadBrandDeals]);
+
+  // Latest deal per creator → label on their button
+  const latestByCreator = useMemo(() => {
+    const map: Record<string, { id: string; status?: string | null }> = {};
+    collabs.forEach((c) => { if (!map[c.creator_id]) map[c.creator_id] = c; });
+    return map;
+  }, [collabs]);
+  const statusLabels = useMemo(() => {
+    const out: Record<string, string> = {};
+    Object.entries(latestByCreator).forEach(([id, c]) => {
+      if (c.status !== 'declined') out[id] = STATUS_LABEL[c.status || ''] || 'In progress';
+    });
+    return out;
+  }, [latestByCreator]);
+
+  const requestCollab = (creator: OfferCreator) => {
+    if (viewer.kind === 'guest') {
+      window.location.href = `/login?next=${encodeURIComponent('/creators')}`;
+      return;
+    }
+    if (viewer.kind === 'brand') setOfferTarget(creator);
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -64,12 +133,15 @@ export default function CreatorsPage() {
             const colors = getNicheColors(c.primary_niche || 'General');
             return {
               id: c.id,
+              userId: c.user_id,
               name: c.creator_name || 'Creator Name',
               platform: c.primary_platform || 'Instagram',
               niche: c.primary_niche || 'General',
               followers: formatFollowers(c.follower_count),
               ctr: formatCTR(c.engagement_rate),
-              rate: c.rate_per_integration ? `₹${Number(c.rate_per_integration).toLocaleString('en-IN')}` : '₹8K',
+              rate: formatRate(c.rate_per_integration),
+              engagementRate: c.engagement_rate != null ? Number(c.engagement_rate) : null,
+              bio: c.content_style_desc || null,
               score: c.ai_total_score || 70,
               verified: true,
               colorA: colors.colorA,
@@ -92,8 +164,11 @@ export default function CreatorsPage() {
   }, []);
 
   const filtered = creators.filter((c) => {
-    const matchNiche = activeNiche === 'All' || c.niche === activeNiche;
-    const matchPlatform = activePlatform === 'All' || c.platform === activePlatform;
+    const matchNiche = activeNiche === 'All' || c.niche.toLowerCase().includes(activeNiche.toLowerCase());
+    const matchPlatform =
+      activePlatform === 'All' ||
+      c.platform === activePlatform ||
+      (activePlatform === 'Multi-platform' && /both|multi/i.test(c.platform));
     const matchSearch = !search || c.name.toLowerCase().includes(search.toLowerCase()) || c.niche.toLowerCase().includes(search.toLowerCase());
     return matchNiche && matchPlatform && matchSearch;
   });
@@ -144,6 +219,8 @@ export default function CreatorsPage() {
       {/* ── AI MATCHMAKER DEMO SECTION ── */}
       <section className="px-4 sm:px-6 lg:px-8 py-10 max-w-7xl mx-auto">
         <AIMatchmaker
+          onSelectCreator={requestCollab}
+          creatorStatus={statusLabels}
           title="Match Talent with Fewsion AI Engine"
           subtitle="Real-time neural recommendation system matching brands and creators by niche, engagement VTR, and budget."
         />
@@ -252,7 +329,26 @@ export default function CreatorsPage() {
             style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))' }}
           >
             {filtered.map((creator) => (
-              <CreatorCard key={creator.id} creator={creator} />
+              <CreatorCard
+                key={creator.id}
+                creator={creator}
+                viewer={viewer}
+                status={creator.userId ? statusLabels[creator.userId] : undefined}
+                onRequest={() =>
+                  creator.userId &&
+                  requestCollab({
+                    id: creator.userId,
+                    name: creator.name,
+                    niche: creator.niche,
+                    platform: creator.platform,
+                    followers: creator.followers,
+                    engagementRate: creator.engagementRate ?? null,
+                    score: creator.score,
+                    rate: creator.rate === 'On request' ? null : creator.rate,
+                    bio: creator.bio ?? null,
+                  })
+                }
+              />
             ))}
           </div>
         )}
@@ -312,11 +408,42 @@ export default function CreatorsPage() {
         </div>
       </section>
 
+
+      {/* Offer panel for signed-in brands */}
+      <CreatorOfferDrawer
+        creator={offerTarget}
+        campaigns={campaigns}
+        existing={offerTarget ? latestByCreator[offerTarget.id] ?? null : null}
+        brandName={viewer.kind === 'brand' ? viewer.brandName : 'our brand'}
+        onClose={() => setOfferTarget(null)}
+        onSent={(collab) => setCollabs((prev) => [collab, ...prev.filter((c) => c.id !== collab.id)])}
+        onOpenConversation={(id) => {
+          window.location.href = `/portals/brand?collab=${id}`;
+        }}
+      />
     </main>
   );
 }
 
-function CreatorCard({ creator }: { creator: Creator }) {
+function CreatorCard({
+  creator,
+  viewer,
+  status,
+  onRequest,
+}: {
+  creator: Creator;
+  viewer: Viewer;
+  status?: string;
+  onRequest: () => void;
+}) {
+  // Button depends on who is looking
+  const blocked = viewer.kind === 'other' || !creator.userId;
+  const label =
+    !creator.userId
+      ? 'Sample creator'
+      : viewer.kind === 'other'
+        ? 'Only brands can send offers'
+        : status || 'Request collab';
   const scoreColor = creator.score >= 80 ? '#4ade80' : creator.score >= 60 ? 'var(--amber)' : '#888';
 
   return (
@@ -396,15 +523,22 @@ function CreatorCard({ creator }: { creator: Creator }) {
         )}
       </div>
 
-      <Link
-        href="/signup?role=brand"
-        className="block text-center w-full py-[10px] rounded-full font-display text-[13px] font-bold no-underline transition-all duration-200"
-        style={{ background: 'var(--amber)', color: '#000' }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.9'; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
+      <button
+        type="button"
+        onClick={onRequest}
+        disabled={blocked || viewer.kind === 'loading'}
+        title={viewer.kind === 'guest' ? 'Sign in as a brand to send an offer' : undefined}
+        className="block text-center w-full py-[10px] rounded-full font-display text-[13px] font-bold transition-all duration-200 hover:opacity-90 disabled:cursor-not-allowed"
+        style={
+          blocked
+            ? { background: 'var(--card2)', color: '#777', border: '1px solid var(--border)' }
+            : status
+              ? { background: 'rgba(245,166,35,0.12)', color: 'var(--amber)', border: '1px solid rgba(245,166,35,0.35)' }
+              : { background: 'var(--amber)', color: '#000' }
+        }
       >
-        Request collab
-      </Link>
+        {label}
+      </button>
     </div>
   );
 }
@@ -413,6 +547,7 @@ interface Creator {
   id: number | string; name: string; platform: string; niche: string;
   followers: string; ctr: string; rate: string; score: number;
   verified: boolean; colorA: string; colorB: string;
+  userId?: string; engagementRate?: number | null; bio?: string | null;
 }
 
 const mockCreators: Creator[] = [

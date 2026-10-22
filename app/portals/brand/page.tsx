@@ -360,6 +360,17 @@ export default function BrandPortalPage() {
     loadAll();
   }, [loadAll]);
 
+  // Deep link: /portals/brand?collab=<id> opens that conversation
+  useEffect(() => {
+    if (loading) return;
+    const params = new URLSearchParams(window.location.search);
+    const collabId = params.get('collab');
+    if (!collabId) return;
+    setActiveTab('messages');
+    setSelectedCollabId(collabId);
+    window.history.replaceState(null, '', window.location.pathname);
+  }, [loading]);
+
   // Realtime subscriptions
   useEffect(() => {
     if (!userId) return;

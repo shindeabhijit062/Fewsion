@@ -128,8 +128,13 @@ export default function LoginPage() {
         }
 
         showToast('Welcome back! Redirecting...', 'success');
+        // Return to the page that sent them here (same-site paths only)
+        const next = new URLSearchParams(window.location.search).get('next');
+        const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : null;
         setTimeout(() => {
-          if (hasSubProfile) {
+          if (hasSubProfile && safeNext) {
+            window.location.href = safeNext;
+          } else if (hasSubProfile) {
             window.location.href = `/portals/${role}`;
           } else {
             window.location.href = `/${role}/dashboard`;

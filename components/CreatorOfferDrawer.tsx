@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, Sparkles, Send, CheckCircle2, MessageSquare, Loader2, Trophy } from 'lucide-react';
-import type { CreatorMatch } from '@/components/AIMatchmaker';
 import { OfferForm, OfferFormValue, emptyOffer, validateOffer } from '@/components/OfferForm';
 import { offersApi } from '@/lib/offersApi';
 import { STATUS_LABEL } from '@/lib/offers';
@@ -16,6 +15,21 @@ interface CampaignOption {
   campaign_title?: string;
   budget_allocated?: number;
   status_state?: string;
+}
+
+/** Creator shown in the drawer. AI fields are optional (not every entry point has them). */
+export interface OfferCreator {
+  id: string; // creator's user id
+  name: string;
+  niche?: string | null;
+  platform?: string | null;
+  followers?: string | null;
+  engagementRate?: number | null;
+  score?: number | null;
+  rate?: string | null;
+  bio?: string | null;
+  matchScore?: number | null;
+  reason?: string | null;
 }
 
 interface ExistingCollab {
@@ -50,7 +64,7 @@ export function CreatorOfferDrawer({
   onSent,
   onOpenConversation,
 }: {
-  creator: CreatorMatch | null;
+  creator: OfferCreator | null;
   campaigns: CampaignOption[];
   /** Latest collaboration with this creator, if any */
   existing: ExistingCollab | null;
@@ -155,9 +169,11 @@ export function CreatorOfferDrawer({
                 <p className="truncate text-xs text-[var(--muted)]">
                   {[creator.platform, creator.niche].filter(Boolean).join(' · ') || 'Fewsion creator'}
                 </p>
-                <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-[rgba(245,166,35,0.12)] px-2.5 py-0.5 text-[11px] font-bold text-[var(--amber)]">
-                  <Trophy size={11} /> {creator.matchScore}% match
-                </span>
+                {creator.matchScore != null && (
+                  <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-[rgba(245,166,35,0.12)] px-2.5 py-0.5 text-[11px] font-bold text-[var(--amber)]">
+                    <Trophy size={11} /> {creator.matchScore}% match
+                  </span>
+                )}
               </div>
               <button
                 onClick={onClose}
@@ -186,6 +202,7 @@ export function CreatorOfferDrawer({
               </div>
 
               {/* Why the AI picked them */}
+              {creator.reason && (
               <div className="mt-4 flex gap-2.5 rounded-xl border border-[rgba(245,166,35,0.2)] bg-[rgba(245,166,35,0.05)] p-3.5">
                 <Sparkles size={15} className="mt-0.5 shrink-0 text-[var(--amber)]" />
                 <div>
@@ -193,6 +210,7 @@ export function CreatorOfferDrawer({
                   <p className="mt-1 text-xs leading-relaxed text-[var(--text)]">{creator.reason}</p>
                 </div>
               </div>
+              )}
 
               {creator.bio && (
                 <div className="mt-4">
