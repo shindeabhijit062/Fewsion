@@ -80,7 +80,7 @@
 //                   if (tab.id !== 'messages') setSelectedCollabId(null);
 //                 }}
 //                 className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors text-left ${active
-//                     ? 'bg-[var(--card)] text-[var(--text)] border-l-2 border-[oklch(0.8_0.16_75)]'
+//                     ? 'bg-[var(--card)] text-[var(--text)] border-l-2 border-[var(--amber)]'
 //                     : 'text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--text)]'
 //                   }`}
 //               >
@@ -93,7 +93,7 @@
 
 //         <div className="mt-auto pt-5 border-t border-[var(--border)]">
 //           <div className="flex items-center gap-3">
-//             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[oklch(0.8_0.16_75)] to-[oklch(0.72_0.18_45)] font-display text-xs font-extrabold text-black">
+//             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[var(--amber)] to-[var(--amber2)] font-display text-xs font-extrabold text-black">
 //               {initials || 'C'}
 //             </div>
 //             <div>
@@ -237,7 +237,7 @@ function CreatorLayoutInner({ children }: { children: React.ReactNode }) {
                   if (tab.id !== 'messages') setSelectedCollabId(null);
                 }}
                 className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors text-left ${active
-                  ? 'bg-[var(--card)] text-[var(--text)] border-l-2 border-[oklch(0.8_0.16_75)]'
+                  ? 'bg-[var(--card)] text-[var(--text)] border-l-2 border-[var(--amber)]'
                   : 'text-[var(--muted)] hover:bg-[var(--card)] hover:text-[var(--text)]'
                   }`}
               >

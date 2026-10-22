@@ -179,7 +179,7 @@ export function CreatorOfferDrawer({
                 onClick={onClose}
                 disabled={sending}
                 aria-label="Close"
-                className="shrink-0 rounded-full p-1.5 text-[var(--muted)] hover:bg-white/5 hover:text-[var(--text)]"
+                className="shrink-0 rounded-full p-1.5 text-[var(--muted)] hover:bg-[var(--card2)] hover:text-[var(--text)]"
               >
                 <X size={18} />
               </button>

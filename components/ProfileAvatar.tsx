@@ -30,7 +30,7 @@ export function ProfileAvatar({
     initials,
     size = 36,
     editable = false,
-    className = 'bg-gradient-to-br from-[oklch(0.8_0.16_75)] to-[oklch(0.72_0.18_45)] text-black',
+    className = 'bg-gradient-to-br from-[var(--amber)] to-[var(--amber2)] text-black',
 }: ProfileAvatarProps) {
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [uploading, setUploading] = useState(false);
@@ -144,7 +144,7 @@ export function ProfileAvatar({
 
     const circle = (
         <div
-            className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-full font-display font-extrabold uppercase ${showImage ? 'bg-[oklch(0.2_0.02_80)]' : className
+            className={`relative flex shrink-0 items-center justify-center overflow-hidden rounded-full font-display font-extrabold uppercase ${showImage ? 'bg-[var(--card2)]' : className
                 }`}
             style={{ width: size, height: size, fontSize: Math.max(10, size * 0.33) }}
         >
@@ -163,7 +163,7 @@ export function ProfileAvatar({
 
             {uploading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-                    <Loader2 size={size * 0.45} className="animate-spin text-white" />
+                    <Loader2 size={size * 0.45} className="animate-spin text-[var(--text)]" />
                 </div>
             )}
         </div>
@@ -179,17 +179,17 @@ export function ProfileAvatar({
                 disabled={uploading}
                 title="Change profile photo"
                 aria-label="Change profile photo"
-                className="group relative shrink-0 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.8_0.16_75)]"
+                className="group relative shrink-0 rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--amber)]"
             >
                 {circle}
                 {/* Dark overlay on hover */}
                 {!uploading && (
                     <span className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-full bg-black/55 opacity-0 transition-opacity group-hover:opacity-100">
-                        <Camera size={size * 0.4} className="text-white" />
+                        <Camera size={size * 0.4} className="text-[var(--text)]" />
                     </span>
                 )}
                 {/* Small camera badge, always visible so people know it's clickable */}
-                <span className="pointer-events-none absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[oklch(0.12_0.01_80)] bg-[oklch(0.8_0.16_75)]">
+                <span className="pointer-events-none absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full border-2 border-[var(--border)] bg-[var(--amber)]">
                     <Camera size={8} className="text-black" />
                 </span>
             </button>

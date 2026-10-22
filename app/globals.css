@@ -9,29 +9,29 @@
    FEWSION DESIGN SYSTEM — globals.css
 ═══════════════════════════════════════════════════════════════ */
 
-/* ── CSS Custom Properties (Design Tokens) ── */
+/* ── CSS Custom Properties (Design Tokens) — Fewsion uses a single white theme ── */
 :root {
-  --black: #080808;
-  --deep: #0e0e0e;
-  --card: #141414;
-  --card2: #1a1a1a;
-  --border: rgba(255, 255, 255, 0.07);
-  --border2: rgba(255, 255, 255, 0.12);
-  --amber: #F5A623;
-  --amber2: #FF6B35;
-  --amber-glow: rgba(245, 166, 35, 0.15);
-  --green: #4ade80;
-  --green-glow: rgba(74, 222, 128, 0.1);
-  --text: #f0ece4;
-  --muted: #a1a1aa;
-  --muted2: #71717a;
-  --white: #ffffff;
+  --black: #f8fafc;
+  --deep: #ffffff;
+  --card: #ffffff;
+  --card2: #f1f5f9;
+  --border: rgba(0, 0, 0, 0.08);
+  --border2: rgba(0, 0, 0, 0.15);
+  --amber: #d97706;
+  --amber2: #ea580c;
+  --amber-glow: rgba(217, 119, 6, 0.15);
+  --green: #16a34a;
+  --green-glow: rgba(22, 163, 74, 0.1);
+  --text: #0f172a;
+  --muted: #475569;
+  --muted2: #64748b;
+  --white: #0f172a;
   --font-display: 'Plus Jakarta Sans', 'Outfit', sans-serif;
   --font-body: 'Plus Jakarta Sans', 'Outfit', sans-serif;
   --radius: 16px;
   --radius-sm: 10px;
-  --core-bg: #111111;
-  --core-text: #ffffff;
+  --core-bg: #ffffff;
+  --core-text: #0f172a;
 }
 
 /* ── Light / White Theme Custom Properties ── */
@@ -85,18 +85,6 @@ body {
 }
 
 /* ── FONT VISIBILITY & THEME ADAPTATION OVERRIDES ── */
-[data-theme="light"] .text-white,
-.light-theme .text-white,
-[data-theme="light"] .text-white\/80,
-.light-theme .text-white\/80,
-[data-theme="light"] .text-white\/90,
-.light-theme .text-white\/90,
-[data-theme="light"] .text-white\/70,
-.light-theme .text-white\/70,
-[data-theme="light"] .text-white\/60,
-.light-theme .text-white\/60 {
-  color: var(--text) !important;
-}
 
 [data-theme="light"] .text-\[\#888\],
 .light-theme .text-\[\#888\],
@@ -316,7 +304,7 @@ textarea {
   }
 
   .footer-brand .logo {
-    @apply font-display text-[22px] font-extrabold text-white mb-[14px];
+    @apply font-display text-[22px] font-extrabold text-[var(--text)] mb-[14px];
     letter-spacing: -0.5px;
   }
 
@@ -325,11 +313,11 @@ textarea {
   }
 
   .footer-brand p {
-    @apply text-sm text-[#888] leading-relaxed;
+    @apply text-sm text-[var(--muted)] leading-relaxed;
   }
 
   .footer-col h5 {
-    @apply font-display text-[13px] font-bold text-white uppercase mb-4;
+    @apply font-display text-[13px] font-bold text-[var(--text)] uppercase mb-4;
     letter-spacing: 0.05em;
   }
 
@@ -338,7 +326,7 @@ textarea {
   }
 
   .footer-col ul a {
-    @apply text-sm text-[#888] no-underline;
+    @apply text-sm text-[var(--muted)] no-underline;
     transition: color 0.2s;
   }
 
@@ -352,7 +340,7 @@ textarea {
   }
 
   .footer-bottom p {
-    @apply text-[13px] text-[#555];
+    @apply text-[13px] text-[var(--muted2)];
   }
 
   .footer-bottom .made span {
@@ -436,7 +424,7 @@ textarea {
 
   /* ── SECTION HEADINGS ── */
   .section-title {
-    @apply font-display font-extrabold text-white;
+    @apply font-display font-extrabold text-[var(--text)];
     font-size: clamp(28px, 4vw, 52px);
     letter-spacing: -1.5px;
     line-height: 1.1;
@@ -449,7 +437,7 @@ textarea {
   }
 
   .section-sub {
-    @apply text-[17px] text-[#888] max-w-[520px] leading-[1.7] font-light;
+    @apply text-[17px] text-[var(--muted)] max-w-[520px] leading-[1.7] font-light;
     margin-bottom: 56px;
   }
 
@@ -550,7 +538,7 @@ textarea {
 
   /* ── FORM ELEMENTS ── */
   .form-input {
-    @apply w-full text-[14px] text-[#f0ece4] outline-none rounded-[10px] px-4 py-[13px];
+    @apply w-full text-[14px] text-[var(--text)] outline-none rounded-[10px] px-4 py-[13px];
     background: var(--card);
     border: 1.5px solid var(--border);
     font-family: var(--font-body);
@@ -854,7 +842,7 @@ textarea {
   }
 
   .chat-header-info h4 {
-    @apply font-display text-[14px] font-bold text-white;
+    @apply font-display text-[14px] font-bold text-[var(--text)];
   }
 
   .chat-header-info p {
@@ -926,7 +914,7 @@ textarea {
   }
 
   .creator-rec-row h5 {
-    @apply font-display text-[13px] font-bold text-white;
+    @apply font-display text-[13px] font-bold text-[var(--text)];
   }
 
   .creator-rec-row .niche {

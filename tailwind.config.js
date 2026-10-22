@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        black: 'var(--black)',
+        black: '#000000',
         deep: 'var(--deep)',
         card: 'var(--card)',
         card2: 'var(--card2)',

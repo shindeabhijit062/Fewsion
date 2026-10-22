@@ -191,7 +191,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
   const leadMatch = matches[0];
 
   return (
-    <section className="relative overflow-hidden rounded-3xl border border-[var(--border2)] bg-[#0c0c0e] p-4 sm:p-6 lg:p-10 shadow-2xl">
+    <section className="relative overflow-hidden rounded-3xl border border-[var(--border2)] bg-[var(--black)] p-4 sm:p-6 lg:p-10 shadow-2xl">
       {/* Background glow */}
       <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-[rgba(245,166,35,0.10)] blur-[100px] pointer-events-none" />
       <div className="absolute -left-20 -bottom-20 h-72 w-72 rounded-full bg-[#FF6B35]/10 blur-[100px] pointer-events-none" />
@@ -202,7 +202,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
           <Zap size={14} />
           <span>Fewsion AI Neural Matchmaker</span>
         </div>
-        <h2 className="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-white tracking-tight">
+        <h2 className="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-[var(--text)] tracking-tight">
           {title || 'Match Brands & Creators'}
         </h2>
         <p className="mt-2 text-sm text-[var(--muted)]">
@@ -212,7 +212,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
 
       <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[minmax(0,380px)_minmax(0,1fr)] gap-4 sm:gap-6">
         {/* ── Brief ── */}
-        <div className="rounded-2xl border border-[var(--border)] bg-[rgba(20,20,20,0.6)] p-4 sm:p-6 space-y-6">
+        <div className="rounded-2xl border border-[var(--border)] bg-[var(--card2)] p-4 sm:p-6 space-y-6">
           <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--muted2)]">Your campaign brief</div>
 
           {/* Niche */}
@@ -229,7 +229,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                   disabled={phase === 'running'}
                   className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition-all disabled:cursor-not-allowed ${niche === n
                     ? 'bg-[var(--amber)] text-black font-bold shadow-lg shadow-[rgba(245,166,35,0.20)]'
-                    : 'bg-[var(--card)] text-[var(--muted)] border border-[var(--border)] hover:border-[rgba(245,166,35,0.40)] hover:text-white'
+                    : 'bg-[var(--card)] text-[var(--muted)] border border-[var(--border)] hover:border-[rgba(245,166,35,0.40)] hover:text-[var(--text)]'
                     }`}
                 >
                   {n}
@@ -255,7 +255,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                     : 'border-[var(--border)] bg-[var(--card)] hover:border-[rgba(245,166,35,0.40)]'
                     }`}
                 >
-                  <div className={`text-xs font-bold ${goal === g.value ? 'text-[var(--amber)]' : 'text-white'}`}>{g.value}</div>
+                  <div className={`text-xs font-bold ${goal === g.value ? 'text-[var(--amber)]' : 'text-[var(--text)]'}`}>{g.value}</div>
                   <div className="text-[10px] text-[var(--muted2)] mt-0.5">{g.hint}</div>
                 </button>
               ))}
@@ -326,7 +326,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
         </div>
 
         {/* ── Results stage ── */}
-        <div ref={resultsRef} className="relative min-h-[420px] rounded-2xl border border-[var(--border)] bg-black/30 p-4 sm:p-6 overflow-hidden">
+        <div ref={resultsRef} className="relative min-h-[420px] rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 sm:p-6 overflow-hidden">
           <AnimatePresence mode="wait">
             {phase === 'idle' && <IdleStage key="idle" />}
 
@@ -360,7 +360,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                         >
                           {state === 'done' ? <Check size={11} strokeWidth={3} /> : state === 'active' ? <Loader2 size={11} className="animate-spin" /> : null}
                         </span>
-                        <span className={state === 'active' ? 'font-semibold text-white' : 'text-[var(--muted)]'}>{label}</span>
+                        <span className={state === 'active' ? 'font-semibold text-[var(--text)]' : 'text-[var(--muted)]'}>{label}</span>
                       </motion.div>
                     );
                   })}
@@ -394,7 +394,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
               <motion.div key="done" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
                   <div>
-                    <div className="flex items-center gap-2 text-sm font-bold text-white">
+                    <div className="flex items-center gap-2 text-sm font-bold text-[var(--text)]">
                       <BrainCircuit size={16} className="text-[var(--amber)]" />
                       {matches.length > 1 ? `Top ${matches.length} AI matches` : matches.length ? 'Your AI match' : 'No matches yet'}
                     </div>
@@ -405,7 +405,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                   {matches.length > 0 && (
                     <button
                       onClick={handleExport}
-                      className="flex items-center gap-1.5 rounded-full border border-[var(--border2)] bg-[var(--card)] px-3 py-1 text-xs font-semibold text-[var(--muted)] hover:text-white hover:border-[var(--amber)] transition"
+                      className="flex items-center gap-1.5 rounded-full border border-[var(--border2)] bg-[var(--card)] px-3 py-1 text-xs font-semibold text-[var(--muted)] hover:text-[var(--text)] hover:border-[var(--amber)] transition"
                     >
                       <Download size={13} /> Export shortlist
                     </button>
@@ -438,7 +438,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                             <Trophy size={14} />
                             <span>AI recommendation</span>
                           </div>
-                          <p className="text-xs text-white mt-1">
+                          <p className="text-xs text-[var(--text)] mt-1">
                             <strong className="text-[var(--amber)]">{leadMatch.name}</strong> is your strongest fit at{' '}
                             {leadMatch.matchScore}% for this {goal.toLowerCase()} campaign.
                           </p>
@@ -495,7 +495,7 @@ function IdleStage() {
         </div>
       </div>
       <div>
-        <div className="text-sm font-bold text-white">Your matches will appear here</div>
+        <div className="text-sm font-bold text-[var(--text)]">Your matches will appear here</div>
         <p className="mt-1 max-w-xs text-xs text-[var(--muted)]">
           Set your niche, goal and budget, then let Fewsion AI score every creator profile and rank the best fits.
         </p>
@@ -588,7 +588,7 @@ function ScoreRing({ value, delay }: { value: number; delay: number }) {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-[13px] font-extrabold leading-none text-white">{shown}%</span>
+        <span className="text-[13px] font-extrabold leading-none text-[var(--text)]">{shown}%</span>
         <span className="mt-0.5 text-[7px] font-bold uppercase tracking-wider text-[var(--muted2)]">match</span>
       </div>
     </div>
@@ -643,7 +643,7 @@ function MatchCard({
             {initials(creator.name)}
           </div>
           <div className="min-w-0">
-            <h4 className="truncate text-sm font-bold text-white group-hover:text-[var(--amber)] transition-colors">
+            <h4 className="truncate text-sm font-bold text-[var(--text)] group-hover:text-[var(--amber)] transition-colors">
               {creator.name}
             </h4>
             <div className="truncate text-[11px] text-[var(--muted)]">{subline}</div>
@@ -678,14 +678,14 @@ function MatchCard({
       <div className="mt-3 grid grid-cols-3 gap-2 text-center">
         {stats.map((s) => (
           <div key={s.label} className="min-w-0 rounded-lg border border-[var(--border)] bg-[var(--card2)] p-1.5">
-            <div className="truncate text-xs font-extrabold text-white">{s.value ?? '—'}</div>
+            <div className="truncate text-xs font-extrabold text-[var(--text)]">{s.value ?? '—'}</div>
             <div className="truncate text-[9px] text-[var(--muted2)] uppercase">{s.label}</div>
           </div>
         ))}
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border)] pt-3">
-        <div className="text-xs font-extrabold text-white">
+        <div className="text-xs font-extrabold text-[var(--text)]">
           {creator.rate ?? <span className="font-medium text-[var(--muted2)]">Rate not set</span>}
         </div>
         {status ? (

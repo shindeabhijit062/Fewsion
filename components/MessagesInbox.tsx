@@ -510,7 +510,7 @@ const STATUS_STYLES: Record<string, string> = {
 function StatusPill({ status }: { status?: string | null }) {
   const s = (status || 'active').toLowerCase();
   return (
-    <span className={`shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${STATUS_STYLES[s] || 'bg-white/5 text-[var(--muted)]'}`}>
+    <span className={`shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-[10px] font-semibold capitalize ${STATUS_STYLES[s] || 'bg-[var(--card2)] text-[var(--muted)]'}`}>
       {STATUS_LABEL[s] || s.replace(/_/g, ' ')}
     </span>
   );
@@ -640,7 +640,7 @@ export function MessagesInbox({
               <button
                 key={c.collab.id}
                 onClick={() => onSelect(c.collab.id)}
-                className={`mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors ${active ? 'bg-[rgba(245,166,35,0.1)]' : 'hover:bg-white/[0.03]'
+                className={`mb-1 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition-colors ${active ? 'bg-[rgba(245,166,35,0.1)]' : 'hover:bg-[var(--card2)]'
                   }`}
               >
                 <div className="relative">
@@ -692,7 +692,7 @@ export function MessagesInbox({
             <header className="flex items-center gap-2 sm:gap-3 border-b border-[var(--border)] px-3 sm:px-4 py-3">
               <button
                 onClick={() => onSelect(null)}
-                className="shrink-0 rounded-full p-1.5 text-[var(--muted)] hover:bg-white/5 hover:text-[var(--text)] md:hidden"
+                className="shrink-0 rounded-full p-1.5 text-[var(--muted)] hover:bg-[var(--card2)] hover:text-[var(--text)] md:hidden"
                 aria-label="Back to conversations"
               >
                 <ArrowLeft size={16} />
@@ -721,7 +721,7 @@ export function MessagesInbox({
                   ? 'border-red-500/20 bg-red-500/5 text-red-300'
                   : myTurn
                     ? 'border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.08)] text-[var(--amber)]'
-                    : 'border-[var(--border)] bg-white/[0.02] text-[var(--muted)]'
+                    : 'border-[var(--border)] bg-[var(--card2)] text-[var(--muted)]'
                   }`}
               >
                 {status === 'declined'
@@ -1094,7 +1094,7 @@ export function MessageToasts({
             initial={{ opacity: 0, x: 40, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 40, scale: 0.95 }}
-            className="pointer-events-auto flex cursor-pointer items-start gap-3 rounded-2xl border border-[rgba(245,166,35,0.3)] bg-[#141414] p-3.5 shadow-2xl shadow-black/50"
+            className="pointer-events-auto flex cursor-pointer items-start gap-3 rounded-2xl border border-[rgba(245,166,35,0.3)] bg-[var(--card)] p-3.5 shadow-2xl shadow-black/50"
             onClick={() => {
               onOpen(t.collabId);
               onDismiss(t.id);
@@ -1103,15 +1103,15 @@ export function MessageToasts({
             <Avatar id={t.collabId} name={t.name} url={t.avatarUrl} size={36} />
             <div className="min-w-0 flex-1">
               <div className="text-[11px] font-semibold uppercase tracking-wider text-[var(--amber)]">New message</div>
-              <div className="truncate text-sm font-bold text-white">{t.name}</div>
-              <div className="line-clamp-2 text-xs text-[#aaa]">{t.content}</div>
+              <div className="truncate text-sm font-bold text-[var(--text)]">{t.name}</div>
+              <div className="line-clamp-2 text-xs text-[var(--muted)]">{t.content}</div>
             </div>
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onDismiss(t.id);
               }}
-              className="rounded-full p-1 text-[#888] hover:bg-white/5 hover:text-white"
+              className="rounded-full p-1 text-[var(--muted)] hover:bg-[var(--card2)] hover:text-[var(--text)]"
               aria-label="Dismiss"
             >
               <X size={14} />

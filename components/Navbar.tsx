@@ -10,7 +10,6 @@ import { ProfileAvatar } from '@/components/ProfileAvatar';
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [theme, setTheme] = useState<'current' | 'white'>('current');
 
   // Auth User State
   const [user, setUser] = useState<any>(null);
@@ -72,36 +71,10 @@ export default function Navbar() {
     };
   }, []);
 
-  // Sync stored theme on mount
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('fewsion_theme') as 'current' | 'white' | null;
-    if (savedTheme === 'white') {
-      setTheme('white');
-      document.documentElement.setAttribute('data-theme', 'light');
-      document.documentElement.classList.add('light-theme');
-    } else {
-      setTheme('current');
-      document.documentElement.removeAttribute('data-theme');
-      document.documentElement.classList.remove('light-theme');
-    }
-  }, []);
-
   // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
-
-  const handleThemeChange = (newTheme: 'current' | 'white') => {
-    setTheme(newTheme);
-    localStorage.setItem('fewsion_theme', newTheme);
-    if (newTheme === 'white') {
-      document.documentElement.setAttribute('data-theme', 'light');
-      document.documentElement.classList.add('light-theme');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-      document.documentElement.classList.remove('light-theme');
-    }
-  };
 
   const handleLogout = async () => {
     setDropdownOpen(false);
@@ -165,42 +138,6 @@ export default function Navbar() {
               </Link>
             </li>
           ))}
-
-          {/* Theme Toggle */}
-          <li className="my-2 md:my-0">
-            <div className="inline-flex items-center bg-[var(--card2)] border border-[var(--border2)] rounded-full p-1 text-[13px] font-medium select-none">
-              <button
-                type="button"
-                onClick={() => handleThemeChange('current')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all duration-200 ${
-                  theme === 'current'
-                    ? 'bg-[var(--amber)] text-black font-semibold shadow-sm'
-                    : 'text-[var(--muted)] hover:text-[var(--text)]'
-                }`}
-                aria-label="Current Theme"
-              >
-                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                </svg>
-                <span>Current</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handleThemeChange('white')}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-full transition-all duration-200 ${
-                  theme === 'white'
-                    ? 'bg-[var(--amber)] text-black font-semibold shadow-sm'
-                    : 'text-[var(--muted)] hover:text-[var(--text)]'
-                }`}
-                aria-label="White Theme"
-              >
-                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-                <span>White</span>
-              </button>
-            </div>
-          </li>
 
           {/* User Auth Section */}
           {user ? (

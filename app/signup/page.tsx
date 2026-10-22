@@ -72,11 +72,11 @@ export default function SignupPage() {
   };
 
   const strengthConfig = [
-    { width: '0%', color: '#555', text: 'Enter a password' },
+    { width: '0%', color: 'var(--muted)', text: 'Enter a password' },
     { width: '25%', color: '#ef4444', text: 'Too weak' },
     { width: '50%', color: '#f59e0b', text: 'Moderate' },
     { width: '75%', color: '#3b82f6', text: 'Strong' },
-    { width: '100%', color: '#4ade80', text: 'Very strong ✓' },
+    { width: '100%', color: 'var(--green)', text: 'Very strong ✓' },
   ];
 
   const toggleChip = (val: string, arr: string[], setter: (v: string[]) => void) => {

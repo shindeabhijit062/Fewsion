@@ -12,13 +12,13 @@ export default function EditorDashboardPage() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '36px', flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <span className="badge-amber">EDITOR PORTAL</span>
-            <h1 className="text-2xl sm:text-[32px]" style={{ fontFamily: 'var(--font-display)', color: '#fff', marginTop: '8px' }}>Video Editor Workspace</h1>
+            <h1 className="text-2xl sm:text-[32px]" style={{ fontFamily: 'var(--font-display)', color: 'var(--text)', marginTop: '8px' }}>Video Editor Workspace</h1>
           </div>
           <button className="btn-primary" style={{ fontSize: '13px', padding: '10px 22px' }}>Browse Editing Jobs</button>
         </div>
 
         <div className="glass-card p-5 sm:p-8" style={{ borderRadius: '20px' }}>
-          <h3 className="text-lg sm:text-xl" style={{ fontFamily: 'var(--font-display)', color: '#fff', marginBottom: '20px' }}>Assigned Editing Projects</h3>
+          <h3 className="text-lg sm:text-xl" style={{ fontFamily: 'var(--font-display)', color: 'var(--text)', marginBottom: '20px' }}>Assigned Editing Projects</h3>
           <p style={{ color: 'var(--color-muted)', fontSize: '14px' }}>No active editing jobs assigned yet. Browse open jobs to send pitches!</p>
         </div>
       </div>

@@ -56,7 +56,7 @@ export function PortalMobileNav({
   return (
     <>
       {/* Top bar */}
-      <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 border-b border-[var(--border)] bg-[rgba(10,10,10,0.85)] px-4 py-3 backdrop-blur-md">
+      <div className="md:hidden sticky top-0 z-30 flex items-center gap-3 border-b border-[var(--border)] bg-[rgba(255,255,255,0.9)] px-4 py-3 backdrop-blur-md">
         <button
           onClick={() => setOpen(true)}
           aria-label="Open menu"
@@ -113,7 +113,7 @@ export function PortalMobileNav({
                 <button
                   onClick={() => setOpen(false)}
                   aria-label="Close menu"
-                  className="rounded-full p-1.5 text-[var(--muted)] hover:bg-white/5 hover:text-[var(--text)]"
+                  className="rounded-full p-1.5 text-[var(--muted)] hover:bg-[var(--card2)] hover:text-[var(--text)]"
                 >
                   <X size={18} />
                 </button>

@@ -22,10 +22,10 @@ const fmtDate = (d?: string) => (d ? new Date(d).toLocaleDateString() : '—');
 const fmtTime = (d?: string) => (d ? new Date(d).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '');
 const fmtINR = (n?: number) => `₹${Number(n || 0).toLocaleString('en-IN')}`;
 
-function StatCard({ label, value, className = 'text-white' }: { label: string; value: string; className?: string }) {
+function StatCard({ label, value, className = 'text-[var(--text)]' }: { label: string; value: string; className?: string }) {
   return (
-    <div className="min-w-0 rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.1_0.01_80)] p-5 sm:p-6">
-      <div className="text-xs uppercase tracking-wide text-[oklch(0.68_0.015_85)]">{label}</div>
+    <div className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--black)] p-5 sm:p-6">
+      <div className="text-xs uppercase tracking-wide text-[var(--muted)]">{label}</div>
       <div className={`mt-2 font-display text-2xl font-extrabold ${className}`}>{value}</div>
     </div>
   );
@@ -33,10 +33,10 @@ function StatCard({ label, value, className = 'text-white' }: { label: string; v
 
 function ApplicationRow({ app, statusTagClasses }: { app: any; statusTagClasses: (s?: string) => string }) {
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.1_0.01_80)] p-4 hover:border-[oklch(0.35_0.02_80)] transition-colors">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[var(--border)] bg-[var(--black)] p-4 hover:border-[var(--border2)] transition-colors">
       <div className="min-w-0">
-        <h3 className="text-sm font-semibold text-white break-words">{app.campaign_title || 'Untitled campaign'}</h3>
-        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[oklch(0.68_0.015_85)]">
+        <h3 className="text-sm font-semibold text-[var(--text)] break-words">{app.campaign_title || 'Untitled campaign'}</h3>
+        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-[var(--muted)]">
           <span>Brand: {app.brand_name || 'Brand partner'}</span>
           <span>•</span>
           <span>Applied: {fmtDate(app.applied_at)}</span>
@@ -54,8 +54,8 @@ function SnapshotRow({ icon, main, sub }: { icon: string; main: string; sub: str
     <div className="flex items-start gap-3">
       <div className="mt-0.5">{icon}</div>
       <div className="min-w-0">
-        <div className="font-semibold text-white">{main}</div>
-        <div className="text-xs text-[oklch(0.68_0.015_85)]">{sub}</div>
+        <div className="font-semibold text-[var(--text)]">{main}</div>
+        <div className="text-xs text-[var(--muted)]">{sub}</div>
       </div>
     </div>
   );
@@ -134,7 +134,7 @@ export default function CreatorDashboardPage() {
                     <ShieldCheck size={20} />
                   </div>
                   <div>
-                    <div className="font-bold text-sm text-white">KYC Verification Required</div>
+                    <div className="font-bold text-sm text-[var(--text)]">KYC Verification Required</div>
                     <div className="text-xs text-[var(--muted)]">
                       Complete your 2-minute KYC verification to participate in live campaigns &amp; unlock escrow payouts.
                     </div>

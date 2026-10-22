@@ -183,7 +183,7 @@ export default function SuperAdminAIKnowledgePage() {
                   type="text" 
                   value={formData.topic}
                   onChange={(e) => setFormData({...formData, topic: e.target.value})}
-                  className="w-full px-4 py-2 bg-[var(--card2)] border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:border-[var(--amber)] text-white"
+                  className="w-full px-4 py-2 bg-[var(--card2)] border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:border-[var(--amber)] text-[var(--text)]"
                   placeholder="e.g., Pricing Tiers, Platform Rules..."
                 />
               </div>
@@ -194,7 +194,7 @@ export default function SuperAdminAIKnowledgePage() {
                   type="text" 
                   value={formData.tags}
                   onChange={(e) => setFormData({...formData, tags: e.target.value})}
-                  className="w-full px-4 py-2 bg-[var(--card2)] border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:border-[var(--amber)] text-white"
+                  className="w-full px-4 py-2 bg-[var(--card2)] border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:border-[var(--amber)] text-[var(--text)]"
                   placeholder="e.g., pricing, faq, system"
                 />
               </div>
@@ -205,7 +205,7 @@ export default function SuperAdminAIKnowledgePage() {
                   value={formData.content}
                   onChange={(e) => setFormData({...formData, content: e.target.value})}
                   rows={6}
-                  className="w-full px-4 py-3 bg-[var(--card2)] border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:border-[var(--amber)] text-white resize-none"
+                  className="w-full px-4 py-3 bg-[var(--card2)] border border-[var(--border)] rounded-lg text-sm focus:outline-none focus:border-[var(--amber)] text-[var(--text)] resize-none"
                   placeholder="Provide the exact text or rules the AI should know about this topic..."
                 />
               </div>
@@ -214,7 +214,7 @@ export default function SuperAdminAIKnowledgePage() {
             <div className="p-4 sm:p-6 border-t border-[var(--border)] flex flex-wrap justify-end gap-3 bg-[var(--card2)]/50">
               <button 
                 onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 text-sm font-medium text-[var(--muted)] hover:text-white transition-colors"
+                className="px-4 py-2 text-sm font-medium text-[var(--muted)] hover:text-[var(--text)] transition-colors"
                 disabled={saving}
               >
                 Cancel

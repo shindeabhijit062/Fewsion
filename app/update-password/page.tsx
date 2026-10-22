@@ -88,7 +88,7 @@ export default function UpdatePasswordPage() {
         {success ? (
           <div
             className="rounded-lg p-4 mb-5 text-[14px] leading-[1.5] text-center"
-            style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)', color: '#4ade80' }}
+            style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)', color: 'var(--green)' }}
           >
             <div className="text-[24px] mb-2">✅</div>
             <strong>Password updated successfully!</strong>

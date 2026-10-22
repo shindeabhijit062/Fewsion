@@ -55,7 +55,7 @@ export default function AIScoreWidget() {
     <div className="glass-card" style={{ padding: '32px', borderRadius: '24px', maxWidth: '560px', margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <span className="badge-amber" style={{ marginBottom: '12px', display: 'inline-block' }}>⚡ AI PROFILE SCORER</span>
-        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: '#fff' }}>Get Your Instagram AI Authenticity Score (0-100)</h3>
+        <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '24px', color: 'var(--text)' }}>Get Your Instagram AI Authenticity Score (0-100)</h3>
         <p style={{ color: 'var(--color-muted)', fontSize: '14px', marginTop: '8px' }}>
           Upload a screenshot of your Instagram Professional Dashboard to calculate your profile reach, engagement, and Fewsion rank.
         </p>
@@ -112,7 +112,7 @@ export default function AIScoreWidget() {
       )}
 
       {result && (
-        <div style={{ background: 'rgba(20, 20, 20, 0.9)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border-green)', marginTop: '16px' }}>
+        <div style={{ background: 'var(--card)', padding: '24px', borderRadius: '16px', border: '1px solid var(--border-green)', marginTop: '16px' }}>
           <div style={{ textAlign: 'center', marginBottom: '16px' }}>
             <span style={{ fontSize: '12px', color: 'var(--color-muted)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Fewsion AI Score</span>
             <div style={{ fontFamily: 'var(--font-display)', fontSize: '54px', fontWeight: 800, color: 'var(--color-amber)', lineHeight: 1 }}>
@@ -122,9 +122,9 @@ export default function AIScoreWidget() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: '12px', fontSize: '13px', color: 'var(--color-muted)' }}>
-            <div>Followers: <strong style={{ color: '#fff' }}>{result.metrics.followers.toLocaleString()}</strong></div>
-            <div>Accounts Reached: <strong style={{ color: '#fff' }}>{result.metrics.accounts_reached.toLocaleString()}</strong></div>
-            <div>Engagement Rate: <strong style={{ color: '#fff' }}>{result.metrics.engagement_rate}%</strong></div>
+            <div>Followers: <strong style={{ color: 'var(--text)' }}>{result.metrics.followers.toLocaleString()}</strong></div>
+            <div>Accounts Reached: <strong style={{ color: 'var(--text)' }}>{result.metrics.accounts_reached.toLocaleString()}</strong></div>
+            <div>Engagement Rate: <strong style={{ color: 'var(--text)' }}>{result.metrics.engagement_rate}%</strong></div>
             <div>Status: <strong style={{ color: 'var(--color-green)' }}>Top 5% Creator</strong></div>
           </div>
         </div>

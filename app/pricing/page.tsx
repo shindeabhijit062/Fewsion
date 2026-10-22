@@ -51,13 +51,13 @@ export default function PricingPage() {
             Simple, Transparent Pricing
           </div>
           <h1
-            className="font-display font-extrabold text-white"
+            className="font-display font-extrabold text-[var(--text)]"
             style={{ fontSize: 'clamp(40px,6vw,76px)', letterSpacing: '-2px', lineHeight: '1.05', marginBottom: '20px' }}
           >
             Pay for what<br />
             <em className="text-gradient-amber" style={{ fontStyle: 'normal' }}>you actually use</em>
           </h1>
-          <p className="text-[19px] text-[#888] font-light max-w-[520px] mx-auto leading-[1.7]">
+          <p className="text-[19px] text-[var(--muted)] font-light max-w-[520px] mx-auto leading-[1.7]">
             No hidden fees. No agency markups. Start free and upgrade as your campaigns scale.
           </p>
         </div>
@@ -126,8 +126,8 @@ export default function PricingPage() {
               <div className="font-display text-[26px] font-extrabold mb-1" style={{ color: 'var(--amber)', letterSpacing: '-0.5px' }}>
                 {a.price}
               </div>
-              <div className="font-display text-[15px] font-bold text-white mb-2">{a.name}</div>
-              <div className="text-[13.5px] text-[#888] leading-[1.6]">{a.desc}</div>
+              <div className="font-display text-[15px] font-bold text-[var(--text)] mb-2">{a.name}</div>
+              <div className="text-[13.5px] text-[var(--muted)] leading-[1.6]">{a.desc}</div>
             </div>
           ))}
         </div>
@@ -155,13 +155,13 @@ export default function PricingPage() {
       >
         <div className="section-tag" style={{ justifyContent: 'center', display: 'flex' }}>Get Started</div>
         <h2
-          className="font-display font-extrabold text-white"
+          className="font-display font-extrabold text-[var(--text)]"
           style={{ fontSize: 'clamp(32px,5vw,60px)', letterSpacing: '-2px', marginBottom: '16px', lineHeight: '1.1' }}
         >
           Start free.<br />
           <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>Scale when ready.</em>
         </h2>
-        <p className="text-[18px] text-[#888] max-w-[480px] mx-auto mb-10 font-light">
+        <p className="text-[18px] text-[var(--muted)] max-w-[480px] mx-auto mb-10 font-light">
           No credit card needed. Launch your first campaign or portfolio in minutes.
         </p>
         <div className="flex gap-[14px] justify-center flex-wrap">
@@ -214,7 +214,7 @@ function PlanCard({ plan, index }: { plan: Plan; index: number }) {
           Most Popular
         </div>
       )}
-      <div className="font-display text-[14px] font-bold uppercase text-[#888] mb-3" style={{ letterSpacing: '0.08em' }}>
+      <div className="font-display text-[14px] font-bold uppercase text-[var(--muted)] mb-3" style={{ letterSpacing: '0.08em' }}>
         {plan.name}
       </div>
       <div
@@ -227,9 +227,9 @@ function PlanCard({ plan, index }: { plan: Plan; index: number }) {
           <><sup className="text-[24px]" style={{ verticalAlign: 'super', letterSpacing: 0 }}>₹</sup>{plan.price}</>
         )}
       </div>
-      <div className="text-[13px] text-[#888] mb-2">{plan.period}</div>
+      <div className="text-[13px] text-[var(--muted)] mb-2">{plan.period}</div>
       <div
-        className="text-[14px] text-[#888] leading-[1.6] mb-7 pb-7"
+        className="text-[14px] text-[var(--muted)] leading-[1.6] mb-7 pb-7"
         style={{ borderBottom: '1px solid var(--border)' }}
       >
         {plan.desc}
@@ -248,8 +248,8 @@ function PlanCard({ plan, index }: { plan: Plan; index: number }) {
             el.style.boxShadow = '0 8px 30px rgba(245,166,35,0.4)';
             el.style.transform = 'translateY(-1px)';
           } else {
-            el.style.borderColor = 'rgba(255,255,255,0.3)';
-            el.style.background = 'rgba(255,255,255,0.04)';
+            el.style.borderColor = 'var(--border2)';
+            el.style.background = 'rgba(15, 23, 42, 0.04)';
           }
         }}
         onMouseLeave={(e) => {
@@ -272,7 +272,7 @@ function PlanCard({ plan, index }: { plan: Plan; index: number }) {
                 </svg>
               </div>
             ) : (
-              <div className="flex-shrink-0 mt-[2px] flex items-center justify-center w-4 h-4 rounded-full border border-[var(--border)] bg-[rgba(255,255,255,0.04)]">
+              <div className="flex-shrink-0 mt-[2px] flex items-center justify-center w-4 h-4 rounded-full border border-[var(--border)] bg-[rgba(15, 23, 42, 0.04)]">
                 <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M1 1L7 7M7 1L1 7" stroke="#555" strokeWidth="1.5" strokeLinecap="round"/>
                 </svg>
@@ -294,12 +294,12 @@ function FaqItem({ q, a, delay }: { q: string; a: string; delay: string }) {
       style={{ background: 'var(--card)', border: `1px solid ${open ? 'rgba(245,166,35,0.25)' : 'var(--border)'}` }}
       onClick={() => setOpen(!open)}
     >
-      <div className="font-display text-[15px] font-bold text-white mb-0 flex justify-between items-start gap-3">
+      <div className="font-display text-[15px] font-bold text-[var(--text)] mb-0 flex justify-between items-start gap-3">
         {q}
         <span className="text-[20px] font-normal flex-shrink-0 transition-transform duration-200" style={{ color: 'var(--amber)', transform: open ? 'rotate(45deg)' : 'none' }}>+</span>
       </div>
       {open && (
-        <div className="text-[14px] text-[#888] leading-[1.7] mt-[10px]">{a}</div>
+        <div className="text-[14px] text-[var(--muted)] leading-[1.7] mt-[10px]">{a}</div>
       )}
     </div>
   );

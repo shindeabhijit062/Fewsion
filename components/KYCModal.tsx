@@ -70,11 +70,11 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-md p-4 overflow-y-auto">
-      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[var(--border2)] bg-[#111114] p-5 sm:p-8 shadow-2xl">
+      <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-3xl border border-[var(--border2)] bg-[var(--black)] p-5 sm:p-8 shadow-2xl">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 sm:right-5 sm:top-5 flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:text-white"
+          className="absolute right-4 top-4 sm:right-5 sm:top-5 flex h-8 w-8 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--card)] text-[var(--muted)] hover:text-[var(--text)]"
         >
           <X size={16} />
         </button>
@@ -85,7 +85,7 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
             <ShieldCheck size={24} />
           </div>
           <div>
-            <h2 className="font-display text-xl font-extrabold text-white">KYC Verification</h2>
+            <h2 className="font-display text-xl font-extrabold text-[var(--text)]">KYC Verification</h2>
             <p className="text-xs text-[var(--muted)]">Required for all campaign participation &amp; escrow payouts</p>
           </div>
         </div>
@@ -150,7 +150,7 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
               value={legalName}
               onChange={(e) => setLegalName(e.target.value)}
               placeholder="e.g. Aarav Mehta"
-              className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--amber)]"
+              className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-4 py-2.5 text-sm text-[var(--text)] outline-none focus:border-[var(--amber)]"
             />
           </div>
 
@@ -163,7 +163,7 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
               <select
                 value={idType}
                 onChange={(e) => setIdType(e.target.value as any)}
-                className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--amber)]"
+                className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-4 py-2.5 text-sm text-[var(--text)] outline-none focus:border-[var(--amber)]"
               >
                 <option value="pan">PAN Card</option>
                 <option value="aadhaar">Aadhaar Card</option>
@@ -181,7 +181,7 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
                 value={idNumber}
                 onChange={(e) => setIdNumber(e.target.value)}
                 placeholder={idType === 'pan' ? 'ABCDE1234F' : '1234 5678 9012'}
-                className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-4 py-2.5 text-sm text-white outline-none focus:border-[var(--amber)]"
+                className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-4 py-2.5 text-sm text-[var(--text)] outline-none focus:border-[var(--amber)]"
               />
             </div>
           </div>
@@ -199,7 +199,7 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
                 className="absolute inset-0 opacity-0 cursor-pointer"
               />
               <Upload size={22} className="text-[var(--amber)] mb-1.5" />
-              <span className="text-xs font-semibold text-white">
+              <span className="text-xs font-semibold text-[var(--text)]">
                 {docFile ? docFile.name : 'Click or drop government ID photo/PDF here'}
               </span>
               <span className="text-[10px] text-[var(--muted2)] mt-0.5">JPG, PNG or PDF up to 5MB</span>
@@ -210,7 +210,7 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
           <div className="pt-2 border-t border-[var(--border)]">
             <div className="flex items-center gap-2 mb-3">
               <CreditCard size={16} className="text-[var(--amber)]" />
-              <span className="text-xs font-bold text-white uppercase tracking-wider">Escrow Payout Account</span>
+              <span className="text-xs font-bold text-[var(--text)] uppercase tracking-wider">Escrow Payout Account</span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -221,7 +221,7 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
                   value={bankAccount}
                   onChange={(e) => setBankAccount(e.target.value)}
                   placeholder="918239019231"
-                  className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-3.5 py-2 text-xs text-white outline-none focus:border-[var(--amber)]"
+                  className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-3.5 py-2 text-xs text-[var(--text)] outline-none focus:border-[var(--amber)]"
                 />
               </div>
 
@@ -232,7 +232,7 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
                   value={ifscCode}
                   onChange={(e) => setIfscCode(e.target.value)}
                   placeholder="HDFC0001234"
-                  className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-3.5 py-2 text-xs text-white outline-none focus:border-[var(--amber)]"
+                  className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-3.5 py-2 text-xs text-[var(--text)] outline-none focus:border-[var(--amber)]"
                 />
               </div>
             </div>
@@ -244,7 +244,7 @@ export function KYCModal({ isOpen, onClose, kycStatus, kycDetails, onSubmitKyc }
                 value={upiId}
                 onChange={(e) => setUpiId(e.target.value)}
                 placeholder="username@upi"
-                className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-3.5 py-2 text-xs text-white outline-none focus:border-[var(--amber)]"
+                className="w-full rounded-xl border border-[var(--border2)] bg-[var(--card)] px-3.5 py-2 text-xs text-[var(--text)] outline-none focus:border-[var(--amber)]"
               />
             </div>
           </div>

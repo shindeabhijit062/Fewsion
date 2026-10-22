@@ -75,7 +75,7 @@ export default function ForgotPasswordPage() {
         {success && (
           <div
             className="rounded-lg p-3 mb-5 text-[14px] leading-[1.5]"
-            style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)', color: '#4ade80' }}
+            style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)', color: 'var(--green)' }}
           >
             ✨ Reset link sent! Check your email inbox (and spam folder) to update your password.
           </div>

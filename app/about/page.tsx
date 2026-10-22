@@ -37,13 +37,13 @@ export default function AboutPage() {
       >
         <div className="section-tag">Our Story</div>
         <h1
-          className="font-display font-extrabold text-white"
+          className="font-display font-extrabold text-[var(--text)]"
           style={{ fontSize: 'clamp(36px,5vw,68px)', letterSpacing: '-2px', marginBottom: '24px' }}
         >
           Built for the people<br />
           who <em className="text-gradient-amber font-display" style={{ fontStyle: 'normal' }}>make the internet</em> move.
         </h1>
-        <p className="text-[19px] text-[#888] font-light leading-[1.7] max-w-[600px] mx-auto">
+        <p className="text-[19px] text-[var(--muted)] font-light leading-[1.7] max-w-[600px] mx-auto">
           Fewsion started with a simple observation: India has 4.5 million creators, but no platform
           that actually treats them like professionals. We&apos;re here to fix that.
         </p>
@@ -58,18 +58,18 @@ export default function AboutPage() {
         <div className="max-w-[720px] mx-auto">
           <div className="section-tag reveal">Our Mission</div>
           <h2
-            className="reveal font-display font-extrabold text-white"
+            className="reveal font-display font-extrabold text-[var(--text)]"
             style={{ fontSize: 'clamp(24px,3vw,40px)', letterSpacing: '-1.2px', marginBottom: '16px', lineHeight: '1.15' }}
           >
             Give every Indian creator<br />
             <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>proof they can get paid for.</em>
           </h2>
-          <p className="reveal text-[16px] text-[#888] leading-[1.8] mb-4 font-light">
+          <p className="reveal text-[16px] text-[var(--muted)] leading-[1.8] mb-4 font-light">
             The creator economy in India is massive — ₹3,500 crore in market size and growing. But the
             infrastructure for creators is broken. Payment delays are common. Brands pick by follower count,
             not output quality. Editors have no marketplace at all.
           </p>
-          <p className="reveal text-[16px] text-[#888] leading-[1.8] font-light">
+          <p className="reveal text-[16px] text-[var(--muted)] leading-[1.8] font-light">
             Fewsion is building the missing layer: a three-sided marketplace where brands find creators by
             real performance, creators get paid reliably through escrow, and editors finally have a platform
             that sees them.
@@ -81,7 +81,7 @@ export default function AboutPage() {
       <section id="values" className="px-[5%] py-[80px] relative z-10">
         <div className="section-tag reveal">What We Stand For</div>
         <h2
-          className="reveal font-display font-extrabold text-white"
+          className="reveal font-display font-extrabold text-[var(--text)]"
           style={{ fontSize: 'clamp(24px,3vw,40px)', letterSpacing: '-1.2px', marginBottom: '48px', lineHeight: '1.15' }}
         >
           Our values aren&apos;t<br />
@@ -97,8 +97,8 @@ export default function AboutPage() {
               className={`card-base p-7 reveal ${i % 3 === 1 ? 'reveal-delay-1' : i % 3 === 2 ? 'reveal-delay-2' : ''}`}
             >
               <div className="text-[28px] mb-[14px]">{v.icon}</div>
-              <h3 className="font-display text-[16px] font-bold text-white mb-2">{v.title}</h3>
-              <p className="text-[14px] text-[#888] leading-[1.7]">{v.desc}</p>
+              <h3 className="font-display text-[16px] font-bold text-[var(--text)] mb-2">{v.title}</h3>
+              <p className="text-[14px] text-[var(--muted)] leading-[1.7]">{v.desc}</p>
             </div>
           ))}
         </div>
@@ -108,7 +108,7 @@ export default function AboutPage() {
       <section id="team" className="px-[5%] py-[80px] relative z-10" style={{ background: 'var(--deep)' }}>
         <div className="section-tag reveal">The Team</div>
         <h2
-          className="reveal font-display font-extrabold text-white"
+          className="reveal font-display font-extrabold text-[var(--text)]"
           style={{ fontSize: 'clamp(24px,3vw,40px)', letterSpacing: '-1.2px', marginBottom: '48px', lineHeight: '1.15' }}
         >
           Founders who&apos;ve been<br />
@@ -144,9 +144,9 @@ export default function AboutPage() {
               >
                 {member.initial}
               </div>
-              <div className="font-display text-[17px] font-bold text-white mb-1">{member.name}</div>
+              <div className="font-display text-[17px] font-bold text-[var(--text)] mb-1">{member.name}</div>
               <div className="text-[13px] font-medium mb-3" style={{ color: 'var(--amber)' }}>{member.role}</div>
-              <div className="text-[13.5px] text-[#888] leading-[1.65]">{member.bio}</div>
+              <div className="text-[13.5px] text-[var(--muted)] leading-[1.65]">{member.bio}</div>
             </div>
           ))}
         </div>
@@ -156,7 +156,7 @@ export default function AboutPage() {
       <section id="traction" className="px-[5%] py-[80px] relative z-10">
         <div className="section-tag reveal">Early Traction</div>
         <h2
-          className="reveal font-display font-extrabold text-white"
+          className="reveal font-display font-extrabold text-[var(--text)]"
           style={{ fontSize: 'clamp(24px,3vw,40px)', letterSpacing: '-1.2px', marginBottom: '48px', lineHeight: '1.15' }}
         >
           The numbers that<br />
@@ -183,7 +183,7 @@ export default function AboutPage() {
               >
                 {s.val}
               </div>
-              <div className="text-[13px] text-[#888] leading-[1.5]">{s.label}</div>
+              <div className="text-[13px] text-[var(--muted)] leading-[1.5]">{s.label}</div>
             </div>
           ))}
         </div>
@@ -199,13 +199,13 @@ export default function AboutPage() {
         }}
       >
         <h2
-          className="font-display font-extrabold text-white"
+          className="font-display font-extrabold text-[var(--text)]"
           style={{ fontSize: 'clamp(32px,5vw,56px)', letterSpacing: '-2px', marginBottom: '16px', lineHeight: '1.1' }}
         >
           Come build India&apos;s<br />
           <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>creator economy with us.</em>
         </h2>
-        <p className="text-[18px] text-[#888] max-w-[460px] mx-auto mb-10 font-light">
+        <p className="text-[18px] text-[var(--muted)] max-w-[460px] mx-auto mb-10 font-light">
           Join the waitlist, partner with us, or just follow what we&apos;re building.
         </p>
         <div className="flex gap-[14px] justify-center flex-wrap">

@@ -162,7 +162,7 @@ export default function EditorsPage() {
           {/* Badge */}
           <div
             className="inline-flex items-center gap-2 rounded-full px-[18px] py-[7px] text-[13px] font-medium mb-7"
-            style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)', color: '#4ade80', letterSpacing: '0.03em' }}
+            style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)', color: 'var(--green)', letterSpacing: '0.03em' }}
           >
             <span
               className="w-[6px] h-[6px] rounded-full"
@@ -172,14 +172,14 @@ export default function EditorsPage() {
           </div>
 
           <h1
-            className="font-display font-extrabold text-white"
+            className="font-display font-extrabold text-[var(--text)]"
             style={{ fontSize: 'clamp(40px,6vw,76px)', letterSpacing: '-2px', lineHeight: '1.05', marginBottom: '24px' }}
           >
             Editors finally<br />get a{' '}
             <em className="text-gradient-amber" style={{ fontStyle: 'normal' }}>platform</em>
             <br />of their own.
           </h1>
-          <p className="text-[#888] font-light leading-[1.7] mb-10" style={{ fontSize: 'clamp(16px,2vw,19px)' }}>
+          <p className="text-[var(--muted)] font-light leading-[1.7] mb-10" style={{ fontSize: 'clamp(16px,2vw,19px)' }}>
             India&apos;s creator economy runs on video. But every editing tool, every marketplace, every job board
             treats editors like an afterthought. Fewsion is the first platform built for you.
           </p>
@@ -201,14 +201,14 @@ export default function EditorsPage() {
       {/* ── DISCOVER EDITORS ── */}
       <section id="explore" className="px-[5%] py-[80px] relative z-10 border-t border-b" style={{ borderColor: 'var(--border)' }}>
         <div className="max-w-[720px] mx-auto text-center mb-10">
-          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-medium mb-4" style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.15)', color: '#4ade80' }}>
+          <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[13px] font-medium mb-4" style={{ background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.15)', color: 'var(--green)' }}>
             Explore Talent
           </div>
-          <h2 className="font-display font-extrabold text-white mb-4" style={{ fontSize: 'clamp(28px,3.5vw,44px)', letterSpacing: '-1.5px', lineHeight: '1.15' }}>
+          <h2 className="font-display font-extrabold text-[var(--text)] mb-4" style={{ fontSize: 'clamp(28px,3.5vw,44px)', letterSpacing: '-1.5px', lineHeight: '1.15' }}>
             Browse verified video editors<br />
-            <em style={{ fontStyle: 'normal', color: '#4ade80' }}>by skills and software.</em>
+            <em style={{ fontStyle: 'normal', color: 'var(--green)' }}>by skills and software.</em>
           </h2>
-          <p className="text-[16px] text-[#888] font-light max-w-[500px] mx-auto">
+          <p className="text-[16px] text-[var(--muted)] font-light max-w-[500px] mx-auto">
             Find the perfect editor to level up your content. Filter by specialty formats, tools, and experience.
           </p>
         </div>
@@ -294,24 +294,24 @@ export default function EditorsPage() {
                 style={{ background: 'var(--card)', border: '1px solid var(--border)', minHeight: '320px' }}
               >
                 <div className="flex items-center gap-[14px] mb-[22px]">
-                  <div className="w-12 h-12 rounded-full bg-neutral-800" />
+                  <div className="w-12 h-12 rounded-full bg-[var(--card2)]" />
                   <div className="flex-1">
-                    <div className="h-4 bg-neutral-800 rounded w-2/3 mb-2" />
-                    <div className="h-3 bg-neutral-800 rounded w-1/3" />
+                    <div className="h-4 bg-[var(--card2)] rounded w-2/3 mb-2" />
+                    <div className="h-3 bg-[var(--card2)] rounded w-1/3" />
                   </div>
-                  <div className="w-10 h-6 bg-neutral-800 rounded-full" />
+                  <div className="w-10 h-6 bg-[var(--card2)] rounded-full" />
                 </div>
-                <div className="h-4 bg-neutral-800 rounded w-full mb-6" />
+                <div className="h-4 bg-[var(--card2)] rounded w-full mb-6" />
                 <div className="grid grid-cols-3 gap-[6px] mb-4">
                   {[1, 2, 3].map((s) => (
-                    <div key={s} className="rounded-lg bg-neutral-800 h-16" />
+                    <div key={s} className="rounded-lg bg-[var(--card2)] h-16" />
                   ))}
                 </div>
                 <div className="flex gap-2 mb-4">
-                  <div className="h-6 bg-neutral-800 rounded-full w-16" />
-                  <div className="h-6 bg-neutral-800 rounded-full w-20" />
+                  <div className="h-6 bg-[var(--card2)] rounded-full w-16" />
+                  <div className="h-6 bg-[var(--card2)] rounded-full w-20" />
                 </div>
-                <div className="h-10 bg-neutral-800 rounded-full w-full" />
+                <div className="h-10 bg-[var(--card2)] rounded-full w-full" />
               </div>
             ))}
           </div>
@@ -379,8 +379,8 @@ export default function EditorsPage() {
                 {i + 1}
               </div>
               <div>
-                <h3 className="font-display text-[20px] font-bold text-white mb-2" style={{ letterSpacing: '-0.4px' }}>{step.title}</h3>
-                <p className="text-[15px] text-[#888] leading-[1.7] max-w-[600px]">{step.desc}</p>
+                <h3 className="font-display text-[20px] font-bold text-[var(--text)] mb-2" style={{ letterSpacing: '-0.4px' }}>{step.title}</h3>
+                <p className="text-[15px] text-[var(--muted)] leading-[1.7] max-w-[600px]">{step.desc}</p>
               </div>
             </div>
           ))}
@@ -416,11 +416,11 @@ export default function EditorsPage() {
                   el.style.transform = 'translateY(0)';
                 }}
               >
-                <div className="text-[11px] uppercase text-[#888] mb-2" style={{ letterSpacing: '0.08em' }}>{card.label}</div>
-                <div className="font-display font-extrabold" style={{ fontSize: '32px', color: '#4ade80', letterSpacing: '-1px', marginBottom: '4px' }}>
+                <div className="text-[11px] uppercase text-[var(--muted)] mb-2" style={{ letterSpacing: '0.08em' }}>{card.label}</div>
+                <div className="font-display font-extrabold" style={{ fontSize: '32px', color: 'var(--green)', letterSpacing: '-1px', marginBottom: '4px' }}>
                   {card.val}
                 </div>
-                <div className="text-[13px] text-[#888]">{card.sub}</div>
+                <div className="text-[13px] text-[var(--muted)]">{card.sub}</div>
               </div>
             ))}
           </div>
@@ -428,25 +428,25 @@ export default function EditorsPage() {
           {/* Text */}
           <div>
             <h2
-              className="font-display font-extrabold text-white"
+              className="font-display font-extrabold text-[var(--text)]"
               style={{ fontSize: 'clamp(28px,3.5vw,44px)', letterSpacing: '-1.5px', marginBottom: '20px', lineHeight: '1.15' }}
             >
               Turn your editing skills<br />
               into <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>reliable income.</em>
             </h2>
-            <p className="text-[16px] text-[#888] leading-[1.8] mb-4 font-light">
+            <p className="text-[16px] text-[var(--muted)] leading-[1.8] mb-4 font-light">
               Top editors on Fewsion earn ₹50,000–₹2L/month working with D2C brands across beauty,
               food, fitness, and fashion. Every project comes with an AI-generated contract and escrow payment.
             </p>
-            <p className="text-[16px] text-[#888] leading-[1.8] mb-6 font-light">
+            <p className="text-[16px] text-[var(--muted)] leading-[1.8] mb-6 font-light">
               No chasing invoices. No awkward rate negotiations. Just create, deliver, get paid.
             </p>
             <ul className="list-none flex flex-col gap-3">
               {['Escrow payment before you start editing', 'Automatic contract on every project', 'Rate benchmarking vs. market averages', 'AI-powered inbound project matching'].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-[15px] text-[#f0ece4]">
+                <li key={item} className="flex items-center gap-3 text-[15px] text-[var(--text)]">
                   <span
                     className="w-[22px] h-[22px] rounded-full flex items-center justify-center text-[11px] font-bold flex-shrink-0"
-                    style={{ background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.2)', color: '#4ade80' }}
+                    style={{ background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.2)', color: 'var(--green)' }}
                   >
                     ✓
                   </span>
@@ -468,13 +468,13 @@ export default function EditorsPage() {
         }}
       >
         <h2
-          className="font-display font-extrabold text-white"
+          className="font-display font-extrabold text-[var(--text)]"
           style={{ fontSize: 'clamp(32px,5vw,60px)', letterSpacing: '-2px', marginBottom: '16px', lineHeight: '1.1' }}
         >
           Ready to make editing<br />
           <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>your main income?</em>
         </h2>
-        <p className="text-[18px] text-[#888] max-w-[480px] mx-auto mb-10 font-light">
+        <p className="text-[18px] text-[var(--muted)] max-w-[480px] mx-auto mb-10 font-light">
           Join thousands of Indian editors already on the waitlist. Free forever to join.
         </p>
         <div className="flex gap-[14px] justify-center flex-wrap">
@@ -519,14 +519,14 @@ function EditorCard({ editor }: { editor: Editor }) {
             {editor.name[0].toUpperCase()}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="font-display text-[15px] font-bold text-white truncate">{editor.name}</div>
-            <div className="text-[12px] text-[#888] truncate">{editor.cityState}</div>
+            <div className="font-display text-[15px] font-bold text-[var(--text)] truncate">{editor.name}</div>
+            <div className="text-[12px] text-[var(--muted)] truncate">{editor.cityState}</div>
           </div>
           <div
             className="flex-shrink-0 font-display text-[12px] font-bold px-3 py-[5px] rounded-full"
             style={{
               background: 'rgba(74,222,128,0.1)',
-              color: '#4ade80',
+              color: 'var(--green)',
               border: '1px solid rgba(74,222,128,0.2)',
             }}
           >
@@ -535,7 +535,7 @@ function EditorCard({ editor }: { editor: Editor }) {
         </div>
 
         {/* Bio */}
-        <p className="text-[13px] text-[#aaa] leading-[1.6] mb-5 min-h-[40px]">
+        <p className="text-[13px] text-[var(--muted)] leading-[1.6] mb-5 min-h-[40px]">
           {editor.oneLineBio}
         </p>
 
@@ -551,8 +551,8 @@ function EditorCard({ editor }: { editor: Editor }) {
               className="text-center rounded-lg py-[8px] px-2 flex flex-col justify-center"
               style={{ background: 'var(--card2)', border: '1px solid var(--border)' }}
             >
-              <div className="font-display text-[12px] font-extrabold text-white truncate">{s.val}</div>
-              <div className="text-[9px] text-[#555] mt-[2px]" style={{ letterSpacing: '0.05em' }}>{s.label}</div>
+              <div className="font-display text-[12px] font-extrabold text-[var(--text)] truncate">{s.val}</div>
+              <div className="text-[9px] text-[var(--muted2)] mt-[2px]" style={{ letterSpacing: '0.05em' }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -572,7 +572,7 @@ function EditorCard({ editor }: { editor: Editor }) {
             <span
               key={f}
               className="text-[11px] px-2.5 py-[4px] rounded-full"
-              style={{ color: '#4ade80', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.15)' }}
+              style={{ color: 'var(--green)', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.15)' }}
             >
               {f}
             </span>
@@ -612,8 +612,8 @@ function EditorPreviewCard() {
           R
         </div>
         <div>
-          <div className="font-display text-[15px] font-bold text-white">Rohan Mehta</div>
-          <div className="text-[12px] text-[#888]">Video Editor · Mumbai</div>
+          <div className="font-display text-[15px] font-bold text-[var(--text)]">Rohan Mehta</div>
+          <div className="text-[12px] text-[var(--muted)]">Video Editor · Mumbai</div>
         </div>
         <div className="ml-auto flex items-center gap-1">
           <span className="font-display text-[14px] font-bold" style={{ color: 'var(--amber)' }}>4.9</span>
@@ -625,12 +625,12 @@ function EditorPreviewCard() {
           <div
             key={i}
             className="rounded-lg flex items-center justify-center text-[22px] relative overflow-hidden"
-            style={{ aspectRatio: '9/16', background: '#1a1a1a', border: '1px solid var(--border)' }}
+            style={{ aspectRatio: '9/16', background: 'var(--card2)', border: '1px solid var(--border)' }}
           >
             {em}
             <span
               className="absolute bottom-[6px] right-[6px] text-[10px] px-[6px] py-[3px] rounded"
-              style={{ background: 'rgba(0,0,0,0.6)', color: 'var(--white)' }}
+              style={{ background: 'rgba(0,0,0,0.6)', color: '#ffffff' }}
             >
               ▶
             </span>
@@ -642,7 +642,7 @@ function EditorPreviewCard() {
           <span
             key={skill}
             className="text-[12px] px-3 py-[5px] rounded-full"
-            style={{ color: '#4ade80', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.15)' }}
+            style={{ color: 'var(--green)', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.15)' }}
           >
             {skill}
           </span>
@@ -653,8 +653,8 @@ function EditorPreviewCard() {
         style={{ background: 'rgba(245,166,35,0.06)', border: '1px solid rgba(245,166,35,0.2)' }}
       >
         <div>
-          <div className="text-[13px] font-medium text-[#f0ece4]">Collab Invite — BeautyBrand</div>
-          <div className="text-[11px] text-[#888] mt-[2px]">₹8,000 · 3 Reels · 7-day deadline</div>
+          <div className="text-[13px] font-medium text-[var(--text)]">Collab Invite — BeautyBrand</div>
+          <div className="text-[11px] text-[var(--muted)] mt-[2px]">₹8,000 · 3 Reels · 7-day deadline</div>
         </div>
         <button
           className="font-display text-[12px] font-bold text-black px-4 py-2 rounded-full border-none cursor-pointer"
@@ -686,8 +686,8 @@ function FeatureCard({ feat }: { feat: { icon: string; title: string; desc: stri
       >
         {feat.icon}
       </div>
-      <h3 className="font-display text-[17px] font-bold text-white mb-[10px]">{feat.title}</h3>
-      <p className="text-[14px] text-[#888] leading-[1.7]">{feat.desc}</p>
+      <h3 className="font-display text-[17px] font-bold text-[var(--text)] mb-[10px]">{feat.title}</h3>
+      <p className="text-[14px] text-[var(--muted)] leading-[1.7]">{feat.desc}</p>
     </div>
   );
 }

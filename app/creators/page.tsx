@@ -198,14 +198,14 @@ export default function CreatorsPage() {
             Discover Creators
           </div>
           <h1
-            className="font-display font-extrabold text-white mb-5"
+            className="font-display font-extrabold text-[var(--text)] mb-5"
             style={{ fontSize: 'clamp(40px,6vw,76px)', letterSpacing: '-2px', lineHeight: '1.05' }}
           >
             India&apos;s best{' '}
             <em className="text-gradient-amber" style={{ fontStyle: 'normal' }}>UGC creators,</em>
             <br />ranked by real results.
           </h1>
-          <p className="text-[19px] text-[#888] font-light max-w-[540px] mx-auto leading-[1.7] mb-10">
+          <p className="text-[19px] text-[var(--muted)] font-light max-w-[540px] mx-auto leading-[1.7] mb-10">
             Every creator on Fewsion is verified by performance — not follower count. Find your match by niche,
             platform, and Creator Score.
           </p>
@@ -302,19 +302,19 @@ export default function CreatorsPage() {
                 style={{ background: 'var(--card)', border: '1px solid var(--border)', minHeight: '220px' }}
               >
                 <div className="flex items-center gap-3 mb-[18px]">
-                  <div className="w-11 h-11 rounded-full bg-neutral-800" />
+                  <div className="w-11 h-11 rounded-full bg-[var(--card2)]" />
                   <div className="flex-1">
-                    <div className="h-4 bg-neutral-800 rounded w-2/3 mb-2" />
-                    <div className="h-3 bg-neutral-800 rounded w-1/3" />
+                    <div className="h-4 bg-[var(--card2)] rounded w-2/3 mb-2" />
+                    <div className="h-3 bg-[var(--card2)] rounded w-1/3" />
                   </div>
-                  <div className="w-8 h-6 bg-neutral-800 rounded-full" />
+                  <div className="w-8 h-6 bg-[var(--card2)] rounded-full" />
                 </div>
                 <div className="grid grid-cols-3 gap-[6px] mb-4">
                   {[1, 2, 3].map((s) => (
-                    <div key={s} className="rounded-lg py-[10px] bg-neutral-800 h-12" />
+                    <div key={s} className="rounded-lg py-[10px] bg-[var(--card2)] h-12" />
                   ))}
                 </div>
-                <div className="h-6 bg-neutral-800 rounded-full w-24" />
+                <div className="h-6 bg-[var(--card2)] rounded-full w-24" />
               </div>
             ))}
           </div>
@@ -377,8 +377,8 @@ export default function CreatorsPage() {
               >
                 {card.icon}
               </div>
-              <h3 className="font-display text-[16px] font-bold text-white mb-2">{card.title}</h3>
-              <p className="text-[14px] text-[#888] leading-[1.7]">{card.desc}</p>
+              <h3 className="font-display text-[16px] font-bold text-[var(--text)] mb-2">{card.title}</h3>
+              <p className="text-[14px] text-[var(--muted)] leading-[1.7]">{card.desc}</p>
             </div>
           ))}
         </div>
@@ -393,13 +393,13 @@ export default function CreatorsPage() {
         }}
       >
         <h2
-          className="font-display font-extrabold text-white"
+          className="font-display font-extrabold text-[var(--text)]"
           style={{ fontSize: 'clamp(32px,5vw,60px)', letterSpacing: '-2px', marginBottom: '16px', lineHeight: '1.1' }}
         >
           Find your next<br />
           <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>high-performing creator.</em>
         </h2>
-        <p className="text-[18px] text-[#888] max-w-[480px] mx-auto mb-10 font-light">
+        <p className="text-[18px] text-[var(--muted)] max-w-[480px] mx-auto mb-10 font-light">
           Access 1,200+ verified creators and launch your first campaign — free to start.
         </p>
         <div className="flex gap-[14px] justify-center flex-wrap">
@@ -472,8 +472,8 @@ function CreatorCard({
           {creator.name[0]}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="font-display text-[15px] font-bold text-white truncate">{creator.name}</div>
-          <div className="text-[12px] text-[#888]">{creator.platform}</div>
+          <div className="font-display text-[15px] font-bold text-[var(--text)] truncate">{creator.name}</div>
+          <div className="text-[12px] text-[var(--muted)]">{creator.platform}</div>
         </div>
         <div
           className="flex-shrink-0 font-display text-[12px] font-bold px-3 py-[5px] rounded-full"
@@ -499,8 +499,8 @@ function CreatorCard({
             className="text-center rounded-lg py-[10px] px-2"
             style={{ background: 'var(--card2)', border: '1px solid var(--border)' }}
           >
-            <div className="font-display text-[15px] font-extrabold text-white">{s.val}</div>
-            <div className="text-[10px] text-[#555] mt-[2px]" style={{ letterSpacing: '0.05em' }}>{s.label}</div>
+            <div className="font-display text-[15px] font-extrabold text-[var(--text)]">{s.val}</div>
+            <div className="text-[10px] text-[var(--muted2)] mt-[2px]" style={{ letterSpacing: '0.05em' }}>{s.label}</div>
           </div>
         ))}
       </div>
@@ -516,7 +516,7 @@ function CreatorCard({
         {creator.verified && (
           <span
             className="text-[11px] px-3 py-[5px] rounded-full"
-            style={{ color: '#4ade80', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)' }}
+            style={{ color: 'var(--green)', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.2)' }}
           >
             ✓ Verified
           </span>
@@ -531,7 +531,7 @@ function CreatorCard({
         className="block text-center w-full py-[10px] rounded-full font-display text-[13px] font-bold transition-all duration-200 hover:opacity-90 disabled:cursor-not-allowed"
         style={
           blocked
-            ? { background: 'var(--card2)', color: '#777', border: '1px solid var(--border)' }
+            ? { background: 'var(--card2)', color: 'var(--muted)', border: '1px solid var(--border)' }
             : status
               ? { background: 'rgba(245,166,35,0.12)', color: 'var(--amber)', border: '1px solid rgba(245,166,35,0.35)' }
               : { background: 'var(--amber)', color: '#000' }

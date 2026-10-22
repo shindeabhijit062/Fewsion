@@ -175,7 +175,7 @@ export default function HomePage() {
             <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
               <div className="animate-core-glow flex h-24 w-24 flex-col items-center justify-center rounded-full bg-[var(--core-bg)] shadow-[0_0_30px_rgba(245,166,35,0.2)]">
                 <span className="text-lg font-bold text-[var(--core-text)]">Few<span className="text-[var(--amber)]">sion</span></span>
-                <span className="text-[10px] uppercase tracking-widest text-[#999]">AI Core</span>
+                <span className="text-[10px] uppercase tracking-widest text-[var(--muted)]">AI Core</span>
               </div>
             </div>
 
@@ -472,32 +472,32 @@ export default function HomePage() {
 
           {/* Left Column: Metrics Cards */}
           <div className="flex-1 flex flex-col gap-4 reveal reveal-delay-1">
-            <div className="bg-[#1a1405] border border-amber/10 rounded-2xl p-6 lg:p-8">
-              <div className="text-[#888] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">Global Creator Economy (2026)</div>
+            <div className="bg-[var(--amber-glow)] border border-amber/10 rounded-2xl p-6 lg:p-8">
+              <div className="text-[var(--muted)] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">Global Creator Economy (2026)</div>
               <div className="text-amber text-[36px] lg:text-[48px] font-extrabold font-display leading-[1] mb-2 tracking-[-1px]">$323 Billion</div>
-              <div className="text-[#666] text-[12px]">Growing at 26.2% CAGR — projected to reach $820B by 2030</div>
+              <div className="text-[var(--muted2)] text-[12px]">Growing at 26.2% CAGR — projected to reach $820B by 2030</div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-[var(--card)] border border-border rounded-xl p-6">
-                <div className="text-[#888] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">India Market (2026)</div>
+                <div className="text-[var(--muted)] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">India Market (2026)</div>
                 <div className="text-[var(--text)] text-[28px] lg:text-[32px] font-extrabold font-display leading-[1] mb-2 tracking-[-1px]">$15B</div>
-                <div className="text-[#666] text-[12px]">Expected to reach $61.87B by 2033</div>
+                <div className="text-[var(--muted2)] text-[12px]">Expected to reach $61.87B by 2033</div>
               </div>
               <div className="bg-[var(--card)] border border-border rounded-xl p-6">
-                <div className="text-[#888] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">India Growth Rate</div>
+                <div className="text-[var(--muted)] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">India Growth Rate</div>
                 <div className="text-[var(--text)] text-[28px] lg:text-[32px] font-extrabold font-display leading-[1] mb-2 tracking-[-1px]">22.4%</div>
-                <div className="text-[#666] text-[12px]">CAGR — one of the fastest in Asia</div>
+                <div className="text-[var(--muted2)] text-[12px]">CAGR — one of the fastest in Asia</div>
               </div>
               <div className="bg-[var(--card)] border border-border rounded-xl p-6">
-                <div className="text-[#888] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">Indian Creators</div>
+                <div className="text-[var(--muted)] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">Indian Creators</div>
                 <div className="text-[var(--text)] text-[28px] lg:text-[32px] font-extrabold font-display leading-[1] mb-2 tracking-[-1px]">4-5M+</div>
-                <div className="text-[#666] text-[12px]">Active creators across platforms</div>
+                <div className="text-[var(--muted2)] text-[12px]">Active creators across platforms</div>
               </div>
               <div className="bg-[var(--card)] border border-border rounded-xl p-6">
-                <div className="text-[#888] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">Influencer Marketing India</div>
+                <div className="text-[var(--muted)] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">Influencer Marketing India</div>
                 <div className="text-[var(--text)] text-[28px] lg:text-[32px] font-extrabold font-display leading-[1] mb-2 tracking-[-1px]">₹3,500Cr</div>
-                <div className="text-[#666] text-[12px]">2025 industry value, growing fast</div>
+                <div className="text-[var(--muted2)] text-[12px]">2025 industry value, growing fast</div>
               </div>
             </div>
           </div>
@@ -507,8 +507,8 @@ export default function HomePage() {
             <p>India's creator economy is exploding — fuelled by 900M+ smartphone users, affordable data, and a massive shift in how D2C brands acquire customers. Brands are moving away from expensive celebrity endorsements and toward authentic, performance-driven UGC content.</p>
             <p>Yet every existing Indian platform — Kofluence, Qoruz, Good Creator Co. — serves enterprise brands through agency-style models. There is no self-serve, performance-first marketplace where a small D2C brand can find a quality creator in minutes.</p>
 
-            <div className="bg-[#1a1405] border-l-[3px] border-amber rounded-r-lg p-5 mt-2">
-              <p className="text-[#e0e0e0] text-[13px] italic mb-0">"Even capturing 0.1% of the Indian market puts Fewsion at ₹35 Cr GMV — a realistic Year 2 target."</p>
+            <div className="bg-[var(--amber-glow)] border-l-[3px] border-amber rounded-r-lg p-5 mt-2">
+              <p className="text-[var(--text)] text-[13px] italic mb-0">"Even capturing 0.1% of the Indian market puts Fewsion at ₹35 Cr GMV — a realistic Year 2 target."</p>
             </div>
           </div>
 
@@ -717,55 +717,55 @@ export default function HomePage() {
           <div className="bg-[var(--card)] border border-border border-b-[2px] border-b-amber p-8 rounded-2xl reveal">
             <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">10-15%</div>
             <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">Transaction Commission</h3>
-            <p className="text-[13px] md:text-[14px] text-[#888] leading-[1.6]">A percentage cut on every paid project completed through the platform. Primary revenue driver at scale.</p>
+            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">A percentage cut on every paid project completed through the platform. Primary revenue driver at scale.</p>
           </div>
-          <div className="bg-[var(--card)] border border-[rgba(255,255,255,0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-1">
+          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-1">
             <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">₹499/mo</div>
             <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">Creator Pro Subscription</h3>
-            <p className="text-[13px] md:text-[14px] text-[#888] leading-[1.6]">Advanced analytics, priority search ranking, featured profile placement, and AI-powered career insights.</p>
+            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">Advanced analytics, priority search ranking, featured profile placement, and AI-powered career insights.</p>
           </div>
-          <div className="bg-[var(--card)] border border-[rgba(255,255,255,0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-2">
+          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-2">
             <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">₹2,999/mo</div>
             <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">Brand Premium Plan</h3>
-            <p className="text-[13px] md:text-[14px] text-[#888] leading-[1.6]">Unlimited campaign briefs, AI chatbot access, bulk creator outreach, and priority matching.</p>
+            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">Unlimited campaign briefs, AI chatbot access, bulk creator outreach, and priority matching.</p>
           </div>
           <div className="bg-[var(--card)] border border-border border-b-[2px] border-b-amber p-8 rounded-2xl reveal">
             <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">₹999</div>
             <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">Featured Brand Listings</h3>
-            <p className="text-[13px] md:text-[14px] text-[#888] leading-[1.6]">Brands pay to be highlighted to relevant creators, driving faster applications and better talent.</p>
+            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">Brands pay to be highlighted to relevant creators, driving faster applications and better talent.</p>
           </div>
-          <div className="bg-[var(--card)] border border-[rgba(255,255,255,0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-1">
+          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-1">
             <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">₹99</div>
             <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">AI Contract Generator</h3>
-            <p className="text-[13px] md:text-[14px] text-[#888] leading-[1.6]">Per-contract fee for auto-generated usage rights, deadline, and payment agreements — no lawyer needed.</p>
+            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">Per-contract fee for auto-generated usage rights, deadline, and payment agreements — no lawyer needed.</p>
           </div>
-          <div className="bg-[var(--card)] border border-[rgba(255,255,255,0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-2">
+          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-2">
             <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">Custom</div>
             <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">Enterprise Packages</h3>
-            <p className="text-[13px] md:text-[14px] text-[#888] leading-[1.6]">White-glove matching, dedicated account management, and bulk campaign tooling for large brands.</p>
+            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">White-glove matching, dedicated account management, and bulk campaign tooling for large brands.</p>
           </div>
         </div>
 
         <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="bg-[var(--card)] border border-border p-6 rounded-2xl text-center reveal">
-            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[#666] mb-4">Month 1–3</div>
+            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[var(--muted2)] mb-4">Month 1–3</div>
             <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-[var(--text)] mb-1 tracking-[-1px]">500</div>
-            <div className="text-[12px] text-[#666]">Creators onboarded</div>
+            <div className="text-[12px] text-[var(--muted2)]">Creators onboarded</div>
           </div>
-          <div className="bg-[var(--card)] border border-[rgba(255,255,255,0.05)] p-6 rounded-2xl text-center reveal reveal-delay-1">
-            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[#666] mb-4">Month 6</div>
+          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] p-6 rounded-2xl text-center reveal reveal-delay-1">
+            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[var(--muted2)] mb-4">Month 6</div>
             <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-[var(--text)] mb-1 tracking-[-1px]">₹15–20L</div>
-            <div className="text-[12px] text-[#666]">Monthly GMV target</div>
+            <div className="text-[12px] text-[var(--muted2)]">Monthly GMV target</div>
           </div>
-          <div className="bg-[var(--card)] border border-[rgba(255,255,255,0.05)] p-6 rounded-2xl text-center reveal reveal-delay-2">
-            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[#666] mb-4">Month 6</div>
+          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] p-6 rounded-2xl text-center reveal reveal-delay-2">
+            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[var(--muted2)] mb-4">Month 6</div>
             <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-1 tracking-[-1px]">₹2–3L</div>
-            <div className="text-[12px] text-[#666]">Monthly revenue</div>
+            <div className="text-[12px] text-[var(--muted2)]">Monthly revenue</div>
           </div>
-          <div className="bg-[var(--card)] border border-[rgba(255,255,255,0.05)] p-6 rounded-2xl text-center reveal reveal-delay-3">
-            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[#666] mb-4">Year 2</div>
+          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] p-6 rounded-2xl text-center reveal reveal-delay-3">
+            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[var(--muted2)] mb-4">Year 2</div>
             <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-1 tracking-[-1px]">₹35Cr+</div>
-            <div className="text-[12px] text-[#666]">GMV milestone</div>
+            <div className="text-[12px] text-[var(--muted2)]">GMV milestone</div>
           </div>
         </div>
       </section>
@@ -783,7 +783,7 @@ export default function HomePage() {
 
         <div className="relative ml-3 md:ml-6 pl-8 md:pl-10 py-4 flex flex-col gap-14 mt-16">
           {/* Timeline Line */}
-          <div className="absolute top-0 bottom-0 left-0 w-[1px] bg-gradient-to-b from-amber via-amber to-[rgba(255,255,255,0.1)] via-[30%]"></div>
+          <div className="absolute top-0 bottom-0 left-0 w-[1px] bg-gradient-to-b from-amber via-amber to-[var(--border)] via-[30%]"></div>
 
           {/* Q3 2026 */}
           <div className="relative reveal">
@@ -817,40 +817,40 @@ export default function HomePage() {
 
           {/* Q1 2027 */}
           <div className="relative reveal">
-            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-[#555] bg-[var(--black)]"></div>
-            <div className="text-[#888] text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q1 2027 — AI LAYER</div>
+            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-[var(--border2)] bg-[var(--black)]"></div>
+            <div className="text-[var(--muted)] text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q1 2027 — AI LAYER</div>
             <h3 className="text-[20px] md:text-[22px] font-bold text-[var(--text)] mb-5">Intelligence Features</h3>
             <div className="flex flex-wrap gap-3">
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">AI brief builder</span>
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">AI contract generator</span>
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">Performance tracker</span>
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">Creator–Editor collab</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">AI brief builder</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">AI contract generator</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Performance tracker</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Creator–Editor collab</span>
             </div>
           </div>
 
           {/* Q2 2027 */}
           <div className="relative reveal">
-            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-[#555] bg-[var(--black)]"></div>
-            <div className="text-[#888] text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q2 2027 — SCALE</div>
+            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-[var(--border2)] bg-[var(--black)]"></div>
+            <div className="text-[var(--muted)] text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q2 2027 — SCALE</div>
             <h3 className="text-[20px] md:text-[22px] font-bold text-[var(--text)] mb-5">Mobile + Growth</h3>
             <div className="flex flex-wrap gap-3">
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">iOS + Android app</span>
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">Referral program</span>
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">SEA market entry</span>
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">Brand storefront V2</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">iOS + Android app</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Referral program</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">SEA market entry</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Brand storefront V2</span>
             </div>
           </div>
 
           {/* Q3 2027 */}
           <div className="relative reveal">
-            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-[#555] bg-[var(--black)]"></div>
-            <div className="text-[#888] text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q3 2027 — FUNDING</div>
+            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-[var(--border2)] bg-[var(--black)]"></div>
+            <div className="text-[var(--muted)] text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q3 2027 — FUNDING</div>
             <h3 className="text-[20px] md:text-[22px] font-bold text-[var(--text)] mb-5">Seed Round + 10K Users</h3>
             <div className="flex flex-wrap gap-3">
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">₹3–5 Cr seed raise</span>
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">10,000 active users</span>
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">Enterprise tier launch</span>
-              <span className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#888] py-2 px-4 rounded-full text-[13px]">Social API integrations</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">₹3–5 Cr seed raise</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">10,000 active users</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Enterprise tier launch</span>
+              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Social API integrations</span>
             </div>
           </div>
 
@@ -869,7 +869,7 @@ export default function HomePage() {
             "The only platform where creators are hired based on <span className="text-amber">proven performance,</span> not follower count."
           </h2>
 
-          <p className="text-[14px] md:text-[16px] text-[#888] leading-[1.8] mb-12 max-w-[650px] reveal reveal-delay-1">
+          <p className="text-[14px] md:text-[16px] text-[var(--muted)] leading-[1.8] mb-12 max-w-[650px] reveal reveal-delay-1">
             Fewsion aims to become the default infrastructure for the creator economy in India and Southeast Asia — the place where every brand finds its best creator, every creator builds their legacy, and every editor finally gets the recognition they deserve.
           </p>
 
@@ -891,7 +891,7 @@ export default function HomePage() {
           <em className="text-amber not-italic">India's creator economy?</em>
         </h2>
 
-        <p className="text-[17px] text-[#888] font-light leading-[1.7] max-w-[460px] mx-auto mb-10 reveal reveal-delay-1">
+        <p className="text-[17px] text-[var(--muted)] font-light leading-[1.7] max-w-[460px] mx-auto mb-10 reveal reveal-delay-1">
           Whether you're a brand, creator, or editor — Fewsion is building for you. Join the waitlist and be among the first to experience it.
         </p>
 

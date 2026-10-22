@@ -7,26 +7,26 @@
 //   const [activeTab, setActiveTab] = useState<'campaigns' | 'creators' | 'escrow'>('campaigns');
 // 
 //   return (
-//     <main className="min-h-screen bg-[oklch(0.12_0.01_80)] text-white pt-24 pb-20">
+//     <main className="min-h-screen bg-[var(--black)] text-[var(--text)] pt-24 pb-20">
 //       {/* Portal Top Bar */}
 //       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-//         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[oklch(0.25_0.02_80)] pb-6 gap-4">
+//         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[var(--border)] pb-6 gap-4">
 //           <div>
-//             <div className="text-xs uppercase tracking-wider text-[oklch(0.8_0.16_75)] font-bold">Brand Portal</div>
-//             <h1 className="text-3xl font-bold font-display text-white mt-1">D2C Brand Command Center</h1>
+//             <div className="text-xs uppercase tracking-wider text-[var(--amber)] font-bold">Brand Portal</div>
+//             <h1 className="text-3xl font-bold font-display text-[var(--text)] mt-1">D2C Brand Command Center</h1>
 //           </div>
 //           <div className="flex gap-3">
-//             <Link href="/creators" className="rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)] transition-all">
+//             <Link href="/creators" className="rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:brightness-95 transition-all">
 //               + New Campaign
 //             </Link>
-//             <Link href="/" className="rounded-full border border-[oklch(0.3_0.02_80)] bg-[oklch(0.15_0.02_80)] px-5 py-2.5 text-xs font-bold text-white hover:border-[oklch(0.8_0.16_75)]">
+//             <Link href="/" className="rounded-full border border-[var(--border2)] bg-[var(--card)] px-5 py-2.5 text-xs font-bold text-[var(--text)] hover:border-[var(--amber)]">
 //               Exit Portal
 //             </Link>
 //           </div>
 //         </div>
 // 
 //         {/* Navigation Tabs */}
-//         <div className="mt-6 flex gap-3 border-b border-[oklch(0.22_0.02_80)] pb-3 text-sm font-semibold">
+//         <div className="mt-6 flex gap-3 border-b border-[var(--border)] pb-3 text-sm font-semibold">
 //           {[
 //             { id: 'campaigns', label: 'Active Campaigns (4)' },
 //             { id: 'creators', label: 'Matched Creators (18)' },
@@ -37,8 +37,8 @@
 //               onClick={() => setActiveTab(tab.id as any)}
 //               className={`pb-2 border-b-2 transition-all ${
 //                 activeTab === tab.id
-//                   ? 'border-[oklch(0.8_0.16_75)] text-[oklch(0.8_0.16_75)] font-bold'
-//                   : 'border-transparent text-gray-400 hover:text-white'
+//                   ? 'border-[var(--amber)] text-[var(--amber)] font-bold'
+//                   : 'border-transparent text-[var(--muted)] hover:text-[var(--text)]'
 //               }`}
 //             >
 //               {tab.label}
@@ -56,11 +56,11 @@
 //               { name: 'Wireless Earbuds UGC Unboxing', budget: '₹1,20,000', applicants: '24 Creators', status: 'Reviewing Scripts' },
 //               { name: 'Fintech App Download Campaign', budget: '₹2,00,000', applicants: '30 Creators', status: 'Escrow Locked' }
 //             ].map((camp, i) => (
-//               <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-6 gap-4">
+//               <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 gap-4">
 //                 <div>
-//                   <h3 className="text-lg font-bold font-display text-white">{camp.name}</h3>
-//                   <div className="mt-1 flex gap-4 text-xs text-[oklch(0.68_0.015_85)]">
-//                     <span>Budget: <strong className="text-[oklch(0.8_0.16_75)]">{camp.budget}</strong></span>
+//                   <h3 className="text-lg font-bold font-display text-[var(--text)]">{camp.name}</h3>
+//                   <div className="mt-1 flex gap-4 text-xs text-[var(--muted)]">
+//                     <span>Budget: <strong className="text-[var(--amber)]">{camp.budget}</strong></span>
 //                     <span>Applicants: <strong>{camp.applicants}</strong></span>
 //                   </div>
 //                 </div>
@@ -68,7 +68,7 @@
 //                   <span className="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400 border border-emerald-500/20">
 //                     {camp.status}
 //                   </span>
-//                   <button className="rounded-xl border border-[oklch(0.3_0.02_80)] bg-[oklch(0.2_0.02_80)] px-4 py-2 text-xs font-bold text-white hover:border-[oklch(0.8_0.16_75)]">
+//                   <button className="rounded-xl border border-[var(--border2)] bg-[var(--card2)] px-4 py-2 text-xs font-bold text-[var(--text)] hover:border-[var(--amber)]">
 //                     Manage &rarr;
 //                   </button>
 //                 </div>
@@ -78,13 +78,13 @@
 //         )}
 // 
 //         {activeTab === 'creators' && (
-//           <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-8 text-center text-sm text-[oklch(0.68_0.015_85)]">
+//           <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8 text-center text-sm text-[var(--muted)]">
 //             18 Verified Creators matched based on your active campaign briefs.
 //           </div>
 //         )}
 // 
 //         {activeTab === 'escrow' && (
-//           <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-8 text-center text-sm text-[oklch(0.68_0.015_85)]">
+//           <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8 text-center text-sm text-[var(--muted)]">
 //             Razorpay Escrow Vault: ₹2,50,000 currently locked safely until milestone approvals.
 //           </div>
 //         )}
@@ -617,11 +617,11 @@ export default function BrandPortalPage() {
     if (['accepted', 'approved', 'active', 'released', 'live', 'signed_both'].includes(s))
       return 'bg-emerald-400/10 border-emerald-400/20 text-emerald-400';
     if (s === 'rejected') return 'bg-red-500/10 border-red-500/20 text-red-400';
-    return 'bg-[oklch(0.8_0.16_75_/_0.1)] border-[oklch(0.8_0.16_75_/_0.2)] text-[oklch(0.8_0.16_75)]';
+    return 'bg-[var(--amber-glow)] border-[rgba(217,119,6,0.25)] text-[var(--amber)]';
   };
 
   const emptyBox = (text: string) => (
-    <div className="rounded-xl border border-dashed border-[oklch(0.3_0.02_80)] p-8 text-center text-sm text-[oklch(0.6_0.015_85)]">
+    <div className="rounded-xl border border-dashed border-[var(--border2)] p-8 text-center text-sm text-[var(--muted)]">
       {text}
     </div>
   );
@@ -631,21 +631,21 @@ export default function BrandPortalPage() {
   // ---------------------------------------------------------------------
   if (loading) {
     return (
-      <main className="min-h-screen bg-[oklch(0.12_0.01_80)] text-white flex items-center justify-center">
-        <p className="text-sm text-[oklch(0.68_0.015_85)]">Loading your workspace...</p>
+      <main className="min-h-screen bg-[var(--black)] text-[var(--text)] flex items-center justify-center">
+        <p className="text-sm text-[var(--muted)]">Loading your workspace...</p>
       </main>
     );
   }
 
   if (!profile) {
     return (
-      <main className="min-h-screen bg-[oklch(0.12_0.01_80)] text-white flex flex-col items-center justify-center gap-4 px-6 text-center">
-        <p className="text-sm text-[oklch(0.68_0.015_85)]">
+      <main className="min-h-screen bg-[var(--black)] text-[var(--text)] flex flex-col items-center justify-center gap-4 px-6 text-center">
+        <p className="text-sm text-[var(--muted)]">
           We couldn&apos;t find a brand profile for your account yet.
         </p>
         <Link
           href="/signup?role=brand"
-          className="rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)] transition-all"
+          className="rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:brightness-95 transition-all"
         >
           Set up Brand Profile
         </Link>
@@ -654,7 +654,7 @@ export default function BrandPortalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[oklch(0.12_0.01_80)] text-white flex flex-col md:flex-row">
+    <div className="min-h-screen bg-[var(--black)] text-[var(--text)] flex flex-col md:flex-row">
       {/* Mobile navbar (phones / small tablets) */}
       <PortalMobileNav
         items={TABS.map((tab) => ({
@@ -677,9 +677,9 @@ export default function BrandPortalPage() {
       />
 
       {/* Sidebar */}
-      <aside className="hidden md:flex w-64 shrink-0 flex-col gap-10 border-r border-[oklch(0.25_0.02_80)] bg-[oklch(0.1_0.01_80)] px-6 py-8 fixed top-0 bottom-0 left-0 z-10">
-        <Link href="/" className="font-display text-xl font-extrabold text-white">
-          Few<span className="text-[oklch(0.8_0.16_75)]">sion</span>
+      <aside className="hidden md:flex w-64 shrink-0 flex-col gap-10 border-r border-[var(--border)] bg-[var(--black)] px-6 py-8 fixed top-0 bottom-0 left-0 z-10">
+        <Link href="/" className="font-display text-xl font-extrabold text-[var(--text)]">
+          Few<span className="text-[var(--amber)]">sion</span>
         </Link>
 
         <nav className="flex flex-col gap-1">
@@ -695,14 +695,14 @@ export default function BrandPortalPage() {
                   if (tab.id !== 'messages') setSelectedCollabId(null);
                 }}
                 className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors text-left ${active
-                    ? 'bg-[oklch(0.16_0.02_80)] text-white border-l-2 border-[oklch(0.8_0.16_75)]'
-                    : 'text-[oklch(0.62_0.015_85)] hover:bg-[oklch(0.16_0.02_80)] hover:text-white'
+                    ? 'bg-[var(--card)] text-[var(--text)] border-l-2 border-[var(--amber)]'
+                    : 'text-[var(--muted)] hover:bg-[var(--card2)] hover:text-[var(--text)]'
                   }`}
               >
                 <Icon size={16} />
                 {tab.label}
                 {tab.id === 'messages' && inbox.totalUnread > 0 && (
-                  <span className="ml-auto rounded-full bg-[oklch(0.8_0.16_75)] px-2 py-0.5 text-[10px] font-extrabold text-black">
+                  <span className="ml-auto rounded-full bg-[var(--amber)] px-2 py-0.5 text-[10px] font-extrabold text-black">
                     {inbox.totalUnread}
                   </span>
                 )}
@@ -711,12 +711,12 @@ export default function BrandPortalPage() {
           })}
         </nav>
 
-        <div className="mt-auto pt-5 border-t border-[oklch(0.25_0.02_80)]">
+        <div className="mt-auto pt-5 border-t border-[var(--border)]">
           <div className="flex items-center gap-3">
             <ProfileAvatar initials={initials || 'B'} size={40} editable />
             <div>
-              <div className="text-sm font-semibold text-white">{profile.brand_name || 'Brand Partner'}</div>
-              <div className="text-xs font-medium text-[oklch(0.62_0.015_85)]">
+              <div className="text-sm font-semibold text-[var(--text)]">{profile.brand_name || 'Brand Partner'}</div>
+              <div className="text-xs font-medium text-[var(--muted)]">
                 {profile.industry || 'D2C Brand'}
               </div>
             </div>
@@ -734,10 +734,10 @@ export default function BrandPortalPage() {
       <main className="flex-1 min-w-0 w-full md:ml-64 px-4 sm:px-6 lg:px-10 py-6 sm:py-10 max-w-7xl">
         <header className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-6 sm:mb-10">
           <div className="min-w-0">
-            <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="font-display text-2xl sm:text-3xl font-extrabold text-[var(--text)] tracking-tight">
               {selectedCampaignId ? 'Campaign Detail' : TAB_COPY[activeTab].title}
             </h1>
-            <p className="mt-1 text-sm text-[oklch(0.68_0.015_85)]">
+            <p className="mt-1 text-sm text-[var(--muted)]">
               {selectedCampaignId ? 'Review metrics, creator applicants and escrow status' : TAB_COPY[activeTab].subtitle}
             </p>
           </div>
@@ -746,26 +746,26 @@ export default function BrandPortalPage() {
             <div className="relative">
               <button
                 onClick={toggleNotifPanel}
-                className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[oklch(0.3_0.02_80)] bg-[oklch(0.15_0.02_80)] text-white"
+                className="relative flex h-10 w-10 items-center justify-center rounded-full border border-[var(--border2)] bg-[var(--card)] text-[var(--text)]"
               >
                 <Bell size={16} />
                 {unreadCount > 0 && (
-                  <span className="absolute top-1.5 right-2 h-2 w-2 rounded-full bg-[oklch(0.8_0.16_75)]" />
+                  <span className="absolute top-1.5 right-2 h-2 w-2 rounded-full bg-[var(--amber)]" />
                 )}
               </button>
               {notifOpen && (
-                <div className="absolute left-0 sm:left-auto sm:right-0 top-12 z-30 w-[calc(100vw-2rem)] max-w-80 sm:w-80 max-h-96 overflow-y-auto rounded-xl border border-[oklch(0.3_0.02_80)] bg-[oklch(0.15_0.02_80)] p-3 shadow-2xl">
+                <div className="absolute left-0 sm:left-auto sm:right-0 top-12 z-30 w-[calc(100vw-2rem)] max-w-80 sm:w-80 max-h-96 overflow-y-auto rounded-xl border border-[var(--border2)] bg-[var(--card)] p-3 shadow-2xl">
                   {notifications.length === 0
                     ? emptyBox('No notifications yet.')
                     : notifications.slice(0, 15).map((n) => (
-                      <div key={n.id} className="flex gap-3 border-b border-[oklch(0.22_0.02_80)] py-3 text-sm last:border-none">
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[oklch(0.8_0.16_75_/_0.1)] text-xs text-[oklch(0.8_0.16_75)]">
+                      <div key={n.id} className="flex gap-3 border-b border-[var(--border)] py-3 text-sm last:border-none">
+                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--amber-glow)] text-xs text-[var(--amber)]">
                           {n.is_read ? '✓' : '●'}
                         </div>
                         <div className="min-w-0 break-words">
-                          <span className="font-medium text-white">{n.title || 'Notification'}</span>
+                          <span className="font-medium text-[var(--text)]">{n.title || 'Notification'}</span>
                           {n.message ? ` — ${n.message}` : ''}
-                          <div className="mt-0.5 text-xs text-[oklch(0.5_0.01_85)]">
+                          <div className="mt-0.5 text-xs text-[var(--muted2)]">
                             {n.created_at ? new Date(n.created_at).toLocaleString() : ''}
                           </div>
                         </div>
@@ -777,7 +777,7 @@ export default function BrandPortalPage() {
             {/* ✨ New AI Campaign Button redirects to onboarding html form with parameter */}
             <Link
               href="../Brand/fewsion_brand_portal.html?new=true"
-              className="whitespace-nowrap rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)] transition-all"
+              className="whitespace-nowrap rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:brightness-95 transition-all"
             >
               ✨ New AI Campaign
             </Link>
@@ -800,32 +800,32 @@ export default function BrandPortalPage() {
               <div className="space-y-6 sm:space-y-8">
                 <button
                   onClick={() => setSelectedCampaignId(null)}
-                  className="flex items-center gap-2 text-xs text-[oklch(0.6_0.015_85)] hover:text-white"
+                  className="flex items-center gap-2 text-xs text-[var(--muted)] hover:text-[var(--text)]"
                 >
                   <ArrowLeft size={14} /> Back to campaigns
                 </button>
 
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-                  <div className="min-w-0 rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-4 sm:p-6">
-                    <div className="text-xs uppercase tracking-wide text-[oklch(0.6_0.015_85)]">Status</div>
-                    <div className="mt-2 font-display text-base sm:text-lg font-extrabold break-words capitalize text-white">
+                  <div className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 sm:p-6">
+                    <div className="text-xs uppercase tracking-wide text-[var(--muted)]">Status</div>
+                    <div className="mt-2 font-display text-base sm:text-lg font-extrabold break-words capitalize text-[var(--text)]">
                       {campaign.status_state || 'Live'}
                     </div>
                   </div>
-                  <div className="min-w-0 rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-4 sm:p-6">
-                    <div className="text-xs uppercase tracking-wide text-[oklch(0.6_0.015_85)]">Platform</div>
-                    <div className="mt-2 font-display text-base sm:text-lg font-extrabold break-words text-white">
+                  <div className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 sm:p-6">
+                    <div className="text-xs uppercase tracking-wide text-[var(--muted)]">Platform</div>
+                    <div className="mt-2 font-display text-base sm:text-lg font-extrabold break-words text-[var(--text)]">
                       {campaign.target_platform || 'Multi-platform'}
                     </div>
                   </div>
-                  <div className="min-w-0 rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-4 sm:p-6">
-                    <div className="text-xs uppercase tracking-wide text-[oklch(0.6_0.015_85)]">Budget</div>
-                    <div className="mt-2 font-display text-base sm:text-lg font-extrabold break-words text-[oklch(0.8_0.16_75)]">
+                  <div className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 sm:p-6">
+                    <div className="text-xs uppercase tracking-wide text-[var(--muted)]">Budget</div>
+                    <div className="mt-2 font-display text-base sm:text-lg font-extrabold break-words text-[var(--amber)]">
                       {campaign.budget_allocated ? fmtINR(campaign.budget_allocated) : '—'}
                     </div>
                   </div>
-                  <div className="min-w-0 rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-4 sm:p-6">
-                    <div className="text-xs uppercase tracking-wide text-[oklch(0.6_0.015_85)]">Spend so far</div>
+                  <div className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 sm:p-6">
+                    <div className="text-xs uppercase tracking-wide text-[var(--muted)]">Spend so far</div>
                     <div className="mt-2 font-display text-base sm:text-lg font-extrabold break-words text-emerald-400">
                       {fmtINR(campaignSpend)}
                     </div>
@@ -833,8 +833,8 @@ export default function BrandPortalPage() {
                 </div>
 
                 <div className="grid lg:grid-cols-[2fr_1fr] gap-6">
-                  <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-5 sm:p-7">
-                    <h2 className="font-display text-lg font-bold text-white mb-5">Applications ({campaignApps.length})</h2>
+                  <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
+                    <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">Applications ({campaignApps.length})</h2>
                     {campaignApps.length === 0
                       ? emptyBox('No applications yet.')
                       : (
@@ -846,17 +846,17 @@ export default function BrandPortalPage() {
                       )}
                   </div>
 
-                  <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-5 sm:p-7">
-                    <h2 className="font-display text-lg font-bold text-white mb-5">Active collaborations ({campaignCollabs.length})</h2>
+                  <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
+                    <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">Active collaborations ({campaignCollabs.length})</h2>
                     {campaignCollabs.length === 0
                       ? emptyBox('No active collaborations yet.')
                       : (
                         <div className="space-y-3">
                           {campaignCollabs.map((c) => (
-                            <div key={c.id} className="rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.11_0.01_80)] p-4 flex flex-col gap-3">
+                            <div key={c.id} className="rounded-xl border border-[var(--border)] bg-[var(--black)] p-4 flex flex-col gap-3">
                               <div>
-                                <h4 className="text-sm font-semibold text-white">Collaboration {c.id.slice(0, 8)}…</h4>
-                                <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-[oklch(0.6_0.015_85)]">
+                                <h4 className="text-sm font-semibold text-[var(--text)]">Collaboration {c.id.slice(0, 8)}…</h4>
+                                <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-xs text-[var(--muted)]">
                                   <span>Status: {c.status || 'active'}</span>
                                   <span>Payment: {c.payment ? fmtINR(c.payment) : '—'}</span>
                                 </div>
@@ -864,14 +864,14 @@ export default function BrandPortalPage() {
                               <div className="flex gap-2">
                                 <button
                                   onClick={() => openThread(c.id)}
-                                  className="flex-1 rounded-full border border-[oklch(0.3_0.02_80)] bg-[oklch(0.15_0.02_80)] py-1.5 text-xs font-semibold text-white hover:border-[oklch(0.8_0.16_75)]"
+                                  className="flex-1 rounded-full border border-[var(--border2)] bg-[var(--card)] py-1.5 text-xs font-semibold text-[var(--text)] hover:border-[var(--amber)]"
                                 >
                                   Message
                                 </button>
                                 <button
                                   disabled={generatingCollabId === c.id}
                                   onClick={() => handleContractAction(c.id)}
-                                  className="flex-1 rounded-full border border-[oklch(0.3_0.02_80)] bg-[oklch(0.15_0.02_80)] py-1.5 text-xs font-semibold text-white hover:border-[oklch(0.8_0.16_75)] disabled:opacity-50"
+                                  className="flex-1 rounded-full border border-[var(--border2)] bg-[var(--card)] py-1.5 text-xs font-semibold text-[var(--text)] hover:border-[var(--amber)] disabled:opacity-50"
                                 >
                                   {generatingCollabId === c.id ? 'Generating…' : 'Contract'}
                                 </button>
@@ -894,19 +894,19 @@ export default function BrandPortalPage() {
             {kycStatus !== 'verified' && (
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5">
                 <div className="flex items-start sm:items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[oklch(0.8_0.16_75)]/20 text-[oklch(0.8_0.16_75)]">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--amber)]/20 text-[var(--amber)]">
                     <ShieldCheck size={20} />
                   </div>
                   <div>
-                    <div className="font-bold text-sm text-white">Brand Business KYC Required</div>
-                    <div className="text-xs text-[oklch(0.68_0.015_85)]">
+                    <div className="font-bold text-sm text-[var(--text)]">Brand Business KYC Required</div>
+                    <div className="text-xs text-[var(--muted)]">
                       Verify business identity and escrow funding account to deposit campaign budgets &amp; approve creator contracts.
                     </div>
                   </div>
                 </div>
                 <button
                   onClick={() => setKycModalOpen(true)}
-                  className="shrink-0 rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)] transition-all cursor-pointer"
+                  className="shrink-0 rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:brightness-95 transition-all cursor-pointer"
                 >
                   Verify Brand KYC Now →
                 </button>
@@ -920,9 +920,9 @@ export default function BrandPortalPage() {
                 { label: 'Active collaborations', value: String(collaborations.length) },
                 { label: 'Total spend', value: fmtINR(totalSpend()), accent: true },
               ].map((stat) => (
-                <div key={stat.label} className="min-w-0 rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-4 sm:p-6">
-                  <div className="text-xs uppercase tracking-wide text-[oklch(0.6_0.015_85)]">{stat.label}</div>
-                  <div className={`mt-2 font-display text-xl sm:text-2xl font-extrabold break-words ${stat.accent ? 'text-[oklch(0.8_0.16_75)]' : 'text-white'}`}>
+                <div key={stat.label} className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 sm:p-6">
+                  <div className="text-xs uppercase tracking-wide text-[var(--muted)]">{stat.label}</div>
+                  <div className={`mt-2 font-display text-xl sm:text-2xl font-extrabold break-words ${stat.accent ? 'text-[var(--amber)]' : 'text-[var(--text)]'}`}>
                     {stat.value}
                   </div>
                 </div>
@@ -930,8 +930,8 @@ export default function BrandPortalPage() {
             </div>
 
             <div className="grid lg:grid-cols-[2fr_1fr] gap-6">
-              <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-5 sm:p-7">
-                <h2 className="font-display text-lg font-bold text-white mb-5">Active brief campaigns</h2>
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
+                <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">Active brief campaigns</h2>
                 {campaigns.length === 0
                   ? emptyBox('No live brief campaigns active. Click "+ New AI Campaign" to get started.')
                   : (
@@ -940,11 +940,11 @@ export default function BrandPortalPage() {
                         <div
                           key={c.id}
                           onClick={() => setSelectedCampaignId(c.id)}
-                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.11_0.01_80)] p-5 cursor-pointer hover:border-[oklch(0.3_0.02_80)] transition-all"
+                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[var(--border)] bg-[var(--black)] p-5 cursor-pointer hover:border-[var(--border2)] transition-all"
                         >
                           <div className="min-w-0">
-                            <h3 className="text-sm font-semibold text-white break-words">{c.campaign_title || 'Untitled Campaign'}</h3>
-                            <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-[oklch(0.6_0.015_85)]">
+                            <h3 className="text-sm font-semibold text-[var(--text)] break-words">{c.campaign_title || 'Untitled Campaign'}</h3>
+                            <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-[var(--muted)]">
                               <span>Platform: {c.target_platform || 'Multi-platform'}</span>
                               <span>Budget: {c.budget_allocated ? fmtINR(c.budget_allocated) : '—'}</span>
                               <span className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold capitalize ${statusTagClasses(c.status_state)}`}>
@@ -952,36 +952,36 @@ export default function BrandPortalPage() {
                               </span>
                             </div>
                           </div>
-                          <div className="text-xs text-[oklch(0.6_0.015_85)] font-medium">View dashboard &rarr;</div>
+                          <div className="text-xs text-[var(--muted)] font-medium">View dashboard &rarr;</div>
                         </div>
                       ))}
                     </div>
                   )}
               </div>
 
-              <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-5 sm:p-7">
-                <h2 className="font-display text-lg font-bold text-white mb-5">Recent system actions</h2>
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
+                <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">Recent system actions</h2>
                 <div className="space-y-4 text-sm">
                   {notifications.length === 0 ? (
                     <div className="flex gap-3">
-                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[oklch(0.8_0.16_75_/_0.1)] text-xs text-[oklch(0.8_0.16_75)]">
+                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--amber-glow)] text-xs text-[var(--amber)]">
                         🔒
                       </div>
                       <div>
-                        <span className="font-medium text-white">Supabase infrastructure connected</span>
-                        <div className="mt-0.5 text-xs text-[oklch(0.5_0.01_85)]">Active session</div>
+                        <span className="font-medium text-[var(--text)]">Supabase infrastructure connected</span>
+                        <div className="mt-0.5 text-xs text-[var(--muted2)]">Active session</div>
                       </div>
                     </div>
                   ) : (
                     notifications.slice(0, 5).map((n) => (
                       <div key={n.id} className="flex gap-3">
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[oklch(0.8_0.16_75_/_0.1)] text-xs text-[oklch(0.8_0.16_75)]">
+                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--amber-glow)] text-xs text-[var(--amber)]">
                           {n.is_read ? '✓' : '●'}
                         </div>
                         <div>
-                          <span className="font-medium text-white">{n.title || 'Notification'}</span>
+                          <span className="font-medium text-[var(--text)]">{n.title || 'Notification'}</span>
                           {n.message ? ` — ${n.message}` : ''}
-                          <div className="mt-0.5 text-xs text-[oklch(0.5_0.01_85)]">
+                          <div className="mt-0.5 text-xs text-[var(--muted2)]">
                             {n.created_at ? new Date(n.created_at).toLocaleDateString() : ''}
                           </div>
                         </div>
@@ -1007,11 +1007,11 @@ export default function BrandPortalPage() {
         {/* KYC Verification Tab */}
         {selectedCampaignId === null && activeTab === 'kyc' && (
           <div className="space-y-6">
-            <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-5 sm:p-7">
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                 <div>
-                  <h2 className="font-display text-xl font-extrabold text-white">Brand Business KYC &amp; Escrow Vault</h2>
-                  <p className="mt-1 text-xs text-[oklch(0.68_0.015_85)]">Governed by Fewsion Escrow &amp; Compliance Standards</p>
+                  <h2 className="font-display text-xl font-extrabold text-[var(--text)]">Brand Business KYC &amp; Escrow Vault</h2>
+                  <p className="mt-1 text-xs text-[var(--muted)]">Governed by Fewsion Escrow &amp; Compliance Standards</p>
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
                   {kycStatus === 'verified' ? (
@@ -1027,38 +1027,38 @@ export default function BrandPortalPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.11_0.01_80)] p-5 space-y-3">
-                  <div className="text-xs uppercase tracking-wider font-bold text-[oklch(0.8_0.16_75)]">Business Entity Details</div>
-                  <div className="text-sm text-white break-words">
-                    <span className="text-[oklch(0.6_0.015_85)]">Brand Legal Name: </span>
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--black)] p-5 space-y-3">
+                  <div className="text-xs uppercase tracking-wider font-bold text-[var(--amber)]">Business Entity Details</div>
+                  <div className="text-sm text-[var(--text)] break-words">
+                    <span className="text-[var(--muted)]">Brand Legal Name: </span>
                     <strong>{kycDetails?.legalName || profile?.brand_name || 'Not provided'}</strong>
                   </div>
-                  <div className="text-sm text-[oklch(0.6_0.015_85)]">
-                    Document Type: <strong className="uppercase text-white">{kycDetails?.idType || 'GSTIN / Corporate PAN'}</strong>
+                  <div className="text-sm text-[var(--muted)]">
+                    Document Type: <strong className="uppercase text-[var(--text)]">{kycDetails?.idType || 'GSTIN / Corporate PAN'}</strong>
                   </div>
-                  <div className="text-sm text-[oklch(0.6_0.015_85)]">
-                    Tax / ID Number: <strong className="uppercase text-white">{kycDetails?.idNumber ? `•••• ${kycDetails.idNumber.slice(-4)}` : 'Not submitted'}</strong>
+                  <div className="text-sm text-[var(--muted)]">
+                    Tax / ID Number: <strong className="uppercase text-[var(--text)]">{kycDetails?.idNumber ? `•••• ${kycDetails.idNumber.slice(-4)}` : 'Not submitted'}</strong>
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.11_0.01_80)] p-5 space-y-3">
-                  <div className="text-xs uppercase tracking-wider font-bold text-[oklch(0.8_0.16_75)]">Escrow Payout &amp; Deposit Account</div>
-                  <div className="text-sm text-[oklch(0.6_0.015_85)]">
-                    Bank Account: <strong className="text-white">{kycDetails?.bankAccount ? `•••• ${kycDetails.bankAccount.slice(-4)}` : 'Not set'}</strong>
+                <div className="rounded-xl border border-[var(--border)] bg-[var(--black)] p-5 space-y-3">
+                  <div className="text-xs uppercase tracking-wider font-bold text-[var(--amber)]">Escrow Payout &amp; Deposit Account</div>
+                  <div className="text-sm text-[var(--muted)]">
+                    Bank Account: <strong className="text-[var(--text)]">{kycDetails?.bankAccount ? `•••• ${kycDetails.bankAccount.slice(-4)}` : 'Not set'}</strong>
                   </div>
-                  <div className="text-sm text-[oklch(0.6_0.015_85)]">
-                    IFSC Code: <strong className="uppercase text-white">{kycDetails?.ifscCode || 'Not set'}</strong>
+                  <div className="text-sm text-[var(--muted)]">
+                    IFSC Code: <strong className="uppercase text-[var(--text)]">{kycDetails?.ifscCode || 'Not set'}</strong>
                   </div>
-                  <div className="text-sm text-[oklch(0.6_0.015_85)]">
-                    UPI ID: <span className="text-white">{kycDetails?.upiId || 'Not set'}</span>
+                  <div className="text-sm text-[var(--muted)]">
+                    UPI ID: <span className="text-[var(--text)]">{kycDetails?.upiId || 'Not set'}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-6 sm:mt-8 pt-6 border-t border-[oklch(0.25_0.02_80)] flex justify-end">
+              <div className="mt-6 sm:mt-8 pt-6 border-t border-[var(--border)] flex justify-end">
                 <button
                   onClick={() => setKycModalOpen(true)}
-                  className="rounded-full bg-[oklch(0.8_0.16_75)] px-6 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)] transition-all cursor-pointer"
+                  className="rounded-full bg-[var(--amber)] px-6 py-2.5 text-xs font-bold text-black hover:brightness-95 transition-all cursor-pointer"
                 >
                   {kycStatus === 'verified' ? 'Update Brand KYC Details' : 'Verify Brand Identity Now'}
                 </button>
@@ -1069,8 +1069,8 @@ export default function BrandPortalPage() {
 
         {/* Campaigns Tab */}
         {selectedCampaignId === null && activeTab === 'campaigns' && (
-          <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-5 sm:p-7">
-            <h2 className="font-display text-lg font-bold text-white mb-5">All campaigns</h2>
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
+            <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">All campaigns</h2>
             {campaigns.length === 0
               ? emptyBox('No campaigns created yet.')
               : (
@@ -1079,11 +1079,11 @@ export default function BrandPortalPage() {
                     <div
                       key={c.id}
                       onClick={() => setSelectedCampaignId(c.id)}
-                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.11_0.01_80)] p-5 cursor-pointer hover:border-[oklch(0.3_0.02_80)] transition-all"
+                      className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[var(--border)] bg-[var(--black)] p-5 cursor-pointer hover:border-[var(--border2)] transition-all"
                     >
                       <div className="min-w-0">
-                        <h3 className="text-sm font-semibold text-white break-words">{c.campaign_title || 'Untitled Campaign'}</h3>
-                        <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-[oklch(0.6_0.015_85)]">
+                        <h3 className="text-sm font-semibold text-[var(--text)] break-words">{c.campaign_title || 'Untitled Campaign'}</h3>
+                        <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-[var(--muted)]">
                           <span>Platform: {c.target_platform || 'Multi-platform'}</span>
                           <span>Budget: {c.budget_allocated ? fmtINR(c.budget_allocated) : '—'}</span>
                           <span className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold capitalize ${statusTagClasses(c.status_state)}`}>
@@ -1091,7 +1091,7 @@ export default function BrandPortalPage() {
                           </span>
                         </div>
                       </div>
-                      <div className="text-xs text-[oklch(0.6_0.015_85)] font-medium">View dashboard &rarr;</div>
+                      <div className="text-xs text-[var(--muted)] font-medium">View dashboard &rarr;</div>
                     </div>
                   ))}
                 </div>
@@ -1101,8 +1101,8 @@ export default function BrandPortalPage() {
 
         {/* Applications Tab */}
         {selectedCampaignId === null && activeTab === 'applications' && (
-          <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-5 sm:p-7">
-            <h2 className="font-display text-lg font-bold text-white mb-5">All applications</h2>
+          <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
+            <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">All applications</h2>
             {applications.length === 0
               ? emptyBox('No applications received yet.')
               : (
@@ -1129,19 +1129,19 @@ export default function BrandPortalPage() {
         {selectedCampaignId === null && activeTab === 'payments' && (
           <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5">
-              <StatCard label="Total logged" value={fmtINR(totalSpend())} className="text-[oklch(0.8_0.16_75)]" />
+              <StatCard label="Total logged" value={fmtINR(totalSpend())} className="text-[var(--amber)]" />
               <StatCard label="Released" value={fmtINR(totalSpend(true))} className="text-emerald-400" />
               <StatCard label="Pending" value={fmtINR(totalSpend() - totalSpend(true))} />
             </div>
-            <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-5 sm:p-7">
-              <h2 className="font-display text-lg font-bold text-white mb-5">Payment history</h2>
+            <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 sm:p-7">
+              <h2 className="font-display text-lg font-bold text-[var(--text)] mb-5">Payment history</h2>
               {payments.length === 0
                 ? emptyBox('No spend logged yet.')
                 : (
                   <div className="overflow-x-auto">
                     <table className="w-full min-w-[480px] text-sm">
                       <thead>
-                        <tr className="text-left text-xs uppercase tracking-wide text-[oklch(0.55_0.01_85)] border-b border-[oklch(0.25_0.02_80)]">
+                        <tr className="text-left text-xs uppercase tracking-wide text-[var(--muted2)] border-b border-[var(--border)]">
                           <th className="py-2.5 pr-3">Amount</th>
                           <th className="py-2.5 pr-3">Status</th>
                           <th className="py-2.5 pr-3">Collaboration ID</th>
@@ -1150,15 +1150,15 @@ export default function BrandPortalPage() {
                       </thead>
                       <tbody>
                         {payments.map((p) => (
-                          <tr key={p.id} className="border-b border-[oklch(0.2_0.02_80)] last:border-none">
-                            <td className="py-3 pr-3 text-white">{fmtINR(p.amount)}</td>
+                          <tr key={p.id} className="border-b border-[var(--border)] last:border-none">
+                            <td className="py-3 pr-3 text-[var(--text)]">{fmtINR(p.amount)}</td>
                             <td className="py-3 pr-3">
                               <span className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold capitalize ${statusTagClasses(p.status)}`}>
                                 {p.status || 'pending'}
                               </span>
                             </td>
-                            <td className="py-3 pr-3 text-[oklch(0.75_0.01_85)]">{p.collaboration_id.slice(0, 8)}…</td>
-                            <td className="py-3 pr-3 text-[oklch(0.6_0.015_85)]">{fmtDate(p.released_at)}</td>
+                            <td className="py-3 pr-3 text-[var(--muted)]">{p.collaboration_id.slice(0, 8)}…</td>
+                            <td className="py-3 pr-3 text-[var(--muted)]">{fmtDate(p.released_at)}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -1189,27 +1189,27 @@ export default function BrandPortalPage() {
           onClick={() => setContractModal(null)}
         >
           <div
-            className="max-h-[80vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-[oklch(0.28_0.02_80)] bg-[oklch(0.14_0.02_80)] p-5 sm:p-7"
+            className="max-h-[80vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-[var(--border2)] bg-[var(--card)] p-5 sm:p-7"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="font-display text-lg font-bold text-white">Collaboration Agreement</h2>
-            <p className="mt-1 mb-4 text-xs text-[oklch(0.55_0.01_85)]">
+            <h2 className="font-display text-lg font-bold text-[var(--text)]">Collaboration Agreement</h2>
+            <p className="mt-1 mb-4 text-xs text-[var(--muted2)]">
               Auto-generated from the campaign terms. Not a substitute for legal advice — review before signing.
             </p>
-            <pre className="mb-5 whitespace-pre-wrap rounded-lg bg-[oklch(0.1_0.01_80)] p-4 text-sm leading-relaxed text-[oklch(0.9_0.01_85)]">
+            <pre className="mb-5 whitespace-pre-wrap rounded-lg bg-[var(--black)] p-4 text-sm leading-relaxed text-[var(--text)]">
               {contractModal.contract_text}
             </pre>
             <div className="flex flex-wrap justify-end gap-2.5">
               <button
                 onClick={() => setContractModal(null)}
-                className="rounded-full border border-[oklch(0.3_0.02_80)] px-5 py-2.5 text-xs font-semibold text-white"
+                className="rounded-full border border-[var(--border2)] px-5 py-2.5 text-xs font-semibold text-[var(--text)]"
               >
                 Close
               </button>
               <button
                 onClick={signContract}
                 disabled={signing || !!contractModal.brand_signed_at}
-                className="rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)] disabled:opacity-50"
+                className="rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:brightness-95 disabled:opacity-50"
               >
                 {contractModal.brand_signed_at ? 'Already Signed' : signing ? 'Signing…' : 'Sign & Send'}
               </button>
@@ -1272,17 +1272,17 @@ function ApplicationRow({
   const status = (app.status || 'pending').toLowerCase();
 
   return (
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.11_0.01_80)] p-4">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-[var(--border)] bg-[var(--black)] p-4">
       <div className="min-w-0">
-        <h3 className="text-sm font-semibold text-white break-words">
+        <h3 className="text-sm font-semibold text-[var(--text)] break-words">
           {applicantName}{' '}
           {applicant.role && (
-            <span className="text-xs text-[oklch(0.6_0.015_85)] font-normal">
+            <span className="text-xs text-[var(--muted)] font-normal">
               ({applicant.role})
             </span>
           )}
         </h3>
-        <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-[oklch(0.6_0.015_85)]">
+        <div className="mt-1 flex flex-wrap items-center gap-3 text-xs text-[var(--muted)]">
           <span>Campaign: {campaignTitle}</span>
           <span>Applied: {fmtDate(app.applied_at)}</span>
           <span className={`rounded-full border px-2 py-0.5 text-[11px] font-semibold capitalize ${statusTagClasses(status)}`}>
@@ -1310,10 +1310,10 @@ function ApplicationRow({
   );
 }
 
-function StatCard({ label, value, className = 'text-white' }: { label: string; value: string; className?: string }) {
+function StatCard({ label, value, className = 'text-[var(--text)]' }: { label: string; value: string; className?: string }) {
   return (
-    <div className="min-w-0 rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-4 sm:p-6">
-      <div className="text-xs uppercase tracking-wide text-[oklch(0.6_0.015_85)]">{label}</div>
+    <div className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--card)] p-4 sm:p-6">
+      <div className="text-xs uppercase tracking-wide text-[var(--muted)]">{label}</div>
       <div className={`mt-2 font-display text-xl font-extrabold break-words ${className}`}>{value}</div>
     </div>
   );

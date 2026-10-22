@@ -155,13 +155,13 @@ export default function BrandsPage() {
       <div className="mb-10">
         <div className="section-tag">Live Campaigns</div>
         <h1
-          className="font-display font-extrabold text-white"
+          className="font-display font-extrabold text-[var(--text)]"
           style={{ fontSize: 'clamp(32px,4.5vw,52px)', letterSpacing: '-1.5px', lineHeight: '1.1', marginBottom: '14px' }}
         >
           Brands are hiring<br />
           <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>right now.</em>
         </h1>
-        <p className="text-[16px] text-[#888] max-w-[560px] font-light">
+        <p className="text-[16px] text-[var(--muted)] max-w-[560px] font-light">
           Browse live campaigns from verified D2C brands and apply directly. Mandatory KYC verification ensures trust and fast escrow payouts.
         </p>
 
@@ -171,13 +171,13 @@ export default function BrandsPage() {
             <span className="font-display text-[26px] font-extrabold" style={{ color: 'var(--amber)' }}>
               {campaigns.length}
             </span>
-            <span className="text-[13px] text-[#888]">live campaigns</span>
+            <span className="text-[13px] text-[var(--muted)]">live campaigns</span>
           </div>
           <div className="flex items-baseline gap-2">
             <span className="font-display text-[26px] font-extrabold" style={{ color: 'var(--amber)' }}>
               {platforms.length}
             </span>
-            <span className="text-[13px] text-[#888]">brands hiring</span>
+            <span className="text-[13px] text-[var(--muted)]">brands hiring</span>
           </div>
         </div>
       </div>
@@ -252,19 +252,19 @@ export default function BrandsPage() {
               style={{ background: 'var(--card)', border: '1px solid var(--border)', minHeight: '220px' }}
             >
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-neutral-800" />
+                <div className="w-10 h-10 rounded-full bg-[var(--card2)]" />
                 <div className="flex-1">
-                  <div className="h-4 bg-neutral-800 rounded w-2/3 mb-2" />
-                  <div className="h-3 bg-neutral-800 rounded w-1/3" />
+                  <div className="h-4 bg-[var(--card2)] rounded w-2/3 mb-2" />
+                  <div className="h-3 bg-[var(--card2)] rounded w-1/3" />
                 </div>
-                <div className="ml-auto w-12 h-5 bg-neutral-800 rounded-full" />
+                <div className="ml-auto w-12 h-5 bg-[var(--card2)] rounded-full" />
               </div>
-              <div className="h-5 bg-neutral-800 rounded w-full my-1" />
+              <div className="h-5 bg-[var(--card2)] rounded w-full my-1" />
               <div className="flex gap-[16px]">
-                <div className="w-20 h-4 bg-neutral-800 rounded" />
-                <div className="w-24 h-4 bg-neutral-800 rounded" />
+                <div className="w-20 h-4 bg-[var(--card2)] rounded" />
+                <div className="w-24 h-4 bg-[var(--card2)] rounded" />
               </div>
-              <div className="h-10 bg-neutral-800 rounded-xl w-full mt-auto" />
+              <div className="h-10 bg-[var(--card2)] rounded-xl w-full mt-auto" />
             </div>
           ))}
         </div>
@@ -344,17 +344,17 @@ function CampaignCard({ campaign, isApplied, onApply }: { campaign: Campaign; is
           {initials(campaign.brand)}
         </div>
         <div>
-          <div className="text-[14px] font-semibold text-white">{campaign.brand}</div>
-          <div className="text-[11.5px] text-[#888]">{campaign.industry}</div>
+          <div className="text-[14px] font-semibold text-[var(--text)]">{campaign.brand}</div>
+          <div className="text-[11.5px] text-[var(--muted)]">{campaign.industry}</div>
         </div>
         <div className="ml-auto status-live">Live</div>
       </div>
 
       {/* Title */}
-      <div className="font-display text-[17px] font-bold text-white leading-[1.3]">{campaign.title}</div>
+      <div className="font-display text-[17px] font-bold text-[var(--text)] leading-[1.3]">{campaign.title}</div>
 
       {/* Meta */}
-      <div className="flex flex-wrap gap-[10px_16px] text-[12.5px] text-[#888]">
+      <div className="flex flex-wrap gap-[10px_16px] text-[12.5px] text-[var(--muted)]">
         <span className="flex items-center gap-[5px]">📱 {campaign.platform}</span>
         <span className="flex items-center gap-[5px]">🗓️ Posted {campaign.posted}</span>
       </div>
@@ -364,7 +364,7 @@ function CampaignCard({ campaign, isApplied, onApply }: { campaign: Campaign; is
         className="flex justify-between items-center rounded-[10px] px-[14px] py-3"
         style={{ background: 'rgba(245,166,35,0.06)', border: '1px solid rgba(245,166,35,0.15)' }}
       >
-        <span className="text-[11px] text-[#888] uppercase" style={{ letterSpacing: '0.05em' }}>Budget</span>
+        <span className="text-[11px] text-[var(--muted)] uppercase" style={{ letterSpacing: '0.05em' }}>Budget</span>
         <span className="font-display text-[18px] font-extrabold" style={{ color: 'var(--amber)' }}>
           ₹{campaign.budget.toLocaleString('en-IN')}
         </span>

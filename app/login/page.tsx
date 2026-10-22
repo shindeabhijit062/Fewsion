@@ -284,7 +284,7 @@ export default function LoginPage() {
               Instagram
             </button>
           </div>
-          <div className="flex items-center gap-3 my-5 text-[12px] text-[#555]">
+          <div className="flex items-center gap-3 my-5 text-[12px] text-[var(--muted2)]">
             <div className="flex-1 h-[1px]" style={{ background: 'var(--border)' }} />
             or continue with email
             <div className="flex-1 h-[1px]" style={{ background: 'var(--border)' }} />

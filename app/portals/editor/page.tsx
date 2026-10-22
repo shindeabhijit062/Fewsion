@@ -7,25 +7,25 @@
 //   const [activeTab, setActiveTab] = useState<'projects' | 'services' | 'earnings'>('projects');
 // 
 //   return (
-//     <main className="min-h-screen bg-[oklch(0.12_0.01_80)] text-white pt-24 pb-20">
+//     <main className="min-h-screen bg-[var(--black)] text-[var(--text)] pt-24 pb-20">
 //       <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-//         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[oklch(0.25_0.02_80)] pb-6 gap-4">
+//         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between border-b border-[var(--border)] pb-6 gap-4">
 //           <div>
-//             <div className="text-xs uppercase tracking-wider text-[oklch(0.8_0.16_75)] font-bold">Editor Portal</div>
-//             <h1 className="text-3xl font-bold font-display text-white mt-1">Video Editor Workspace</h1>
+//             <div className="text-xs uppercase tracking-wider text-[var(--amber)] font-bold">Editor Portal</div>
+//             <h1 className="text-3xl font-bold font-display text-[var(--text)] mt-1">Video Editor Workspace</h1>
 //           </div>
 //           <div className="flex gap-3">
-//             <Link href="/editors" className="rounded-full bg-[oklch(0.8_0.16_75)] px-5 py-2.5 text-xs font-bold text-black hover:bg-[oklch(0.85_0.16_75)] transition-all">
+//             <Link href="/editors" className="rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:brightness-95 transition-all">
 //               Update Portfolio
 //             </Link>
-//             <Link href="/" className="rounded-full border border-[oklch(0.3_0.02_80)] bg-[oklch(0.15_0.02_80)] px-5 py-2.5 text-xs font-bold text-white hover:border-[oklch(0.8_0.16_75)]">
+//             <Link href="/" className="rounded-full border border-[var(--border2)] bg-[var(--card)] px-5 py-2.5 text-xs font-bold text-[var(--text)] hover:border-[var(--amber)]">
 //               Exit Portal
 //             </Link>
 //           </div>
 //         </div>
 // 
 //         {/* Tabs */}
-//         <div className="mt-6 flex gap-3 border-b border-[oklch(0.22_0.02_80)] pb-3 text-sm font-semibold">
+//         <div className="mt-6 flex gap-3 border-b border-[var(--border)] pb-3 text-sm font-semibold">
 //           {[
 //             { id: 'projects', label: 'Active Video Projects (2)' },
 //             { id: 'services', label: 'My Packages (3)' },
@@ -36,8 +36,8 @@
 //               onClick={() => setActiveTab(tab.id as any)}
 //               className={`pb-2 border-b-2 transition-all ${
 //                 activeTab === tab.id
-//                   ? 'border-[oklch(0.8_0.16_75)] text-[oklch(0.8_0.16_75)] font-bold'
-//                   : 'border-transparent text-gray-400 hover:text-white'
+//                   ? 'border-[var(--amber)] text-[var(--amber)] font-bold'
+//                   : 'border-transparent text-[var(--muted)] hover:text-[var(--text)]'
 //               }`}
 //             >
 //               {tab.label}
@@ -54,15 +54,15 @@
 //               { client: 'Rohan Sharma (Creator)', title: '5x Hook Animations + Captions Edit', status: 'Rendering V2 Draft', payout: '₹7,500' },
 //               { client: 'Mamaearth Brand', title: '15-Sec D2C Facebook Ad Color Grade', status: 'Final Review', payout: '₹12,000' }
 //             ].map((proj, i) => (
-//               <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-6 gap-4">
+//               <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 gap-4">
 //                 <div>
-//                   <span className="text-xs font-bold text-[oklch(0.8_0.16_75)] uppercase">{proj.client}</span>
-//                   <h3 className="text-lg font-bold font-display text-white mt-0.5">{proj.title}</h3>
-//                   <p className="text-xs text-[oklch(0.68_0.015_85)] mt-1">Status: {proj.status}</p>
+//                   <span className="text-xs font-bold text-[var(--amber)] uppercase">{proj.client}</span>
+//                   <h3 className="text-lg font-bold font-display text-[var(--text)] mt-0.5">{proj.title}</h3>
+//                   <p className="text-xs text-[var(--muted)] mt-1">Status: {proj.status}</p>
 //                 </div>
 //                 <div className="flex items-center gap-3">
 //                   <span className="text-base font-extrabold text-emerald-400 font-display">{proj.payout}</span>
-//                   <button className="rounded-xl border border-[oklch(0.3_0.02_80)] bg-[oklch(0.2_0.02_80)] px-4 py-2 text-xs font-bold text-white hover:border-[oklch(0.8_0.16_75)]">
+//                   <button className="rounded-xl border border-[var(--border2)] bg-[var(--card2)] px-4 py-2 text-xs font-bold text-[var(--text)] hover:border-[var(--amber)]">
 //                     Upload Draft &rarr;
 //                   </button>
 //                 </div>
@@ -72,13 +72,13 @@
 //         )}
 // 
 //         {activeTab === 'services' && (
-//           <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-8 text-center text-sm text-[oklch(0.68_0.015_85)]">
+//           <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8 text-center text-sm text-[var(--muted)]">
 //             3 Active service packages listed on the Fewsion Editor Marketplace.
 //           </div>
 //         )}
 // 
 //         {activeTab === 'earnings' && (
-//           <div className="rounded-2xl border border-[oklch(0.25_0.02_80)] bg-[oklch(0.15_0.02_80)] p-8 text-center text-sm text-[oklch(0.68_0.015_85)]">
+//           <div className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8 text-center text-sm text-[var(--muted)]">
 //             Total Cleared Income: ₹42,000 transferred via direct Razorpay Escrow to bank.
 //           </div>
 //         )}
@@ -822,17 +822,17 @@ export default function EditorPortalPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#080808] flex items-center justify-center text-white">
+      <div className="min-h-screen bg-[var(--black)] flex items-center justify-center text-[var(--text)]">
         <div className="text-center">
           <div className="w-10 h-10 border-4 border-[#F5A623] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-400 text-sm font-semibold">Loading your workspace...</p>
+          <p className="text-[var(--muted)] text-sm font-semibold">Loading your workspace...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#080808] text-[#f0ece4] flex">
+    <div className="min-h-screen bg-[var(--black)] text-[var(--text)] flex">
       {/* Sidebar Backdrop Mobile */}
       {sidebarOpen && (
         <div
@@ -843,15 +843,15 @@ export default function EditorPortalPage() {
 
       {/* Sidebar Navigation */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 w-[260px] bg-[#0e0e0e] border-r border-white/5 p-8 flex flex-col gap-10 z-40 transition-transform duration-200 ${
+        className={`fixed top-0 bottom-0 left-0 w-[260px] bg-[var(--deep)] border-r border-[var(--border)] p-8 flex flex-col gap-10 z-40 transition-transform duration-200 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
         <div className="flex items-center justify-between">
-          <Link href="/" className="font-display text-2xl font-black text-white tracking-tight">
-            Few<span className="text-[#F5A623]">sion</span>
+          <Link href="/" className="font-display text-2xl font-black text-[var(--text)] tracking-tight">
+            Few<span className="text-[var(--amber)]">sion</span>
           </Link>
-          <button className="md:hidden text-gray-400 hover:text-white" onClick={() => setSidebarOpen(false)}>
+          <button className="md:hidden text-[var(--muted)] hover:text-[var(--text)]" onClick={() => setSidebarOpen(false)}>
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -870,8 +870,8 @@ export default function EditorPortalPage() {
                   }}
                   className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-sm font-medium transition-all text-left ${
                     active
-                      ? 'bg-[#141414] text-white border-l-4 border-[#F5A623] rounded-l-none'
-                      : 'text-gray-400 hover:text-white hover:bg-[#141414]/50'
+                      ? 'bg-[var(--card)] text-[var(--text)] border-l-4 border-[#F5A623] rounded-l-none'
+                      : 'text-[var(--muted)] hover:text-[var(--text)] hover:bg-[var(--card2)]'
                   }`}
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />
@@ -883,7 +883,7 @@ export default function EditorPortalPage() {
         </ul>
 
         {/* Sidebar Footer */}
-        <div className="pt-6 border-t border-white/5">
+        <div className="pt-6 border-t border-[var(--border)]">
           <div className="flex items-center gap-3">
             <ProfileAvatar
               initials={initials(profile?.editor_name || 'Editor')}
@@ -892,10 +892,10 @@ export default function EditorPortalPage() {
               className="bg-gradient-to-br from-[#F5A623] to-[#FF6B35] text-black"
             />
             <div className="overflow-hidden">
-              <div className="text-xs font-semibold text-white truncate">
+              <div className="text-xs font-semibold text-[var(--text)] truncate">
                 {profile?.editor_name || 'Loading editor...'}
               </div>
-              <div className="text-[10px] text-[#F5A623] font-medium uppercase tracking-wider truncate">
+              <div className="text-[10px] text-[var(--amber)] font-medium uppercase tracking-wider truncate">
                 {profile?.city_state || 'City, State'}
               </div>
             </div>
@@ -913,19 +913,19 @@ export default function EditorPortalPage() {
       {/* Main Workspace Area */}
       <main className="flex-1 md:pl-[260px] min-h-screen flex flex-col">
         {/* Header */}
-        <header className="sticky top-0 bg-[#080808]/80 backdrop-blur-md border-b border-white/5 px-6 py-5 flex items-center justify-between z-20">
+        <header className="sticky top-0 bg-[rgba(248,250,252,0.85)] backdrop-blur-md border-b border-[var(--border)] px-6 py-5 flex items-center justify-between z-20">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(true)}
-              className="md:hidden p-2 rounded-lg bg-[#141414] border border-white/10 text-white"
+              className="md:hidden p-2 rounded-lg bg-[var(--card)] border border-[var(--border)] text-[var(--text)]"
             >
               <Menu className="w-6 h-6" />
             </button>
             <div>
-              <h1 className="text-2xl font-black font-display text-white tracking-tight">
+              <h1 className="text-2xl font-black font-display text-[var(--text)] tracking-tight">
                 {TAB_COPY[activeTab].title}
               </h1>
-              <p className="text-xs text-gray-400 mt-1">{TAB_COPY[activeTab].subtitle}</p>
+              <p className="text-xs text-[var(--muted)] mt-1">{TAB_COPY[activeTab].subtitle}</p>
             </div>
           </div>
 
@@ -934,32 +934,32 @@ export default function EditorPortalPage() {
             <div className="relative">
               <button
                 onClick={toggleNotifPanel}
-                className="relative w-10 h-10 rounded-full bg-[#141414] border border-white/10 text-gray-400 hover:text-white flex items-center justify-center transition-all"
+                className="relative w-10 h-10 rounded-full bg-[var(--card)] border border-[var(--border)] text-[var(--muted)] hover:text-[var(--text)] flex items-center justify-center transition-all"
               >
                 <Bell className="w-5 h-5" />
                 {unreadCount > 0 && (
-                  <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-[#F5A623] rounded-full border-2 border-[#080808]"></span>
+                  <span className="absolute top-2 right-2 w-2.5 h-2.5 bg-[#F5A623] rounded-full border-2 border-[var(--black)]"></span>
                 )}
               </button>
 
               {notifOpen && (
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setNotifOpen(false)} />
-                  <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-[#141414] border border-white/10 rounded-xl shadow-2xl z-50 p-4 space-y-3">
-                    <h3 className="text-xs font-black uppercase tracking-wider text-gray-400">Notifications</h3>
-                    <hr className="border-white/5" />
+                  <div className="absolute right-0 mt-2 w-80 max-h-96 overflow-y-auto bg-[var(--card)] border border-[var(--border)] rounded-xl shadow-2xl z-50 p-4 space-y-3">
+                    <h3 className="text-xs font-black uppercase tracking-wider text-[var(--muted)]">Notifications</h3>
+                    <hr className="border-[var(--border)]" />
                     {notifications.length === 0 ? (
-                      <div className="text-center text-xs text-gray-500 py-6">No notifications yet.</div>
+                      <div className="text-center text-xs text-[var(--muted2)] py-6">No notifications yet.</div>
                     ) : (
                       <div className="space-y-3">
                         {notifications.slice(0, 10).map((n) => (
-                          <div key={n.id} className="text-xs border-b border-white/5 pb-2 last:border-none">
+                          <div key={n.id} className="text-xs border-b border-[var(--border)] pb-2 last:border-none">
                             <div className="flex items-start gap-2">
-                              <span className="text-[#F5A623] mt-0.5">•</span>
+                              <span className="text-[var(--amber)] mt-0.5">•</span>
                               <div>
-                                <span className="text-white font-bold">{n.title}</span>
-                                {n.message && <p className="text-gray-400 mt-0.5">{n.message}</p>}
-                                <span className="text-[10px] text-gray-500 block mt-1">{fmtDate(n.created_at)}</span>
+                                <span className="text-[var(--text)] font-bold">{n.title}</span>
+                                {n.message && <p className="text-[var(--muted)] mt-0.5">{n.message}</p>}
+                                <span className="text-[10px] text-[var(--muted2)] block mt-1">{fmtDate(n.created_at)}</span>
                               </div>
                             </div>
                           </div>
@@ -989,12 +989,12 @@ export default function EditorPortalPage() {
               {kycStatus !== 'verified' && (
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F5A623]/20 text-[#F5A623]">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#F5A623]/20 text-[var(--amber)]">
                       <ShieldCheck size={20} />
                     </div>
                     <div>
-                      <div className="font-bold text-sm text-white">Editor Business KYC Required</div>
-                      <div className="text-xs text-gray-300">
+                      <div className="font-bold text-sm text-[var(--text)]">Editor Business KYC Required</div>
+                      <div className="text-xs text-[var(--muted)]">
                         Complete your identity &amp; bank payout verification to request campaign collaborations and accept invites.
                       </div>
                     </div>
@@ -1010,8 +1010,8 @@ export default function EditorPortalPage() {
 
               {/* Pending Invites */}
               {stats.pendingInvites.length > 0 && (
-                <div className="bg-[#141414] border border-[#F5A623]/30 rounded-2xl p-5 sm:p-6 space-y-4">
-                  <h2 className="text-base font-bold text-white flex items-center gap-2">
+                <div className="bg-[var(--card)] border border-[#F5A623]/30 rounded-2xl p-5 sm:p-6 space-y-4">
+                  <h2 className="text-base font-bold text-[var(--text)] flex items-center gap-2">
                     <span className="w-2.5 h-2.5 bg-[#F5A623] rounded-full animate-ping"></span>
                     <span>Pending Collaboration Invites ({stats.pendingInvites.length})</span>
                   </h2>
@@ -1019,11 +1019,11 @@ export default function EditorPortalPage() {
                     {stats.pendingInvites.map((invite) => (
                       <div
                         key={invite.id}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between bg-[#0e0e0e] border border-white/5 rounded-xl p-4 gap-4"
+                        className="flex flex-col sm:flex-row sm:items-center justify-between bg-[var(--deep)] border border-[var(--border)] rounded-xl p-4 gap-4"
                       >
                         <div>
-                          <h3 className="text-sm font-extrabold text-white">{invite.campaign_title}</h3>
-                          <p className="text-xs text-gray-400 mt-1">Brand: {invite.brand_name}</p>
+                          <h3 className="text-sm font-extrabold text-[var(--text)]">{invite.campaign_title}</h3>
+                          <p className="text-xs text-[var(--muted)] mt-1">Brand: {invite.brand_name}</p>
                         </div>
                         <div className="flex gap-2">
                           <button
@@ -1047,29 +1047,29 @@ export default function EditorPortalPage() {
 
               {/* Stats Overview */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-2">Avg turnaround</span>
-                  <div className="text-lg font-black text-white truncate">
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted2)] block mb-2">Avg turnaround</span>
+                  <div className="text-lg font-black text-[var(--text)] truncate">
                     {profile?.turnaround_time || '—'}
                   </div>
                   {profile?.availability_status && (
-                    <div className="text-[10px] text-[#F5A623] font-bold mt-1 uppercase">
+                    <div className="text-[10px] text-[var(--amber)] font-bold mt-1 uppercase">
                       ● {profile.availability_status}
                     </div>
                   )}
                 </div>
 
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-2">Active edits</span>
-                  <div className="text-2xl font-black text-white">{stats.activeCount}</div>
-                  <div className="text-[10px] text-gray-400 mt-1">
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted2)] block mb-2">Active edits</span>
+                  <div className="text-2xl font-black text-[var(--text)]">{stats.activeCount}</div>
+                  <div className="text-[10px] text-[var(--muted)] mt-1">
                     {collaborations.length} total assigned
                   </div>
                 </div>
 
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-2">Completed renders</span>
-                  <div className="text-2xl font-black text-white">{stats.completedCount}</div>
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted2)] block mb-2">Completed renders</span>
+                  <div className="text-2xl font-black text-[var(--text)]">{stats.completedCount}</div>
                   {profile?.ai_grade && (
                     <div className="text-[10px] text-emerald-400 font-bold mt-1 uppercase">
                       Grade: {profile.ai_grade}
@@ -1077,10 +1077,10 @@ export default function EditorPortalPage() {
                   )}
                 </div>
 
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-2">Revenue Cleared</span>
-                  <div className="text-2xl font-black text-[#F5A623]">{fmtINR(stats.releasedRevenue)}</div>
-                  <div className="text-[10px] text-gray-400 mt-1">
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted2)] block mb-2">Revenue Cleared</span>
+                  <div className="text-2xl font-black text-[var(--amber)]">{fmtINR(stats.releasedRevenue)}</div>
+                  <div className="text-[10px] text-[var(--muted)] mt-1">
                     of {fmtINR(stats.totalRevenue)} logged
                   </div>
                 </div>
@@ -1090,9 +1090,9 @@ export default function EditorPortalPage() {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Active Timelines */}
                 <div className="lg:col-span-2 space-y-4">
-                  <h2 className="text-sm font-black uppercase tracking-wider text-white">Active Video Timelines</h2>
+                  <h2 className="text-sm font-black uppercase tracking-wider text-[var(--text)]">Active Video Timelines</h2>
                   {collaborations.length === 0 ? (
-                    <div className="bg-[#141414] border border-white/5 rounded-2xl p-8 text-center text-xs text-gray-500">
+                    <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-8 text-center text-xs text-[var(--muted2)]">
                       No assigned edits yet. Once a brand assigns you to a collaboration, it will appear here.
                     </div>
                   ) : (
@@ -1102,20 +1102,20 @@ export default function EditorPortalPage() {
                         return (
                           <div
                             key={collab.id}
-                            className="bg-[#141414] border border-white/5 hover:border-white/10 rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all"
+                            className="bg-[var(--card)] border border-[var(--border)] hover:border-[var(--border)] rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all"
                           >
                             <div className="space-y-1">
-                              <h3 className="text-sm font-extrabold text-white leading-tight">
+                              <h3 className="text-sm font-extrabold text-[var(--text)] leading-tight">
                                 {collab.campaign_title}
                               </h3>
                               <div className="flex flex-wrap items-center gap-2 text-xs">
-                                <span className="text-gray-400">Brand: {collab.brand_name}</span>
-                                <span className="text-gray-600">•</span>
+                                <span className="text-[var(--muted)]">Brand: {collab.brand_name}</span>
+                                <span className="text-[var(--muted2)]">•</span>
                                 <span
                                   className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                                     isDone
                                       ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                      : 'bg-[#F5A623]/10 text-[#F5A623] border border-[#F5A623]/20'
+                                      : 'bg-[#F5A623]/10 text-[var(--amber)] border border-[#F5A623]/20'
                                   }`}
                                 >
                                   {collab.status || 'Active'}
@@ -1125,7 +1125,7 @@ export default function EditorPortalPage() {
 
                             <div className="flex items-center gap-2 self-end sm:self-center">
                               {collab.deadline && (
-                                <span className="text-xs text-gray-400 mr-2">
+                                <span className="text-xs text-[var(--muted)] mr-2">
                                   Due: {fmtDate(collab.deadline)}
                                 </span>
                               )}
@@ -1134,13 +1134,13 @@ export default function EditorPortalPage() {
                                   setActiveTab('messages');
                                   selectCollabThread(collab.id);
                                 }}
-                                className="bg-[#141414] border border-white/10 hover:border-white/20 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all"
+                                className="bg-[var(--card)] border border-[var(--border)] hover:border-[var(--border2)] text-[var(--text)] font-bold text-xs px-4 py-2 rounded-xl transition-all"
                               >
                                 Message
                               </button>
                               <button
                                 onClick={() => viewContract(collab.id)}
-                                className="bg-[#141414] border border-white/10 hover:border-white/20 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all"
+                                className="bg-[var(--card)] border border-[var(--border)] hover:border-[var(--border2)] text-[var(--text)] font-bold text-xs px-4 py-2 rounded-xl transition-all"
                               >
                                 View Contract
                               </button>
@@ -1154,19 +1154,19 @@ export default function EditorPortalPage() {
 
                 {/* Notifications Feed */}
                 <div className="space-y-4">
-                  <h2 className="text-sm font-black uppercase tracking-wider text-white">Project Notifications</h2>
-                  <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-4">
+                  <h2 className="text-sm font-black uppercase tracking-wider text-[var(--text)]">Project Notifications</h2>
+                  <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 space-y-4">
                     {notifications.length === 0 ? (
-                      <div className="text-center text-xs text-gray-500 py-8">No notifications yet.</div>
+                      <div className="text-center text-xs text-[var(--muted2)] py-8">No notifications yet.</div>
                     ) : (
                       <div className="space-y-4">
                         {notifications.slice(0, 6).map((notif) => (
                           <div key={notif.id} className="flex gap-3 text-xs leading-normal">
-                            <span className="text-[#F5A623] mt-0.5">{notif.is_read ? '✓' : '🔔'}</span>
+                            <span className="text-[var(--amber)] mt-0.5">{notif.is_read ? '✓' : '🔔'}</span>
                             <div>
-                              <span className="text-white font-bold block">{notif.title}</span>
-                              {notif.message && <p className="text-gray-400 mt-0.5">{notif.message}</p>}
-                              <span className="text-[10px] text-gray-500 block mt-1">{fmtDate(notif.created_at)}</span>
+                              <span className="text-[var(--text)] font-bold block">{notif.title}</span>
+                              {notif.message && <p className="text-[var(--muted)] mt-0.5">{notif.message}</p>}
+                              <span className="text-[10px] text-[var(--muted2)] block mt-1">{fmtDate(notif.created_at)}</span>
                             </div>
                           </div>
                         ))}
@@ -1182,92 +1182,92 @@ export default function EditorPortalPage() {
           {activeTab === 'portfolio' && (
             <div className="space-y-8">
               {/* Niches Box */}
-              <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
-                <h2 className="text-sm font-black uppercase tracking-wider text-white mb-4">Your niches</h2>
+              <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6">
+                <h2 className="text-sm font-black uppercase tracking-wider text-[var(--text)] mb-4">Your niches</h2>
                 <div className="flex flex-wrap gap-2">
                   {profile?.edited_creator_niches && profile.edited_creator_niches.length > 0 ? (
                     profile.edited_creator_niches.map((niche, idx) => (
                       <span
                         key={idx}
-                        className="bg-[#F5A623]/10 border border-[#F5A623]/20 text-[#F5A623] text-xs font-semibold px-3 py-1.5 rounded-full"
+                        className="bg-[#F5A623]/10 border border-[#F5A623]/20 text-[var(--amber)] text-xs font-semibold px-3 py-1.5 rounded-full"
                       >
                         🏷️ {niche}
                       </span>
                     ))
                   ) : (
-                    <span className="text-xs text-gray-500">No niches tagged yet.</span>
+                    <span className="text-xs text-[var(--muted2)]">No niches tagged yet.</span>
                   )}
                 </div>
               </div>
 
               {/* Add portfolio Piece form */}
-              <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-4">
-                <h2 className="text-sm font-black uppercase tracking-wider text-white">Add a portfolio piece</h2>
+              <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 space-y-4">
+                <h2 className="text-sm font-black uppercase tracking-wider text-[var(--text)]">Add a portfolio piece</h2>
                 <form onSubmit={handleAddPortfolio} className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-1">
-                      <label className="text-[10px] uppercase font-bold text-gray-500">Video title</label>
+                      <label className="text-[10px] uppercase font-bold text-[var(--muted2)]">Video title</label>
                       <input
                         type="text"
                         placeholder="e.g. 5x Hook Animations + Captions"
                         value={pfTitle}
                         onChange={(e) => setPfTitle(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#F5A623]"
+                        className="w-full bg-[var(--deep)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-xs text-[var(--text)] outline-none focus:border-[#F5A623]"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[10px] uppercase font-bold text-gray-500">Link (YouTube/Drive/Reel)</label>
+                      <label className="text-[10px] uppercase font-bold text-[var(--muted2)]">Link (YouTube/Drive/Reel)</label>
                       <input
                         type="url"
                         placeholder="https://youtu.be/..."
                         value={pfLink}
                         onChange={(e) => setPfLink(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#F5A623]"
+                        className="w-full bg-[var(--deep)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-xs text-[var(--text)] outline-none focus:border-[#F5A623]"
                       />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <div className="space-y-1">
-                      <label className="text-[10px] uppercase font-bold text-gray-500">Views</label>
+                      <label className="text-[10px] uppercase font-bold text-[var(--muted2)]">Views</label>
                       <input
                         type="number"
                         placeholder="15000"
                         value={pfViews}
                         onChange={(e) => setPfViews(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#F5A623]"
+                        className="w-full bg-[var(--deep)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-xs text-[var(--text)] outline-none focus:border-[#F5A623]"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[10px] uppercase font-bold text-gray-500">CTR %</label>
+                      <label className="text-[10px] uppercase font-bold text-[var(--muted2)]">CTR %</label>
                       <input
                         type="number"
                         step="0.1"
                         placeholder="7.5"
                         value={pfCtr}
                         onChange={(e) => setPfCtr(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#F5A623]"
+                        className="w-full bg-[var(--deep)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-xs text-[var(--text)] outline-none focus:border-[#F5A623]"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[10px] uppercase font-bold text-gray-500">Engagement %</label>
+                      <label className="text-[10px] uppercase font-bold text-[var(--muted2)]">Engagement %</label>
                       <input
                         type="number"
                         step="0.1"
                         placeholder="10.2"
                         value={pfEngagement}
                         onChange={(e) => setPfEngagement(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#F5A623]"
+                        className="w-full bg-[var(--deep)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-xs text-[var(--text)] outline-none focus:border-[#F5A623]"
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[10px] uppercase font-bold text-gray-500">Niche tag</label>
+                      <label className="text-[10px] uppercase font-bold text-[var(--muted2)]">Niche tag</label>
                       <input
                         type="text"
                         placeholder="e.g. Fitness"
                         value={pfNiche}
                         onChange={(e) => setPfNiche(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-white/10 rounded-xl px-4 py-2.5 text-xs text-white outline-none focus:border-[#F5A623]"
+                        className="w-full bg-[var(--deep)] border border-[var(--border)] rounded-xl px-4 py-2.5 text-xs text-[var(--text)] outline-none focus:border-[#F5A623]"
                       />
                     </div>
                   </div>
@@ -1287,20 +1287,20 @@ export default function EditorPortalPage() {
 
               {/* Portfolio Grid */}
               <div className="space-y-4">
-                <h2 className="text-sm font-black uppercase tracking-wider text-white">Portfolio pieces ({portfolioItems.length})</h2>
+                <h2 className="text-sm font-black uppercase tracking-wider text-[var(--text)]">Portfolio pieces ({portfolioItems.length})</h2>
                 {portfolioItems.length === 0 ? (
-                  <div className="bg-[#141414] border border-white/5 rounded-2xl p-8 text-center text-xs text-gray-500">
+                  <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-8 text-center text-xs text-[var(--muted2)]">
                     No portfolio pieces yet. Add your best work above — real CTR and engagement numbers here are what get you matched with brands.
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {portfolioItems.map((item) => (
-                      <div key={item.id} className="bg-[#141414] border border-white/5 hover:border-white/10 rounded-2xl p-5 flex flex-col justify-between gap-4 transition-all">
+                      <div key={item.id} className="bg-[var(--card)] border border-[var(--border)] hover:border-[var(--border)] rounded-2xl p-5 flex flex-col justify-between gap-4 transition-all">
                         <div className="space-y-2">
                           <div className="flex justify-between items-start gap-2">
-                            <h3 className="text-sm font-bold text-white line-clamp-1">{item.title}</h3>
+                            <h3 className="text-sm font-bold text-[var(--text)] line-clamp-1">{item.title}</h3>
                             {item.niche && (
-                              <span className="bg-[#F5A623]/10 border border-[#F5A623]/20 text-[#F5A623] text-[9px] font-bold px-2 py-0.5 rounded-full uppercase flex-shrink-0">
+                              <span className="bg-[#F5A623]/10 border border-[#F5A623]/20 text-[var(--amber)] text-[9px] font-bold px-2 py-0.5 rounded-full uppercase flex-shrink-0">
                                 {item.niche}
                               </span>
                             )}
@@ -1309,25 +1309,25 @@ export default function EditorPortalPage() {
                             href={item.link}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-xs text-gray-400 hover:text-[#F5A623] truncate flex items-center gap-1"
+                            className="text-xs text-[var(--muted)] hover:text-[var(--amber)] truncate flex items-center gap-1"
                           >
                             <span className="truncate">{item.link}</span>
                             <ExternalLink className="w-3.5 h-3.5 flex-shrink-0" />
                           </a>
                         </div>
 
-                        <div className="grid grid-cols-3 gap-2 pt-4 border-t border-white/5 text-center">
+                        <div className="grid grid-cols-3 gap-2 pt-4 border-t border-[var(--border)] text-center">
                           <div>
-                            <span className="text-[10px] text-gray-500 block">Views</span>
-                            <strong className="text-xs text-white">{item.views.toLocaleString()}</strong>
+                            <span className="text-[10px] text-[var(--muted2)] block">Views</span>
+                            <strong className="text-xs text-[var(--text)]">{item.views.toLocaleString()}</strong>
                           </div>
                           <div>
-                            <span className="text-[10px] text-gray-500 block">CTR</span>
-                            <strong className="text-xs text-white">{item.ctr}%</strong>
+                            <span className="text-[10px] text-[var(--muted2)] block">CTR</span>
+                            <strong className="text-xs text-[var(--text)]">{item.ctr}%</strong>
                           </div>
                           <div>
-                            <span className="text-[10px] text-gray-500 block">Engagement</span>
-                            <strong className="text-xs text-white">{item.engagement}%</strong>
+                            <span className="text-[10px] text-[var(--muted2)] block">Engagement</span>
+                            <strong className="text-xs text-[var(--text)]">{item.engagement}%</strong>
                           </div>
                         </div>
                       </div>
@@ -1341,9 +1341,9 @@ export default function EditorPortalPage() {
           {/* TAB 3: BROWSE CAMPAIGNS */}
           {activeTab === 'campaigns' && (
             <div className="space-y-4">
-              <h2 className="text-sm font-black uppercase tracking-wider text-white">Open campaigns</h2>
+              <h2 className="text-sm font-black uppercase tracking-wider text-[var(--text)]">Open campaigns</h2>
               {campaigns.length === 0 ? (
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-8 text-center text-xs text-gray-500">
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-8 text-center text-xs text-[var(--muted2)]">
                   No open campaigns right now. Check back soon.
                 </div>
               ) : (
@@ -1351,11 +1351,11 @@ export default function EditorPortalPage() {
                   {campaigns.map((camp) => (
                     <div
                       key={camp.id}
-                      className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                      className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                     >
                       <div className="space-y-1">
-                        <h3 className="text-base font-extrabold text-white">{camp.title}</h3>
-                        <div className="flex flex-wrap items-center gap-2 text-xs text-gray-400">
+                        <h3 className="text-base font-extrabold text-[var(--text)]">{camp.title}</h3>
+                        <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--muted)]">
                           <span>{camp.brand_name}</span>
                           {camp.niches && camp.niches.length > 0 && (
                             <>
@@ -1364,7 +1364,7 @@ export default function EditorPortalPage() {
                             </>
                           )}
                         </div>
-                        <div className="text-sm font-black text-[#F5A623] pt-1">
+                        <div className="text-sm font-black text-[var(--amber)] pt-1">
                           {fmtINR(camp.budget)}
                         </div>
                       </div>
@@ -1374,7 +1374,7 @@ export default function EditorPortalPage() {
                         disabled={camp.already_applied || applyingCampaignId === camp.id}
                         className={`text-xs font-bold px-5 py-3 rounded-full transition-all self-start sm:self-center ${
                           camp.already_applied
-                            ? 'bg-white/5 border border-white/10 text-gray-400 cursor-not-allowed'
+                            ? 'bg-[var(--card2)] border border-[var(--border)] text-[var(--muted)] cursor-not-allowed'
                             : 'bg-[#F5A623] hover:bg-[#F5A623]/95 text-black'
                         }`}
                       >
@@ -1392,57 +1392,57 @@ export default function EditorPortalPage() {
             <div className="space-y-8">
               {/* Payment Summary */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">Total logged</span>
-                  <div className="text-2xl font-black text-[#F5A623]">{fmtINR(stats.totalRevenue)}</div>
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted2)] block mb-1">Total logged</span>
+                  <div className="text-2xl font-black text-[var(--amber)]">{fmtINR(stats.totalRevenue)}</div>
                 </div>
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">Released</span>
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted2)] block mb-1">Released</span>
                   <div className="text-2xl font-black text-emerald-400">{fmtINR(stats.releasedRevenue)}</div>
                 </div>
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">Pending escrow</span>
-                  <div className="text-2xl font-black text-white">
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted2)] block mb-1">Pending escrow</span>
+                  <div className="text-2xl font-black text-[var(--text)]">
                     {fmtINR(stats.totalRevenue - stats.releasedRevenue)}
                   </div>
                 </div>
               </div>
 
               {/* Payment Table */}
-              <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-4">
-                <h2 className="text-sm font-black uppercase tracking-wider text-white">Payment history</h2>
+              <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 space-y-4">
+                <h2 className="text-sm font-black uppercase tracking-wider text-[var(--text)]">Payment history</h2>
                 {payments.length === 0 ? (
-                  <div className="text-center text-xs text-gray-500 py-8">No payments logged yet.</div>
+                  <div className="text-center text-xs text-[var(--muted2)] py-8">No payments logged yet.</div>
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs">
                       <thead>
-                        <tr className="text-gray-500 border-b border-white/5">
+                        <tr className="text-[var(--muted2)] border-b border-[var(--border)]">
                           <th className="pb-3">Amount</th>
                           <th className="pb-3">Status</th>
                           <th className="pb-3">Campaign</th>
                           <th className="pb-3">Released Date</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-white/5">
+                      <tbody className="divide-y divide-[var(--border)]">
                         {payments.map((p) => {
                           const collab = collaborations.find((c) => c.id === p.collaboration_id);
                           return (
                             <tr key={p.id}>
-                              <td className="py-4 font-bold text-white">{fmtINR(p.amount)}</td>
+                              <td className="py-4 font-bold text-[var(--text)]">{fmtINR(p.amount)}</td>
                               <td className="py-4">
                                 <span
                                   className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
                                     p.status === 'released'
                                       ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                      : 'bg-[#F5A623]/10 text-[#F5A623] border border-[#F5A623]/20'
+                                      : 'bg-[#F5A623]/10 text-[var(--amber)] border border-[#F5A623]/20'
                                   }`}
                                 >
                                   {p.status || 'pending'}
                                 </span>
                               </td>
-                              <td className="py-4 text-gray-400">{collab?.campaign_title || '—'}</td>
-                              <td className="py-4 text-gray-400">{fmtDate(p.released_at)}</td>
+                              <td className="py-4 text-[var(--muted)]">{collab?.campaign_title || '—'}</td>
+                              <td className="py-4 text-[var(--muted)]">{fmtDate(p.released_at)}</td>
                             </tr>
                           );
                         })}
@@ -1458,14 +1458,14 @@ export default function EditorPortalPage() {
           {activeTab === 'messages' && (
             <div className="space-y-6">
               {!selectedCollabId ? (
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-4">
-                  <h2 className="text-sm font-black uppercase tracking-wider text-white">Conversations</h2>
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 space-y-4">
+                  <h2 className="text-sm font-black uppercase tracking-wider text-[var(--text)]">Conversations</h2>
                   {collaborations.length === 0 ? (
-                    <div className="text-center text-xs text-gray-500 py-8">
+                    <div className="text-center text-xs text-[var(--muted2)] py-8">
                       Feedback threads open up once you are assigned to a collaboration.
                     </div>
                   ) : (
-                    <div className="divide-y divide-white/5">
+                    <div className="divide-y divide-[var(--border)]">
                       {collaborations.map((collab) => (
                         <div
                           key={collab.id}
@@ -1473,12 +1473,12 @@ export default function EditorPortalPage() {
                           className="py-4 flex justify-between items-center cursor-pointer group"
                         >
                           <div>
-                            <div className="font-extrabold text-white group-hover:text-[#F5A623] transition-colors">
+                            <div className="font-extrabold text-[var(--text)] group-hover:text-[var(--amber)] transition-colors">
                               {collab.brand_name}
                             </div>
-                            <div className="text-xs text-gray-400 mt-0.5">{collab.campaign_title}</div>
+                            <div className="text-xs text-[var(--muted)] mt-0.5">{collab.campaign_title}</div>
                           </div>
-                          <span className="text-xs text-gray-500 group-hover:text-white transition-colors">
+                          <span className="text-xs text-[var(--muted2)] group-hover:text-[var(--text)] transition-colors">
                             Open &rarr;
                           </span>
                         </div>
@@ -1487,25 +1487,25 @@ export default function EditorPortalPage() {
                   )}
                 </div>
               ) : (
-                <div className="flex flex-col h-[520px] bg-[#141414] border border-white/5 rounded-2xl overflow-hidden">
+                <div className="flex flex-col h-[520px] bg-[var(--card)] border border-[var(--border)] rounded-2xl overflow-hidden">
                   {/* Message Header */}
-                  <div className="bg-[#0e0e0e] px-6 py-4 flex items-center justify-between border-b border-white/5">
+                  <div className="bg-[var(--deep)] px-6 py-4 flex items-center justify-between border-b border-[var(--border)]">
                     <button
                       onClick={() => selectCollabThread(null)}
-                      className="text-xs text-gray-400 hover:text-white flex items-center gap-1 font-bold"
+                      className="text-xs text-[var(--muted)] hover:text-[var(--text)] flex items-center gap-1 font-bold"
                     >
                       <ArrowLeft className="w-4 h-4" />
                       <span>All conversations</span>
                     </button>
-                    <span className="text-xs font-bold text-[#F5A623]">
+                    <span className="text-xs font-bold text-[var(--amber)]">
                       {collaborations.find((c) => c.id === selectedCollabId)?.brand_name}
                     </span>
                   </div>
 
                   {/* Messages Bubble List */}
-                  <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-[#0e0e0e]/50">
+                  <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-[var(--card2)]">
                     {threadMessages.length === 0 ? (
-                      <div className="text-center text-xs text-gray-500 py-12">
+                      <div className="text-center text-xs text-[var(--muted2)] py-12">
                         No messages yet. Say hello!
                       </div>
                     ) : (
@@ -1518,12 +1518,12 @@ export default function EditorPortalPage() {
                           >
                             <div
                               className={`rounded-2xl px-4 py-2.5 text-xs leading-relaxed ${
-                                isMine ? 'bg-[#F5A623] text-black font-medium' : 'bg-[#1a1a1a] text-white'
+                                isMine ? 'bg-[#F5A623] text-black font-medium' : 'bg-[var(--card2)] text-[var(--text)]'
                               }`}
                             >
                               {m.content}
                             </div>
-                            <span className="text-[9px] text-gray-500 mt-1">{fmtTime(m.created_at)}</span>
+                            <span className="text-[9px] text-[var(--muted2)] mt-1">{fmtTime(m.created_at)}</span>
                           </div>
                         );
                       })
@@ -1531,7 +1531,7 @@ export default function EditorPortalPage() {
                   </div>
 
                   {/* Send Input Area */}
-                  <div className="p-4 bg-[#0e0e0e] border-t border-white/5 flex gap-3">
+                  <div className="p-4 bg-[var(--deep)] border-t border-[var(--border)] flex gap-3">
                     <input
                       type="text"
                       placeholder="Type your message..."
@@ -1540,7 +1540,7 @@ export default function EditorPortalPage() {
                       onKeyDown={(e) => {
                         if (e.key === 'Enter') sendMessage();
                       }}
-                      className="flex-1 bg-[#1a1a1a] border border-white/10 rounded-full px-5 py-3 text-xs outline-none focus:border-[#F5A623]"
+                      className="flex-1 bg-[var(--card2)] border border-[var(--border)] rounded-full px-5 py-3 text-xs outline-none focus:border-[#F5A623]"
                     />
                     <button
                       onClick={sendMessage}
@@ -1559,38 +1559,38 @@ export default function EditorPortalPage() {
             <div className="space-y-8">
               {/* Average Stats */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">Average Rating</span>
-                  <div className="text-3xl font-black text-white flex items-baseline gap-1">
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted2)] block mb-1">Average Rating</span>
+                  <div className="text-3xl font-black text-[var(--text)] flex items-baseline gap-1">
                     <span>{stats.avgRating || '--'}</span>
-                    <span className="text-xs text-gray-500 font-bold">/5</span>
+                    <span className="text-xs text-[var(--muted2)] font-bold">/5</span>
                   </div>
                 </div>
-                <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6">
-                  <span className="text-[10px] uppercase font-bold tracking-wider text-gray-500 block mb-1">Total Reviews</span>
-                  <div className="text-3xl font-black text-[#F5A623]">
+                <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[var(--muted2)] block mb-1">Total Reviews</span>
+                  <div className="text-3xl font-black text-[var(--amber)]">
                     {reviews.length}
                   </div>
                 </div>
               </div>
 
               {/* Reviews List */}
-              <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-4">
-                <h2 className="text-sm font-black uppercase tracking-wider text-white">All Reviews</h2>
+              <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 space-y-4">
+                <h2 className="text-sm font-black uppercase tracking-wider text-[var(--text)]">All Reviews</h2>
                 {reviews.length === 0 ? (
-                  <div className="text-center text-xs text-gray-500 py-8">
+                  <div className="text-center text-xs text-[var(--muted2)] py-8">
                     No reviews yet. They will appear here after you complete a collaboration.
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {reviews.map((r) => (
-                      <div key={r.id} className="bg-[#0e0e0e] border border-white/5 rounded-xl p-4 space-y-2">
-                        <div className="flex gap-1 text-[#F5A623]">
+                      <div key={r.id} className="bg-[var(--deep)] border border-[var(--border)] rounded-xl p-4 space-y-2">
+                        <div className="flex gap-1 text-[var(--amber)]">
                           {Array.from({ length: 5 }).map((_, idx) => (
                             <span key={idx}>{idx < (r.rating || 0) ? '★' : '☆'}</span>
                           ))}
                         </div>
-                        <p className="text-xs text-gray-300 leading-relaxed">
+                        <p className="text-xs text-[var(--muted)] leading-relaxed">
                           {r.review || 'No written feedback provided.'}
                         </p>
                       </div>
@@ -1603,99 +1603,99 @@ export default function EditorPortalPage() {
 
           {/* TAB 7: PROFILE SETTINGS */}
           {activeTab === 'settings' && profile && (
-            <div className="bg-[#141414] border border-white/5 rounded-2xl p-5 sm:p-6 space-y-6">
-              <h2 className="text-sm font-black uppercase tracking-wider text-white border-b border-white/5 pb-4">
+            <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 sm:p-6 space-y-6">
+              <h2 className="text-sm font-black uppercase tracking-wider text-[var(--text)] border-b border-[var(--border)] pb-4">
                 Your profile settings
               </h2>
 
-              <div className="divide-y divide-white/5 text-xs">
+              <div className="divide-y divide-[var(--border)] text-xs">
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Editor name</span>
-                  <span className="font-bold text-white break-words">{profile.editor_name || '—'}</span>
+                  <span className="text-[var(--muted2)]">Editor name</span>
+                  <span className="font-bold text-[var(--text)] break-words">{profile.editor_name || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">City / State</span>
-                  <span className="font-bold text-white break-words">{profile.city_state || '—'}</span>
+                  <span className="text-[var(--muted2)]">City / State</span>
+                  <span className="font-bold text-[var(--text)] break-words">{profile.city_state || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Experience Duration</span>
-                  <span className="font-bold text-white break-words">{profile.experience_duration || '—'}</span>
+                  <span className="text-[var(--muted2)]">Experience Duration</span>
+                  <span className="font-bold text-[var(--text)] break-words">{profile.experience_duration || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">One-line Bio</span>
-                  <span className="font-bold text-white break-words">{profile.one_line_bio || '—'}</span>
+                  <span className="text-[var(--muted2)]">One-line Bio</span>
+                  <span className="font-bold text-[var(--text)] break-words">{profile.one_line_bio || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Languages</span>
-                  <span className="font-bold text-white break-words">
+                  <span className="text-[var(--muted2)]">Languages</span>
+                  <span className="font-bold text-[var(--text)] break-words">
                     {profile.languages && profile.languages.length > 0 ? profile.languages.join(', ') : '—'}
                   </span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Specialised Formats</span>
-                  <span className="font-bold text-white break-words">
+                  <span className="text-[var(--muted2)]">Specialised Formats</span>
+                  <span className="font-bold text-[var(--text)] break-words">
                     {profile.specialised_formats && profile.specialised_formats.length > 0
                       ? profile.specialised_formats.join(', ')
                       : '—'}
                   </span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Primary Software</span>
-                  <span className="font-bold text-white break-words">
+                  <span className="text-[var(--muted2)]">Primary Software</span>
+                  <span className="font-bold text-[var(--text)] break-words">
                     {profile.primary_software && profile.primary_software.length > 0
                       ? profile.primary_software.join(', ')
                       : '—'}
                   </span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Special Skills</span>
-                  <span className="font-bold text-white break-words">
+                  <span className="text-[var(--muted2)]">Special Skills</span>
+                  <span className="font-bold text-[var(--text)] break-words">
                     {profile.special_skills && profile.special_skills.length > 0 ? profile.special_skills.join(', ') : '—'}
                   </span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Niches Edited For</span>
-                  <span className="font-bold text-white break-words">
+                  <span className="text-[var(--muted2)]">Niches Edited For</span>
+                  <span className="font-bold text-[var(--text)] break-words">
                     {profile.edited_creator_niches && profile.edited_creator_niches.length > 0
                       ? profile.edited_creator_niches.join(', ')
                       : '—'}
                   </span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Total Videos Edited</span>
-                  <span className="font-bold text-white break-words">{profile.total_videos_edited || 0}</span>
+                  <span className="text-[var(--muted2)]">Total Videos Edited</span>
+                  <span className="font-bold text-[var(--text)] break-words">{profile.total_videos_edited || 0}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Turnaround Time</span>
-                  <span className="font-bold text-white break-words">{profile.turnaround_time || '—'}</span>
+                  <span className="text-[var(--muted2)]">Turnaround Time</span>
+                  <span className="font-bold text-[var(--text)] break-words">{profile.turnaround_time || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Availability</span>
-                  <span className="font-bold text-white break-words">{profile.availability_status || '—'}</span>
+                  <span className="text-[var(--muted2)]">Availability</span>
+                  <span className="font-bold text-[var(--text)] break-words">{profile.availability_status || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Rate Short Form</span>
-                  <span className="font-bold text-white break-words">{profile.rate_short_form || '—'}</span>
+                  <span className="text-[var(--muted2)]">Rate Short Form</span>
+                  <span className="font-bold text-[var(--text)] break-words">{profile.rate_short_form || '—'}</span>
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">Portfolio Link</span>
+                  <span className="text-[var(--muted2)]">Portfolio Link</span>
                   {profile.portfolio_url ? (
                     <a
                       href={profile.portfolio_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-bold text-[#F5A623] hover:underline flex items-center gap-1"
+                      className="font-bold text-[var(--amber)] hover:underline flex items-center gap-1"
                     >
                       <span>{profile.portfolio_url}</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
                   ) : (
-                    <span className="font-bold text-white break-words">—</span>
+                    <span className="font-bold text-[var(--text)] break-words">—</span>
                   )}
                 </div>
                 <div className="py-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1">
-                  <span className="text-gray-500">AI Score</span>
-                  <span className="font-bold text-white break-words">
+                  <span className="text-[var(--muted2)]">AI Score</span>
+                  <span className="font-bold text-[var(--text)] break-words">
                     {profile.ai_total_score != null
                       ? `${profile.ai_total_score}/100 (${profile.ai_grade || '—'})`
                       : '—'}
@@ -1717,11 +1717,11 @@ export default function EditorPortalPage() {
           {/* TAB 8: KYC VERIFICATION */}
           {activeTab === 'kyc' && (
             <div className="space-y-6">
-              <div className="rounded-2xl border border-white/5 bg-[#0e0e0e] p-7">
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--deep)] p-7">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                   <div>
-                    <h2 className="font-display text-xl font-extrabold text-white">Editor Identity &amp; Payout Escrow KYC</h2>
-                    <p className="mt-1 text-xs text-gray-400">Governed by Fewsion Escrow &amp; Compliance Standards</p>
+                    <h2 className="font-display text-xl font-extrabold text-[var(--text)]">Editor Identity &amp; Payout Escrow KYC</h2>
+                    <p className="mt-1 text-xs text-[var(--muted)]">Governed by Fewsion Escrow &amp; Compliance Standards</p>
                   </div>
                   <div className="flex items-center gap-2">
                     {kycStatus === 'verified' ? (
@@ -1737,35 +1737,35 @@ export default function EditorPortalPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="rounded-xl border border-white/5 bg-[#141414] p-5 space-y-3">
-                    <div className="text-xs uppercase tracking-wider font-bold text-[#F5A623]">Personal / Tax Details</div>
-                    <div className="text-sm text-white">
-                      <span className="text-gray-400">Legal Name: </span>
+                  <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 space-y-3">
+                    <div className="text-xs uppercase tracking-wider font-bold text-[var(--amber)]">Personal / Tax Details</div>
+                    <div className="text-sm text-[var(--text)]">
+                      <span className="text-[var(--muted)]">Legal Name: </span>
                       <strong>{kycDetails?.legalName || profile?.editor_name || 'Not provided'}</strong>
                     </div>
-                    <div className="text-sm text-gray-400">
-                      Document Type: <strong className="uppercase text-white">{kycDetails?.idType || 'PAN Card'}</strong>
+                    <div className="text-sm text-[var(--muted)]">
+                      Document Type: <strong className="uppercase text-[var(--text)]">{kycDetails?.idType || 'PAN Card'}</strong>
                     </div>
-                    <div className="text-sm text-gray-400">
-                      ID Number: <strong className="uppercase text-white">{kycDetails?.idNumber ? `•••• ${kycDetails.idNumber.slice(-4)}` : 'Not submitted'}</strong>
+                    <div className="text-sm text-[var(--muted)]">
+                      ID Number: <strong className="uppercase text-[var(--text)]">{kycDetails?.idNumber ? `•••• ${kycDetails.idNumber.slice(-4)}` : 'Not submitted'}</strong>
                     </div>
                   </div>
 
-                  <div className="rounded-xl border border-white/5 bg-[#141414] p-5 space-y-3">
-                    <div className="text-xs uppercase tracking-wider font-bold text-[#F5A623]">Escrow Bank Payout Account</div>
-                    <div className="text-sm text-gray-400">
-                      Bank Account: <strong className="text-white">{kycDetails?.bankAccount ? `•••• ${kycDetails.bankAccount.slice(-4)}` : 'Not set'}</strong>
+                  <div className="rounded-xl border border-[var(--border)] bg-[var(--card)] p-5 space-y-3">
+                    <div className="text-xs uppercase tracking-wider font-bold text-[var(--amber)]">Escrow Bank Payout Account</div>
+                    <div className="text-sm text-[var(--muted)]">
+                      Bank Account: <strong className="text-[var(--text)]">{kycDetails?.bankAccount ? `•••• ${kycDetails.bankAccount.slice(-4)}` : 'Not set'}</strong>
                     </div>
-                    <div className="text-sm text-gray-400">
-                      IFSC Code: <strong className="uppercase text-white">{kycDetails?.ifscCode || 'Not set'}</strong>
+                    <div className="text-sm text-[var(--muted)]">
+                      IFSC Code: <strong className="uppercase text-[var(--text)]">{kycDetails?.ifscCode || 'Not set'}</strong>
                     </div>
-                    <div className="text-sm text-gray-400">
-                      UPI ID: <span className="text-white">{kycDetails?.upiId || 'Not set'}</span>
+                    <div className="text-sm text-[var(--muted)]">
+                      UPI ID: <span className="text-[var(--text)]">{kycDetails?.upiId || 'Not set'}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-white/5 flex justify-end">
+                <div className="mt-8 pt-6 border-t border-[var(--border)] flex justify-end">
                   <button
                     onClick={() => setKycModalOpen(true)}
                     className="rounded-full bg-[#F5A623] px-6 py-2.5 text-xs font-bold text-black hover:bg-[#f5b342] transition-all cursor-pointer"
@@ -1782,20 +1782,20 @@ export default function EditorPortalPage() {
       {/* Contract Modal */}
       {contractModal && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#141414] border border-white/10 rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 md:p-8 space-y-6">
+          <div className="bg-[var(--card)] border border-[var(--border)] rounded-2xl w-full max-w-2xl max-h-[85vh] overflow-y-auto p-6 md:p-8 space-y-6">
             <div>
-              <h2 className="text-lg font-black font-display text-white tracking-tight">Collaboration Agreement</h2>
-              <p className="text-[10px] text-gray-500 mt-1 uppercase tracking-wider">
+              <h2 className="text-lg font-black font-display text-[var(--text)] tracking-tight">Collaboration Agreement</h2>
+              <p className="text-[10px] text-[var(--muted2)] mt-1 uppercase tracking-wider">
                 Auto-generated from campaign terms. Please review prior to signing.
               </p>
             </div>
 
-            <pre className="whitespace-pre-wrap font-sans text-xs bg-[#0e0e0e] border border-white/5 p-4 rounded-xl text-gray-300 leading-relaxed max-h-[40vh] overflow-y-auto">
+            <pre className="whitespace-pre-wrap font-sans text-xs bg-[var(--deep)] border border-[var(--border)] p-4 rounded-xl text-[var(--muted)] leading-relaxed max-h-[40vh] overflow-y-auto">
               {contractModal.contract_text}
             </pre>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-white/5 pt-4">
-              <div className="text-[10px] text-gray-500 uppercase font-bold space-y-1">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-[var(--border)] pt-4">
+              <div className="text-[10px] text-[var(--muted2)] uppercase font-bold space-y-1">
                 <div>
                   Brand: {contractModal.brand_signature_name ? `Signed (${contractModal.brand_signature_name})` : 'Awaiting Signature'}
                 </div>
@@ -1807,7 +1807,7 @@ export default function EditorPortalPage() {
               <div className="flex gap-2 self-end">
                 <button
                   onClick={() => setContractModal(null)}
-                  className="bg-transparent border border-white/20 hover:border-white/30 text-white font-bold text-xs px-4 py-2.5 rounded-full transition-all"
+                  className="bg-transparent border border-[var(--border2)] hover:border-[var(--border2)] text-[var(--text)] font-bold text-xs px-4 py-2.5 rounded-full transition-all"
                 >
                   Close
                 </button>
