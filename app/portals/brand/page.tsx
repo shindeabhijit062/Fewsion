@@ -123,6 +123,7 @@ import { AIMatchmaker, CreatorMatch } from '@/components/AIMatchmaker';
 import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
 import { PortalMobileNav } from '@/components/PortalMobileNav';
+import AIChatbotWidget from '@/components/AIChatbotWidget';
 import { MessagesInbox, MessageToasts, useInbox } from '@/components/MessagesInbox';
 import { CreatorOfferDrawer } from '@/components/CreatorOfferDrawer';
 import { STATUS_LABEL } from '@/lib/offers';
@@ -1235,6 +1236,9 @@ export default function BrandPortalPage() {
 
       {/* Live alerts for new messages */}
       <MessageToasts toasts={inbox.toasts} onOpen={openThread} onDismiss={inbox.dismissToast} />
+
+      {/* Fewsion AI assistant */}
+      <AIChatbotWidget subtitle="Brand Assistant" greeting={"👋 Hi! I'm Fewsion AI, your brand assistant.\n\nAsk me to find creators for a campaign, compare creators, or explain offers, contracts and escrow."} />
 
       {/* Brand KYC Modal */}
       <KYCModal

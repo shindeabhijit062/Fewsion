@@ -149,6 +149,7 @@ import { CreatorProvider, useCreatorData, TabId } from './CreatorContext';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
 import { MessageToasts } from '@/components/MessagesInbox';
 import { PortalMobileNav } from '@/components/PortalMobileNav';
+import AIChatbotWidget from '@/components/AIChatbotWidget';
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -281,6 +282,9 @@ function CreatorLayoutInner({ children }: { children: React.ReactNode }) {
 
       {/* Live alerts for new messages */}
       <MessageToasts toasts={inbox.toasts} onOpen={openThread} onDismiss={inbox.dismissToast} />
+
+      {/* Fewsion AI assistant */}
+      <AIChatbotWidget subtitle="Creator Assistant" greeting={"👋 Hi! I'm Fewsion AI, your creator assistant.\n\nAsk me which brand campaigns suit you, how to improve your Creator Score, or how offers and payments work."} />
     </div>
   );
 }

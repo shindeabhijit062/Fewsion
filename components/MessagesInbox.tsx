@@ -1085,7 +1085,7 @@ export function MessageToasts({
   onDismiss: (id: string) => void;
 }) {
   return (
-    <div className="pointer-events-none fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-[200] flex w-[340px] max-w-[calc(100vw-32px)] flex-col gap-2">
+    <div className="pointer-events-none fixed bottom-[96px] right-4 sm:right-5 z-[200] flex w-[340px] max-w-[calc(100vw-32px)] flex-col gap-2">
       <AnimatePresence>
         {toasts.map((t) => (
           <motion.div

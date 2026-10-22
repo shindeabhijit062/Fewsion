@@ -121,6 +121,7 @@ import {
 import { supabase } from '@/utils/supabase';
 import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
+import AIChatbotWidget from '@/components/AIChatbotWidget';
 
 // ---------------------------------------------------------------------
 // Types
@@ -1825,6 +1826,9 @@ export default function EditorPortalPage() {
           </div>
         </div>
       )}
+
+      {/* Fewsion AI assistant */}
+      <AIChatbotWidget subtitle="Editor Assistant" greeting={"👋 Hi! I'm Fewsion AI, your editor assistant.\n\nAsk me about editing projects, creators who need editors, pricing your work, or how payments work."} />
 
       {/* Editor KYC Modal */}
       <KYCModal

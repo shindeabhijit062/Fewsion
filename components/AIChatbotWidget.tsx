@@ -4,14 +4,24 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
 
-export default function AIChatbotWidget() {
+interface AIChatbotWidgetProps {
+  /** First message shown in a new chat */
+  greeting?: string;
+  /** Line under "Fewsion AI" in the header */
+  subtitle?: string;
+}
+
+export default function AIChatbotWidget({
+  greeting = "👋 Hi! I'm Fewsion's AI assistant.\n\nLet's find the perfect creators for your brand. How can I help you today?",
+  subtitle = 'Creator Matcher',
+}: AIChatbotWidgetProps = {}) {
   const [open, setOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const DEFAULT_MESSAGE = {
     role: 'bot' as const,
-    text: "👋 Hi! I'm Fewsion's AI assistant.\n\nLet's find the perfect creators for your brand. How can I help you today?",
+    text: greeting,
   };
 
   const [messages, setMessages] = useState<Array<{ role: 'bot' | 'user'; text: string; suggestions?: string[] }>>([DEFAULT_MESSAGE]);
@@ -198,7 +208,7 @@ export default function AIChatbotWidget() {
             </div>
             <div className="chat-header-info">
               <h4>Fewsion AI</h4>
-              <p>Creator Matcher</p>
+              <p>{subtitle}</p>
             </div>
           </div>
           {isLoggedIn && (
