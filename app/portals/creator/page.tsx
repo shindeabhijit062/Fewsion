@@ -76,7 +76,7 @@ export default function CreatorDashboardPage() {
     activeTab, setActiveTab, profile, applications, collaborations, payments,
     notifications, reviews, notifOpen, toggleNotifPanel, unreadCount,
     selectedCollabId, setSelectedCollabId, threadMessages, threadInput, setThreadInput,
-    sendMessage, openThread, viewContract, signContract, contractModal, signing,
+    sendMessage, openThread, viewContract, signContract, contractModal, setContractModal, signing,
     totalEarnings, averageRating, userId, statusTagClasses,
     kycStatus, kycDetails, kycModalOpen, setKycModalOpen, submitKycData, requireKycGate, inbox
   } = useCreatorData();
@@ -450,6 +450,64 @@ export default function CreatorDashboardPage() {
                   className="rounded-full bg-[var(--amber)] px-6 py-2.5 text-xs font-bold text-black hover:opacity-90 transition-all cursor-pointer"
                 >
                   {kycStatus === 'verified' ? 'Update KYC Details' : 'Complete KYC Verification Now'}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Contract modal */}
+        {contractModal && (
+          <div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4"
+            onClick={() => setContractModal(null)}
+          >
+            <div
+              className="max-h-[85vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-[var(--border2)] bg-[var(--card)] p-7"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2 className="font-display text-lg font-bold text-[var(--text)]">Collaboration Agreement</h2>
+              <p className="mt-1 mb-4 text-xs text-[var(--muted)]">
+                Auto-generated from the campaign terms. Not a substitute for legal advice — review before signing.
+              </p>
+              <pre className="mb-5 whitespace-pre-wrap rounded-lg bg-[var(--black)] p-4 font-sans text-sm leading-relaxed text-[var(--text)]">
+                {contractModal.contract_text}
+              </pre>
+
+              <div className="mb-5 grid grid-cols-2 gap-3 text-xs">
+                {[
+                  { who: 'Brand', at: contractModal.brand_signed_at, name: null },
+                  { who: 'You', at: contractModal.counterparty_signed_at, name: contractModal.counterparty_signature_name },
+                ].map((s) => (
+                  <div key={s.who} className="rounded-lg border border-[var(--border)] p-3">
+                    <div className="text-[var(--muted)]">{s.who}</div>
+                    {s.at ? (
+                      <div className="mt-1 flex items-center gap-1.5 font-semibold text-emerald-400">
+                        <CheckCircle2 size={13} /> Signed {new Date(s.at).toLocaleDateString()}
+                        {s.name ? ` · ${s.name}` : ''}
+                      </div>
+                    ) : (
+                      <div className="mt-1 flex items-center gap-1.5 font-semibold text-[var(--amber)]">
+                        <Clock size={13} /> Not signed yet
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex justify-end gap-2.5">
+                <button
+                  onClick={() => setContractModal(null)}
+                  className="rounded-full border border-[var(--border2)] px-5 py-2.5 text-xs font-semibold text-[var(--text)]"
+                >
+                  Close
+                </button>
+                <button
+                  onClick={signContract}
+                  disabled={signing || !!contractModal.counterparty_signed_at}
+                  className="rounded-full bg-[var(--amber)] px-5 py-2.5 text-xs font-bold text-black hover:opacity-90 disabled:opacity-50"
+                >
+                  {contractModal.counterparty_signed_at ? 'Already Signed' : signing ? 'Signing…' : 'Sign Contract'}
                 </button>
               </div>
             </div>
