@@ -66,17 +66,6 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <p>© {new Date().getFullYear()} Fewsion. All rights reserved.</p>
-        <p className="made">
-          Made with <span>♥</span> By{' '}
-          <a
-            href="https://www.josmithservices.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-amber transition-colors"
-          >
-            Josmith Services
-          </a>
-        </p>
       </div>
     </footer>
   );

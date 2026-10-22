@@ -160,9 +160,8 @@ export default function LoginPage() {
         <div className="absolute pointer-events-none" style={{ top: '-20%', left: '-10%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 65%)' }} />
         <div className="absolute pointer-events-none" style={{ bottom: '-20%', right: '-10%', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(255,107,53,0.07) 0%, transparent 65%)' }} />
 
-        <Link href="/" className="relative z-10 font-display text-[24px] font-extrabold text-[color:var(--text)] no-underline" style={{ letterSpacing: '-0.5px' }}>
-          Few<span style={{ color: 'var(--amber)' }}>sion</span>
-        </Link>
+        {/* Spacer keeps the headline centred (the navbar already shows the logo) */}
+        <div aria-hidden />
 
         <div className="relative z-10">
           <div className="text-[12px] font-semibold uppercase mb-5" style={{ letterSpacing: '0.1em', color: 'var(--amber)' }}>
