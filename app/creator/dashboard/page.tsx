@@ -59,7 +59,7 @@
 // }
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase';
 
@@ -109,6 +109,22 @@ export default function CreatorDashboardPage() {
   });
 
   const update = (key: keyof typeof form, value: string) => setForm((f) => ({ ...f, [key]: value }));
+
+  // Signed in with Instagram? Pre-fill what Instagram already told us
+  const [fromInstagram, setFromInstagram] = useState<string | null>(null);
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      const meta = data.user?.user_metadata;
+      if (!meta?.instagram_username) return;
+      setFromInstagram(meta.instagram_username);
+      setForm((f) => ({
+        ...f,
+        name: f.name || meta.full_name || meta.instagram_username,
+        platform: 'Instagram',
+        followers: f.followers || (meta.instagram_followers != null ? String(meta.instagram_followers) : ''),
+      }));
+    });
+  }, []);
 
   async function handleSave() {
     setError('');
@@ -172,6 +188,11 @@ export default function CreatorDashboardPage() {
         <p className="mt-2 text-sm text-[var(--muted)]">
           Tell us about your account. We use this to calculate your Creator Score and match you with brands.
         </p>
+        {fromInstagram && (
+          <p className="mt-3 rounded-xl border border-[rgba(245,166,35,0.25)] bg-[rgba(245,166,35,0.06)] px-4 py-2.5 text-xs text-[var(--amber)]">
+            Connected to Instagram as @{fromInstagram}. We filled in your name and follower count from your account.
+          </p>
+        )}
 
         <div className="mt-8 space-y-6">
           <div>

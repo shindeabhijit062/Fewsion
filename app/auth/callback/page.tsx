@@ -25,6 +25,21 @@ function CallbackInner() {
       }
 
       let { data: { session } } = await supabase.auth.getSession();
+
+      // Instagram sign-in: the server hands us a one-time token
+      const igToken = searchParams?.get('ig_token');
+      if (igToken) {
+        await supabase.auth.signOut({ scope: 'local' });
+        const { data, error } = await supabase.auth.verifyOtp({ token_hash: igToken, type: 'magiclink' });
+        if (error || !data.session) {
+          setMessage(error?.message || 'Instagram sign-in failed. Please try again.');
+          setTimeout(() => (window.location.href = '/login'), 2500);
+          return;
+        }
+        session = data.session;
+        setMessage('Signed in with Instagram. Redirecting...');
+      }
+
       const code = searchParams?.get('code');
       if (!session && code) {
         const { data, error } = await supabase.auth.exchangeCodeForSession(code);
@@ -81,7 +96,9 @@ function CallbackInner() {
         .eq('user_id', user.id)
         .maybeSingle();
 
-      window.location.href = subProfile ? `/portals/${role}` : `/${role}/dashboard`;
+      const next = searchParams?.get('next');
+      const safeNext = next && next.startsWith('/') && !next.startsWith('//') ? next : null;
+      window.location.href = subProfile ? safeNext || `/portals/${role}` : `/${role}/dashboard`;
     }
 
     finishSignIn();

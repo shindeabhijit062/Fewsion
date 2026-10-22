@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../utils/supabase';
 
@@ -46,6 +46,18 @@ export default function LoginPage() {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 4000);
   };
+
+  // Errors sent back by Instagram sign-in (/login?error=...)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const err = params.get('error');
+    if (!err) return;
+    setToast({ msg: err, type: 'error' });
+    const t = setTimeout(() => setToast(null), 6000);
+    params.delete('error');
+    window.history.replaceState(null, '', `${window.location.pathname}${params.toString() ? `?${params}` : ''}`);
+    return () => clearTimeout(t);
+  }, []);
 
   const handleLogin = async () => {
     let valid = true;
@@ -246,7 +258,10 @@ export default function LoginPage() {
               Google
             </button>
             <button
-              onClick={() => showToast('Instagram sign-in is coming soon. Please use Google or email for now.', 'error')}
+              onClick={() => {
+                const next = new URLSearchParams(window.location.search).get('next');
+                window.location.href = `/api/auth/instagram/start?role=${role}${next ? `&next=${encodeURIComponent(next)}` : ''}`;
+              }}
               className="flex items-center justify-center gap-2 rounded-[10px] p-3 text-[13px] font-medium cursor-pointer border-none transition-all duration-200"
               style={{ background: 'var(--card)', border: '1.5px solid var(--border)', color: 'var(--text)', fontFamily: 'var(--font-body)' }}
               onMouseEnter={(e) => { const el = e.currentTarget as HTMLElement; el.style.borderColor = 'var(--border2)'; el.style.background = 'var(--card2)'; }}
