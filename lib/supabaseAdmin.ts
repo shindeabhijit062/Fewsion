@@ -18,26 +18,49 @@ export function getSupabaseAdmin(): SupabaseClient | null {
 
 export type AdminRole = 'super_admin' | 'admin';
 
+const SUPER_ROLES = ['super_admin', 'superadmin'];
+const ADMIN_ROLES = ['admin'];
+
+export type AdminCheck =
+  | { ok: true; caller: { id: string; email: string | null; role: AdminRole } }
+  | { ok: false; reason: string };
+
 /**
- * Checks the bearer token on a request and returns the caller if their
- * role in public.users is super_admin or admin. The role is read from the
- * database only (never from user_metadata, which users can edit themselves).
+ * Checks the bearer token on a request and returns the caller if they are a
+ * super admin or admin. The role comes from public.users (matched by id, then
+ * by email, like the Super Admin login) or from app_metadata. user_metadata
+ * is ignored on purpose: any signed-in user can edit it themselves.
  */
-export async function getAdminCaller(
-  req: Request
-): Promise<{ id: string; email: string | null; role: AdminRole } | null> {
+export async function checkAdminCaller(req: Request): Promise<AdminCheck> {
   const admin = getSupabaseAdmin();
-  if (!admin) return null;
+  if (!admin) return { ok: false, reason: 'Server is missing SUPABASE_SERVICE_ROLE_KEY.' };
 
   const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
-  if (!token) return null;
+  if (!token) return { ok: false, reason: 'You are not signed in. Sign in again from the Super Admin login.' };
 
   const { data, error } = await admin.auth.getUser(token);
-  if (error || !data.user) return null;
+  if (error || !data.user) {
+    return { ok: false, reason: 'Your session has expired. Sign out and sign in again.' };
+  }
+  const user = data.user;
 
-  const { data: row } = await admin.from('users').select('role').eq('id', data.user.id).maybeSingle();
-  const role = String(row?.role || '').toLowerCase();
-  if (role !== 'super_admin' && role !== 'admin') return null;
+  let rawRole: unknown = null;
+  const { data: byId } = await admin.from('users').select('role').eq('id', user.id).maybeSingle();
+  rawRole = byId?.role;
+  if (!rawRole && user.email) {
+    const { data: byEmail } = await admin.from('users').select('role').ilike('email', user.email).limit(1).maybeSingle();
+    rawRole = byEmail?.role;
+  }
+  if (!rawRole) rawRole = user.app_metadata?.role;
 
-  return { id: data.user.id, email: data.user.email ?? null, role };
+  const role = String(rawRole || '').toLowerCase();
+  if (SUPER_ROLES.includes(role)) return { ok: true, caller: { id: user.id, email: user.email ?? null, role: 'super_admin' } };
+  if (ADMIN_ROLES.includes(role)) return { ok: true, caller: { id: user.id, email: user.email ?? null, role: 'admin' } };
+
+  return {
+    ok: false,
+    reason: rawRole
+      ? `Account ${user.email} has role "${rawRole}", not super_admin.`
+      : `Account ${user.email} has no role in the users table. Set its role to super_admin in Supabase (Table Editor → users).`,
+  };
 }

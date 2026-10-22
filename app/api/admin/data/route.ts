@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getAdminCaller, getSupabaseAdmin } from '@/lib/supabaseAdmin';
+import { checkAdminCaller, getSupabaseAdmin } from '@/lib/supabaseAdmin';
 
 // Super admin data API: read, create, update and delete rows in any public
 // table. Every request must carry the caller's Supabase access token, and
@@ -74,8 +74,9 @@ async function guard(req: Request, needsWrite: boolean) {
       ),
     };
   }
-  const caller = await getAdminCaller(req);
-  if (!caller) return { error: json({ error: 'Not authorised. Sign in with a Super Admin account.' }, 401) };
+  const check = await checkAdminCaller(req);
+  if (!check.ok) return { error: json({ error: `Not authorised: ${check.reason}` }, 401) };
+  const caller = check.caller;
   if (needsWrite && caller.role !== 'super_admin') {
     return { error: json({ error: 'Only Super Admins can change data.' }, 403) };
   }
