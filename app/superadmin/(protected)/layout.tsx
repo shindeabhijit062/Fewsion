@@ -84,6 +84,7 @@ export default function SuperAdminDashboardLayout({
   if (pathname?.includes('/audit-logs')) title = 'Audit Logs';
   if (pathname?.includes('/settings')) title = 'Platform Settings';
   if (pathname?.includes('/ai-knowledge')) title = 'AI Knowledge Base';
+  if (pathname?.includes('/superadmin/data')) title = 'Data Manager';
 
   if (loading) {
     return (

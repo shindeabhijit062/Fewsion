@@ -14,7 +14,8 @@ import {
   ShieldCheck, 
   Settings, 
   LogOut,
-  X
+  X,
+  Database
 } from 'lucide-react';
 
 const navItems = [
@@ -23,6 +24,7 @@ const navItems = [
   { name: 'Brands', href: '/superadmin/brands', icon: Building2 },
   { name: 'Creators', href: '/superadmin/creators', icon: Clapperboard },
   { name: 'Collaborations', href: '/superadmin/collaborations', icon: Handshake },
+  { name: 'Data Manager', href: '/superadmin/data', icon: Database },
   { name: 'Reports', href: '/superadmin/reports', icon: BarChart3 },
   { name: 'Audit Logs', href: '/superadmin/audit-logs', icon: ShieldCheck },
   { name: 'Settings', href: '/superadmin/settings', icon: Settings },

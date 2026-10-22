@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/utils/supabase';
-import { logAuditAction } from '@/lib/audit';
+import { adminApi } from '@/lib/adminApi';
 import ConfirmModal from '@/components/superadmin/ConfirmModal';
 import CSVExporter from '@/components/superadmin/CSVExporter';
+import RecordEditor from '@/components/superadmin/RecordEditor';
 import { 
   Search, 
   Filter, 
@@ -18,14 +19,17 @@ import {
   CircleX,
   ChevronLeft,
   ChevronRight,
-  UserPlus
+  Pencil,
+  Trash2
 } from 'lucide-react';
 
 interface UserRecord {
   id: string;
   email: string;
   role: string;
-  full_name: string;
+  full_name?: string;
+  first_name?: string;
+  last_name?: string;
   avatar_url?: string;
   phone?: string;
   city?: string;
@@ -34,6 +38,9 @@ interface UserRecord {
   created_at: string;
   updated_at?: string;
 }
+
+const nameOf = (u: UserRecord) =>
+  u.full_name || [u.first_name, u.last_name].filter(Boolean).join(' ') || '';
 
 export default function SuperAdminUsersPage() {
   const [users, setUsers] = useState<UserRecord[]>([]);
@@ -51,7 +58,7 @@ export default function SuperAdminUsersPage() {
     open: boolean;
     title: string;
     message: string;
-    actionType: 'toggle_verify' | 'change_role';
+    actionType: 'toggle_verify' | 'change_role' | 'delete';
     newRole?: string;
     newVerify?: boolean;
     isDestructive?: boolean;
@@ -62,6 +69,8 @@ export default function SuperAdminUsersPage() {
     actionType: 'toggle_verify',
   });
   const [actionLoading, setActionLoading] = useState(false);
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [toast, setToast] = useState<{ msg: string; type: 'success' | 'error' } | null>(null);
 
   const showToast = (msg: string, type: 'success' | 'error') => {
@@ -72,18 +81,10 @@ export default function SuperAdminUsersPage() {
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        showToast(`Failed to fetch users: ${error.message}`, 'error');
-      } else {
-        setUsers(data || []);
-      }
+      const { rows } = await adminApi.list('users', { limit: 500 });
+      setUsers(rows as UserRecord[]);
     } catch (err: any) {
-      showToast('Error connecting to database', 'error');
+      showToast(`Failed to fetch users: ${err.message}`, 'error');
     } finally {
       setLoading(false);
     }
@@ -91,13 +92,14 @@ export default function SuperAdminUsersPage() {
 
   useEffect(() => {
     fetchUsers();
+    supabase.auth.getUser().then(({ data }) => setCurrentUserId(data.user?.id ?? null));
   }, [fetchUsers]);
 
   // Filtering
   const filteredUsers = users.filter((u) => {
     const matchesSearch =
       u.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      u.full_name?.toLowerCase().includes(searchTerm.toLowerCase());
+      nameOf(u).toLowerCase().includes(searchTerm.toLowerCase());
     
     const matchesRole = roleFilter === 'all' || u.role === roleFilter;
     
@@ -122,56 +124,22 @@ export default function SuperAdminUsersPage() {
     setActionLoading(true);
 
     try {
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
-
       if (confirmModal.actionType === 'toggle_verify') {
         const nextStatus = !selectedUser.is_verified;
-        const { error } = await supabase
-          .from('users')
-          .update({ is_verified: nextStatus })
-          .eq('id', selectedUser.id);
-
-        if (error) throw error;
-
-        // Record Audit Log
-        await logAuditAction(
-          currentUser?.id || null,
-          nextStatus ? 'USER_VERIFIED' : 'USER_UNVERIFIED',
-          'users',
-          selectedUser.id,
-          { target_email: selectedUser.email, actor_email: currentUser?.email }
-        );
-
+        await adminApi.update('users', selectedUser.id, { is_verified: nextStatus });
         showToast(
           `User ${selectedUser.email} status updated to ${nextStatus ? 'Verified' : 'Unverified'}`,
           'success'
         );
       } else if (confirmModal.actionType === 'change_role' && confirmModal.newRole) {
-        const { error } = await supabase
-          .from('users')
-          .update({ role: confirmModal.newRole })
-          .eq('id', selectedUser.id);
-
-        if (error) throw error;
-
-        // Record Audit Log
-        await logAuditAction(
-          currentUser?.id || null,
-          'USER_ROLE_CHANGED',
-          'users',
-          selectedUser.id,
-          {
-            old_role: selectedUser.role,
-            new_role: confirmModal.newRole,
-            target_email: selectedUser.email,
-            actor_email: currentUser?.email,
-          }
-        );
-
+        await adminApi.update('users', selectedUser.id, { role: confirmModal.newRole });
         showToast(
           `Role for ${selectedUser.email} changed to ${confirmModal.newRole.toUpperCase()}`,
           'success'
         );
+      } else if (confirmModal.actionType === 'delete') {
+        await adminApi.remove('users', selectedUser.id);
+        showToast(`User ${selectedUser.email} deleted.`, 'success');
       }
 
       await fetchUsers();
@@ -205,7 +173,7 @@ export default function SuperAdminUsersPage() {
           <CSVExporter 
             data={filteredUsers.map(u => ({
               ID: u.id,
-              FullName: u.full_name,
+              FullName: nameOf(u),
               Email: u.email,
               Role: u.role,
               Verified: u.is_verified ? 'Yes' : 'No',
@@ -295,10 +263,10 @@ export default function SuperAdminUsersPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-[var(--amber)]/10 border border-[var(--amber)]/20 flex items-center justify-center font-bold text-xs text-[var(--amber)]">
-                          {user.full_name ? user.full_name.charAt(0).toUpperCase() : 'U'}
+                          {nameOf(user) ? nameOf(user).charAt(0).toUpperCase() : 'U'}
                         </div>
                         <div>
-                          <div className="font-semibold text-[var(--text)]">{user.full_name || 'No Name'}</div>
+                          <div className="font-semibold text-[var(--text)]">{nameOf(user) || 'No Name'}</div>
                           <div className="text-[var(--muted)] text-xs">{user.email}</div>
                         </div>
                       </div>
@@ -395,6 +363,34 @@ export default function SuperAdminUsersPage() {
                           <option value="admin">Admin</option>
                           <option value="super_admin">Super Admin</option>
                         </select>
+
+                        {/* Edit */}
+                        <button
+                          onClick={() => { setSelectedUser(user); setEditorOpen(true); }}
+                          className="p-1.5 rounded-lg text-[var(--muted)] hover:text-[var(--amber)] hover:bg-[rgba(245,166,35,0.1)] transition-colors"
+                          title="Edit user"
+                        >
+                          <Pencil className="w-4 h-4" />
+                        </button>
+
+                        {/* Delete */}
+                        <button
+                          onClick={() => {
+                            setSelectedUser(user);
+                            setConfirmModal({
+                              open: true,
+                              title: 'Delete User',
+                              message: `Permanently delete ${user.email}? This removes their account and login, and records linked to them may also be removed. This cannot be undone.`,
+                              actionType: 'delete',
+                              isDestructive: true,
+                            });
+                          }}
+                          disabled={user.id === currentUserId}
+                          className="p-1.5 rounded-lg text-[var(--muted)] hover:text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                          title={user.id === currentUserId ? "You can't delete your own account" : 'Delete user'}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -435,8 +431,23 @@ export default function SuperAdminUsersPage() {
         message={confirmModal.message}
         isDestructive={confirmModal.isDestructive}
         loading={actionLoading}
+        confirmText={confirmModal.actionType === 'delete' ? 'Delete' : 'Confirm'}
         onConfirm={handleExecuteAction}
         onClose={() => setConfirmModal((prev) => ({ ...prev, open: false }))}
+      />
+
+      {/* Edit user */}
+      <RecordEditor
+        isOpen={editorOpen}
+        table="users"
+        record={selectedUser}
+        title={selectedUser ? `Edit ${nameOf(selectedUser) || selectedUser.email}` : 'Edit user'}
+        onClose={() => setEditorOpen(false)}
+        onSaved={() => {
+          setEditorOpen(false);
+          showToast('User updated.', 'success');
+          fetchUsers();
+        }}
       />
 
       {/* User Details Modal */}
@@ -449,7 +460,7 @@ export default function SuperAdminUsersPage() {
           <div className="relative bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 max-w-lg w-full z-10 space-y-4">
             <div className="flex justify-between items-start border-b border-[var(--border)] pb-4">
               <div>
-                <h3 className="text-lg font-bold text-[var(--text)]">{selectedUser.full_name || 'User Details'}</h3>
+                <h3 className="text-lg font-bold text-[var(--text)]">{nameOf(selectedUser) || 'User Details'}</h3>
                 <p className="text-xs text-[var(--muted)]">{selectedUser.email}</p>
               </div>
               <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[var(--amber)]/10 text-[var(--amber)] border border-[var(--amber)]/20">
