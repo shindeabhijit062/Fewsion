@@ -216,15 +216,17 @@ export default function CreatorsPage() {
         </div>
       </section>
 
-      {/* ── AI MATCHMAKER DEMO SECTION ── */}
-      <section className="px-4 sm:px-6 lg:px-8 py-10 max-w-7xl mx-auto">
-        <AIMatchmaker
-          onSelectCreator={requestCollab}
-          creatorStatus={statusLabels}
-          title="Match Talent with Fewsion AI Engine"
-          subtitle="Real-time neural recommendation system matching brands and creators by niche, engagement VTR, and budget."
-        />
-      </section>
+      {/* ── AI CREATOR MATCHMAKER (for brands and visitors, not creators/editors) ── */}
+      {(viewer.kind === 'brand' || viewer.kind === 'guest') && (
+        <section className="px-4 sm:px-6 lg:px-8 py-10 max-w-7xl mx-auto">
+          <AIMatchmaker
+            onSelectCreator={requestCollab}
+            creatorStatus={statusLabels}
+            title="Match Talent with Fewsion AI Engine"
+            subtitle="Real-time neural recommendation system matching brands and creators by niche, engagement VTR, and budget."
+          />
+        </section>
+      )}
 
       {/* ── SEARCH + FILTERS ── */}
       <section className="px-[5%] pb-10 relative z-10">

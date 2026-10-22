@@ -38,7 +38,7 @@ export interface CreatorMatch {
 }
 
 // Same niche list creators pick from on their dashboard
-const NICHES = [
+export const NICHES = [
   'Any',
   'Tech & gadgets',
   'Beauty & skincare',
@@ -505,7 +505,7 @@ function IdleStage() {
 }
 
 // Animated "network" of nodes lighting up while the match runs
-function NeuralScanner() {
+export function NeuralScanner() {
   const nodes = Array.from({ length: 18 }, (_, i) => {
     const angle = (i / 18) * Math.PI * 2;
     const r = i % 2 ? 38 : 54;
@@ -552,7 +552,7 @@ function NeuralScanner() {
   );
 }
 
-function ScoreRing({ value, delay }: { value: number; delay: number }) {
+export function ScoreRing({ value, delay }: { value: number; delay: number }) {
   const r = 20;
   const circ = 2 * Math.PI * r;
   const [shown, setShown] = useState(0);

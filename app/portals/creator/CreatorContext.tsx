@@ -699,6 +699,8 @@ export interface CreatorContextType {
   isKycVerified: boolean;
   requireKycGate: (onSuccessAction: () => void) => boolean;
   inbox: InboxState;
+  /** Reload portal data in the background */
+  refresh: () => void;
 }
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
@@ -810,7 +812,33 @@ export function CreatorProvider({ children }: { children: React.ReactNode }) {
     setKycStatus(loadedStatus);
     setKycDetails(loadedDetails);
 
-    setApplications(appsRes.data ?? []);
+    // Applications only store campaign ids: add the campaign title and brand name
+    const apps = appsRes.data ?? [];
+    const campaignIds = Array.from(new Set(apps.map((a: any) => a.campaign_id).filter(Boolean)));
+    if (campaignIds.length) {
+      const { data: briefs } = await supabase
+        .from('campaign_briefs')
+        .select('id, campaign_title, brand_id')
+        .in('id', campaignIds);
+      const brandIds = Array.from(new Set((briefs ?? []).map((b: any) => b.brand_id).filter(Boolean)));
+      const { data: brands } = brandIds.length
+        ? await supabase.from('brand_profiles').select('user_id, brand_name').in('user_id', brandIds)
+        : { data: [] as any[] };
+      const briefBy = new Map((briefs ?? []).map((b: any) => [b.id, b]));
+      const brandBy = new Map((brands ?? []).map((b: any) => [b.user_id, b.brand_name]));
+      setApplications(
+        apps.map((a: any) => {
+          const brief: any = briefBy.get(a.campaign_id);
+          return {
+            ...a,
+            campaign_title: a.campaign_title || brief?.campaign_title,
+            brand_name: a.brand_name || (brief ? brandBy.get(brief.brand_id) : undefined),
+          };
+        })
+      );
+    } else {
+      setApplications(apps);
+    }
     setCollaborations(collabRes.data ?? []);
     setPayments(paymentsRes.data ?? []);
     setNotifications(notifRes.data ?? []);
@@ -1045,7 +1073,8 @@ export function CreatorProvider({ children }: { children: React.ReactNode }) {
     signing, setSigning, totalEarnings, averageRating, unreadCount, initials, markNotificationsRead,
     toggleNotifPanel, openThread, sendMessage, viewContract, signContract, handleLogout,
     statusTagClasses, kycStatus, setKycStatus, kycDetails, setKycDetails, kycModalOpen, setKycModalOpen,
-    submitKycData, isKycVerified, requireKycGate, inbox
+    submitKycData, isKycVerified, requireKycGate, inbox,
+    refresh: () => loadAll(true),
   };
 
   return (

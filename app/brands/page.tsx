@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
-import { AIMatchmaker } from '@/components/AIMatchmaker';
+import { CampaignMatchmaker } from '@/components/CampaignMatchmaker';
+import { applicationsApi } from '@/lib/applicationsApi';
 import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
 
 export default function BrandsPage() {
@@ -18,6 +19,42 @@ export default function BrandsPage() {
   const [kycModalOpen, setKycModalOpen] = useState(false);
   const [pendingCampaignId, setPendingCampaignId] = useState<number | string | null>(null);
   const [appliedMap, setAppliedMap] = useState<Record<string | number, boolean>>({});
+  // Who is viewing: only creators can apply; brands see campaigns read-only
+  const [viewer, setViewer] = useState<'loading' | 'guest' | 'creator' | 'brand' | 'other'>('loading');
+  const [notice, setNotice] = useState<string | null>(null);
+
+  const showNotice = (msg: string) => {
+    setNotice(msg);
+    setTimeout(() => setNotice(null), 4500);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return setViewer('guest');
+      const [{ data: row }, { data: creator }] = await Promise.all([
+        supabase.from('users').select('role').eq('id', user.id).maybeSingle(),
+        supabase.from('creator_profiles').select('id').eq('user_id', user.id).maybeSingle(),
+      ]);
+      const role = creator ? 'creator' : row?.role === 'brand' ? 'brand' : row?.role === 'creator' ? 'creator' : 'other';
+      setViewer(role);
+      if (role === 'creator') {
+        const ids = await applicationsApi.mine();
+        setAppliedMap(Object.fromEntries(ids.map((id) => [id, true])));
+      }
+    })();
+  }, []);
+
+  // Save the application for real
+  const submitApplication = async (campaignId: number | string) => {
+    try {
+      await applicationsApi.apply(String(campaignId));
+      setAppliedMap((prev) => ({ ...prev, [campaignId]: true }));
+      showNotice('✓ Application sent. The brand has been notified.');
+    } catch (e) {
+      showNotice((e as Error).message);
+    }
+  };
 
   useEffect(() => {
     async function checkKyc() {
@@ -49,19 +86,27 @@ export default function BrandsPage() {
     setKycModalOpen(false);
 
     if (pendingCampaignId) {
-      setAppliedMap((prev) => ({ ...prev, [pendingCampaignId]: true }));
+      const id = pendingCampaignId;
       setPendingCampaignId(null);
-      alert('✓ KYC Verified! Your application for this campaign has been submitted.');
+      await submitApplication(id);
     }
   };
 
   const handleApplyClick = (campaignId: number | string) => {
+    if (viewer === 'guest') {
+      window.location.href = `/login?next=${encodeURIComponent('/brands')}`;
+      return;
+    }
+    if (viewer !== 'creator') {
+      showNotice('Only creators can apply to campaigns.');
+      return;
+    }
     if (kycStatus !== 'verified') {
       setPendingCampaignId(campaignId);
       setKycModalOpen(true);
       return;
     }
-    setAppliedMap((prev) => ({ ...prev, [campaignId]: true }));
+    submitApplication(campaignId);
   };
 
   useEffect(() => {
@@ -182,16 +227,23 @@ export default function BrandsPage() {
         </div>
       </div>
 
-      {/* ── AI MATCHMAKER SECTION ── */}
-      <div className="mb-14">
-        <AIMatchmaker
-          title="AI Campaign Neural Matchmaker"
-          subtitle="Match your brand campaign requirements or creator profile against real-time performance indicators."
-          onSelectCreator={(c) => {
-            handleApplyClick(c.id);
-          }}
-        />
-      </div>
+      {/* ── AI CAMPAIGN MATCHMAKER (for creators and visitors, not brands) ── */}
+      {viewer !== 'brand' && viewer !== 'loading' && (
+        <div className="mb-14">
+          <CampaignMatchmaker
+            title="AI Campaign Neural Matchmaker"
+            subtitle="Fewsion AI ranks live brand campaigns against your creator profile: niche, platform, rate and engagement."
+            canApply={viewer === 'creator'}
+            beforeApply={(c) => {
+              if (kycStatus === 'verified') return true;
+              setPendingCampaignId(c.id);
+              setKycModalOpen(true);
+              return false;
+            }}
+            onApplied={(c) => setAppliedMap((prev) => ({ ...prev, [c.id]: true }))}
+          />
+        </div>
+      )}
 
       {/* ── FILTERS ── */}
       <div className="flex gap-3 mb-7 flex-wrap">
@@ -284,12 +336,19 @@ export default function BrandsPage() {
               campaign={campaign}
               isApplied={Boolean(appliedMap[campaign.id])}
               onApply={() => handleApplyClick(campaign.id)}
+              blockedLabel={viewer === 'brand' || viewer === 'other' ? 'Creators only' : undefined}
             />
           ))}
         </div>
       )}
 
       {/* KYC Modal Gate */}
+      {notice && (
+        <div className="fixed bottom-5 left-1/2 z-[200] -translate-x-1/2 rounded-full border border-[var(--border2)] bg-[var(--card)] px-5 py-2.5 text-sm font-medium text-[var(--text)] shadow-xl">
+          {notice}
+        </div>
+      )}
+
       <KYCModal
         isOpen={kycModalOpen}
         onClose={() => setKycModalOpen(false)}
@@ -301,7 +360,18 @@ export default function BrandsPage() {
   );
 }
 
-function CampaignCard({ campaign, isApplied, onApply }: { campaign: Campaign; isApplied?: boolean; onApply?: () => void }) {
+function CampaignCard({
+  campaign,
+  isApplied,
+  onApply,
+  blockedLabel,
+}: {
+  campaign: Campaign;
+  isApplied?: boolean;
+  onApply?: () => void;
+  /** Shown instead of "Apply now" for viewers who can't apply (brands) */
+  blockedLabel?: string;
+}) {
   const [internalApplied, setInternalApplied] = useState(false);
   const applied = isApplied || internalApplied;
 
@@ -373,7 +443,7 @@ function CampaignCard({ campaign, isApplied, onApply }: { campaign: Campaign; is
       {/* Apply button */}
       <button
         onClick={handleApply}
-        disabled={applied}
+        disabled={applied || !!blockedLabel}
         className="w-full font-display text-[13.5px] font-bold py-[11px] rounded-full border-none cursor-pointer transition-all duration-200"
         style={{
           background: applied ? 'rgba(74,222,128,0.12)' : 'var(--amber)',
@@ -382,7 +452,7 @@ function CampaignCard({ campaign, isApplied, onApply }: { campaign: Campaign; is
         onMouseEnter={(e) => { if (!applied) { (e.currentTarget as HTMLButtonElement).style.opacity = '0.88'; (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-1px)'; } }}
         onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.opacity = '1'; (e.currentTarget as HTMLButtonElement).style.transform = ''; }}
       >
-        {applied ? '✓ Applied' : 'Apply now'}
+        {applied ? '✓ Applied' : blockedLabel || 'Apply now'}
       </button>
     </div>
   );

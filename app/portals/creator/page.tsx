@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Bell, Send as SendIcon, ShieldCheck, AlertTriangle, CheckCircle2, Clock } from 'lucide-react';
 import { useCreatorData, TabId, emptyBox } from './CreatorContext';
 import { KYCModal } from '@/components/KYCModal';
-import { AIMatchmaker } from '@/components/AIMatchmaker';
+import { CampaignMatchmaker } from '@/components/CampaignMatchmaker';
 import { MessagesInbox } from '@/components/MessagesInbox';
 
 const TAB_COPY: Record<TabId, { title: string; subtitle: string }> = {
@@ -68,7 +68,7 @@ export default function CreatorDashboardPage() {
     selectedCollabId, setSelectedCollabId, threadMessages, threadInput, setThreadInput,
     sendMessage, openThread, viewContract, signContract, contractModal, setContractModal, signing,
     totalEarnings, averageRating, userId, statusTagClasses,
-    kycStatus, kycDetails, kycModalOpen, setKycModalOpen, submitKycData, requireKycGate, inbox
+    kycStatus, kycDetails, kycModalOpen, setKycModalOpen, submitKycData, requireKycGate, inbox, refresh
   } = useCreatorData();
 
   return (
@@ -191,14 +191,11 @@ export default function CreatorDashboardPage() {
 
             {/* AI Matchmaker embedded section */}
             <div className="mt-6 sm:mt-10">
-              <AIMatchmaker
+              <CampaignMatchmaker
                 title="AI Campaign Matchmaker"
-                subtitle="Find top compatible brand campaigns and creators tuned to your niche and engagement metrics."
-                onSelectCreator={() => {
-                  requireKycGate(() => {
-                    alert('Connecting with campaign...');
-                  });
-                }}
+                subtitle="Fewsion AI ranks live brand campaigns against your niche, platform, rate and engagement."
+                beforeApply={() => requireKycGate(() => {})}
+                onApplied={() => refresh()}
               />
             </div>
           </div>

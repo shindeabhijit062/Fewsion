@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { explainMatches } from '@/lib/aiExplain';
 
 // AI creator matching.
 // 1. Every creator in creator_profiles is scored against the brief
@@ -91,15 +92,7 @@ function fallbackReason(m: any, goal: Goal, niche: string): string {
 }
 
 async function aiReasons(matches: any[], brief: { niche: string; goal: Goal; budget: number }): Promise<Record<string, string> | null> {
-  const apiKey = process.env.AI_API_KEY || process.env.OPENROUTER_API_KEY;
-  if (!apiKey || !matches.length) return null;
-
-  const baseUrl = process.env.AI_BASE_URL || 'https://api.tokenrouter.com/v1';
-  const models = (process.env.AI_MODEL || 'deepseek/deepseek-v4.1-flash')
-    .split(',')
-    .map((m) => m.trim())
-    .filter(Boolean);
-
+  if (!matches.length) return null;
   const payload = matches.map((m) => ({
     id: m.id,
     name: m.name,
@@ -123,33 +116,7 @@ ${JSON.stringify(payload)}
 For each creator, write ONE short sentence (max 22 words) explaining why they suit a ${brief.goal.toLowerCase()} campaign: connect their content style, niche, engagement or reach to the goal. Mention a weakness only if it matters (e.g. over budget, different niche). Do not mention match percentages or rankings. Use only the facts given; never invent any.
 Reply with JSON only, in this shape: {"<id>": "<reason>", ...}`;
 
-  for (const model of models) {
-    try {
-      const res = await fetch(`${baseUrl}/chat/completions`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model,
-          temperature: 0.3,
-          messages: [{ role: 'user', content: prompt }],
-        }),
-        signal: AbortSignal.timeout(15_000),
-      });
-      if (!res.ok) {
-        console.error('Match AI error:', model, res.status);
-        if ([404, 429, 500, 502, 503, 504].includes(res.status)) continue;
-        return null;
-      }
-      const data = await res.json();
-      const text: string = data?.choices?.[0]?.message?.content ?? '';
-      const json = text.match(/\{[\s\S]*\}/);
-      if (!json) return null;
-      return JSON.parse(json[0]);
-    } catch (e) {
-      console.error('Match AI request failed:', model, e);
-    }
-  }
-  return null;
+  return explainMatches(prompt);
 }
 
 export async function POST(req: Request) {
