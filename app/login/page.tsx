@@ -6,6 +6,17 @@ import { supabase } from '../../utils/supabase';
 
 type Role = 'brand' | 'creator' | 'editor';
 
+const EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
+
+const validateEmail = (value: string): string => {
+  const trimmed = value.trim();
+  if (!trimmed) return 'Email is required';
+  if (trimmed.length > 254 || !EMAIL_REGEX.test(trimmed) || trimmed.includes('..')) {
+    return 'Please enter a valid email address';
+  }
+  return '';
+};
+
 export default function LoginPage() {
   const [role, setRole] = useState<Role>('brand');
   const [email, setEmail] = useState('');
@@ -41,8 +52,10 @@ export default function LoginPage() {
     setEmailError('');
     setPassError('');
 
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setEmailError('Please enter a valid email address');
+    const trimmedEmail = email.trim().toLowerCase();
+    const emailErr = validateEmail(trimmedEmail);
+    if (emailErr) {
+      setEmailError(emailErr);
       valid = false;
     }
     if (!password || password.length < 6) {
@@ -54,7 +67,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
+        email: trimmedEmail,
         password,
       });
 
@@ -255,8 +268,10 @@ export default function LoginPage() {
               placeholder="you@company.com"
               value={email}
               onChange={(e) => { setEmail(e.target.value); setEmailError(''); }}
+              onBlur={() => { if (email) setEmailError(validateEmail(email)); }}
               className={`form-input ${emailError ? 'error' : ''}`}
               autoComplete="email"
+              aria-invalid={!!emailError}
             />
             {emailError && <div className="form-error" style={{ display: 'block' }}>{emailError}</div>}
           </div>
