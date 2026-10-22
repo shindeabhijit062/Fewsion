@@ -148,6 +148,7 @@ import {
 import { CreatorProvider, useCreatorData, TabId } from './CreatorContext';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
 import { MessageToasts } from '@/components/MessagesInbox';
+import { PortalMobileNav } from '@/components/PortalMobileNav';
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard },
@@ -197,7 +198,27 @@ function CreatorLayoutInner({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--black)] text-[var(--text)] flex">
+    <div className="min-h-screen bg-[var(--black)] text-[var(--text)] flex flex-col md:flex-row">
+      {/* Mobile navbar (phones / small tablets) */}
+      <PortalMobileNav
+        items={TABS.map((tab) => ({
+          id: tab.id,
+          label: tab.label,
+          icon: tab.icon,
+          active: activeTab === tab.id,
+          badge: tab.id === 'messages' ? inbox.totalUnread : undefined,
+        }))}
+        onSelect={(id) => {
+          setActiveTab(id as TabId);
+          if (id !== 'messages') setSelectedCollabId(null);
+        }}
+        name={profile.creator_name || 'Creator'}
+        subtitle={`★ Score ${profile.ai_total_score ?? '--'}`}
+        avatar={<ProfileAvatar initials={initials || 'C'} size={34} />}
+        avatarLarge={<ProfileAvatar initials={initials || 'C'} size={44} editable />}
+        onLogout={handleLogout}
+      />
+
       {/* Sidebar */}
       <aside className="hidden md:flex w-64 shrink-0 flex-col gap-10 border-r border-[var(--border)] bg-[var(--black)] px-6 py-8 fixed top-0 bottom-0 left-0 z-10">
         <Link href="/" className="font-display text-xl font-extrabold text-[var(--text)]">

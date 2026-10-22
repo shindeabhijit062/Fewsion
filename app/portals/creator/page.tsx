@@ -61,16 +61,6 @@ function SnapshotRow({ icon, main, sub }: { icon: string; main: string; sub: str
   );
 }
 
-const TABS: { id: TabId; label: string }[] = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'applications', label: 'My Applications' },
-  { id: 'collaborations', label: 'Active Collabs' },
-  { id: 'payments', label: 'Earnings' },
-  { id: 'messages', label: 'Messages' },
-  { id: 'reviews', label: 'Reviews' },
-  { id: 'kyc', label: 'KYC Verification' },
-];
-
 export default function CreatorDashboardPage() {
   const {
     activeTab, setActiveTab, profile, applications, collaborations, payments,
@@ -132,22 +122,6 @@ export default function CreatorDashboardPage() {
           </div>
         </header>
 
-        {/* Mobile tab switcher */}
-        <div className="md:hidden mb-6 -mx-4 px-4 sm:-mx-6 sm:px-6 flex gap-2 overflow-x-auto pb-2">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold ${activeTab === tab.id
-                  ? 'bg-[var(--amber)] text-black'
-                  : 'bg-[var(--card)] text-[var(--muted)] border border-[var(--border)]'
-                }`}
-            >
-              {tab.label}
-              {tab.id === 'messages' && inbox.totalUnread > 0 ? ` (${inbox.totalUnread})` : ''}
-            </button>
-          ))}
-        </div>
 
         {/* Overview */}
         {activeTab === 'overview' && (

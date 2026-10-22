@@ -122,6 +122,7 @@ import { supabase } from '@/utils/supabase';
 import { AIMatchmaker, CreatorMatch } from '@/components/AIMatchmaker';
 import { KYCModal, KycStatus, KycData } from '@/components/KYCModal';
 import { ProfileAvatar } from '@/components/ProfileAvatar';
+import { PortalMobileNav } from '@/components/PortalMobileNav';
 import { MessagesInbox, MessageToasts, useInbox } from '@/components/MessagesInbox';
 import { CreatorOfferDrawer } from '@/components/CreatorOfferDrawer';
 import { STATUS_LABEL } from '@/lib/offers';
@@ -653,7 +654,28 @@ export default function BrandPortalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[oklch(0.12_0.01_80)] text-white flex">
+    <div className="min-h-screen bg-[oklch(0.12_0.01_80)] text-white flex flex-col md:flex-row">
+      {/* Mobile navbar (phones / small tablets) */}
+      <PortalMobileNav
+        items={TABS.map((tab) => ({
+          id: tab.id,
+          label: tab.label,
+          icon: tab.icon,
+          active: activeTab === tab.id && selectedCampaignId === null,
+          badge: tab.id === 'messages' ? inbox.totalUnread : undefined,
+        }))}
+        onSelect={(id) => {
+          setActiveTab(id as TabId);
+          setSelectedCampaignId(null);
+          if (id !== 'messages') setSelectedCollabId(null);
+        }}
+        name={profile.brand_name || 'Brand Partner'}
+        subtitle={profile.industry || 'D2C Brand'}
+        avatar={<ProfileAvatar initials={initials || 'B'} size={34} />}
+        avatarLarge={<ProfileAvatar initials={initials || 'B'} size={44} editable />}
+        onLogout={handleLogout}
+      />
+
       {/* Sidebar */}
       <aside className="hidden md:flex w-64 shrink-0 flex-col gap-10 border-r border-[oklch(0.25_0.02_80)] bg-[oklch(0.1_0.01_80)] px-6 py-8 fixed top-0 bottom-0 left-0 z-10">
         <Link href="/" className="font-display text-xl font-extrabold text-white">
@@ -761,26 +783,6 @@ export default function BrandPortalPage() {
             </Link>
           </div>
         </header>
-
-        {/* Mobile Tab Switcher */}
-        <div className="md:hidden mb-6 -mx-4 px-4 sm:-mx-6 sm:px-6 flex gap-2 overflow-x-auto pb-2">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => {
-                setActiveTab(tab.id);
-                setSelectedCampaignId(null);
-              }}
-              className={`shrink-0 rounded-full px-4 py-2 text-xs font-bold ${activeTab === tab.id && selectedCampaignId === null
-                  ? 'bg-[oklch(0.8_0.16_75)] text-black'
-                  : 'bg-[oklch(0.15_0.02_80)] text-[oklch(0.68_0.015_85)] border border-[oklch(0.25_0.02_80)]'
-                }`}
-            >
-              {tab.label}
-              {tab.id === 'messages' && inbox.totalUnread > 0 ? ` (${inbox.totalUnread})` : ''}
-            </button>
-          ))}
-        </div>
 
         {/* Campaign Detail View */}
         {selectedCampaignId !== null && (
