@@ -14,7 +14,8 @@ export interface FeatureInfo {
 export const FEATURES = {
   aiMatching: { status: 'live' },
   creatorScore: { status: 'beta' },
-  editorMarketplace: { status: 'beta' },
+  // Matches the landing page (components/landing/content.ts): editor marketplace is due Q4 2026
+  editorMarketplace: { status: 'soon', when: 'Q4 2026' },
   escrow: { status: 'soon', when: 'Q4 2026' },
   brandReviews: { status: 'soon', when: 'Q4 2026' },
   briefBuilder: { status: 'soon', when: 'Q1 2027' },

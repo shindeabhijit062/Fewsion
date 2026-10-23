@@ -8,7 +8,8 @@ import { COMPANY } from '@/lib/company';
 export default function Footer() {
   const pathname = usePathname();
   if (
-    pathname?.startsWith('/portals/') || 
+    pathname === '/' || // the landing page renders its own footer
+    pathname?.startsWith('/portals/') ||
     pathname?.startsWith('/superadmin') || 
     pathname?.startsWith('/sign-in') || 
     pathname?.startsWith('/sign-up')
