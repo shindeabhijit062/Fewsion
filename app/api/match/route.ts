@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { explainMatches } from '@/lib/aiExplain';
+import { isTestAccount } from '@/lib/testAccounts';
 
 // AI creator matching.
 // 1. Every creator in creator_profiles is scored against the brief
@@ -139,7 +140,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Could not load creators.' }, { status: 500 });
     }
 
-    const creators = data ?? [];
+    const creators = (data ?? []).filter((c: any) => !isTestAccount(c.creator_name));
     const weights = GOAL_WEIGHTS[goal];
 
     const ranked = creators

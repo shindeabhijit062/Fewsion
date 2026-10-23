@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import HelpLine from '@/components/HelpLine';
+import { featureLabel } from '@/lib/featureStatus';
 import { supabase } from '../../utils/supabase';
 
 type Role = 'brand' | 'creator' | 'editor';
@@ -13,9 +15,9 @@ const roleData = {
     icon: '🏢',
     desc: 'Post campaigns, discover creators, run UGC at scale',
     perks: [
-      { icon: '🤖', title: 'AI Brief Builder', desc: 'Generate campaign briefs in 3 minutes' },
+      { icon: '🤖', title: 'AI Brief Builder', desc: `Generate campaign briefs in minutes (${featureLabel('briefBuilder')})` },
       { icon: '🎯', title: 'Performance Creator Search', desc: 'Filter by verified CTR, not follower count' },
-      { icon: '🔒', title: 'Escrow-Protected Campaigns', desc: 'Only pay when you approve content' },
+      { icon: '🔒', title: 'Escrow-Protected Campaigns', desc: `Only pay when you approve content (${featureLabel('escrow')})` },
     ],
   },
   creator: {
@@ -24,7 +26,7 @@ const roleData = {
     desc: 'Get matched to brand deals, build your performance portfolio',
     perks: [
       { icon: '📊', title: 'Performance Portfolio', desc: 'Showcase real CTR and engagement to brands' },
-      { icon: '💰', title: 'Guaranteed Payments', desc: 'Escrow-protected, released within 24hrs' },
+      { icon: '💰', title: 'Protected Payments', desc: `Escrow-protected payouts (${featureLabel('escrow')})` },
       { icon: '🤖', title: 'AI Brand Matching', desc: 'Get matched to campaigns that fit your niche' },
     ],
   },
@@ -34,8 +36,8 @@ const roleData = {
     desc: 'Find editing projects from brands and creators',
     perks: [
       { icon: '🎬', title: 'Editor Portfolio', desc: 'Showcase your showreel to brands and creators' },
-      { icon: '🤝', title: 'Creator Collaboration', desc: 'Get invited into live projects in-platform' },
-      { icon: '💰', title: 'Escrow-Protected Pay', desc: 'Get paid within 24hrs of project approval' },
+      { icon: '🤝', title: 'Creator Collaboration', desc: `Get invited into live projects in-platform (${featureLabel('creatorEditorCollab')})` },
+      { icon: '💰', title: 'Escrow-Protected Pay', desc: `Protected payouts after project approval (${featureLabel('escrow')})` },
     ],
   },
 };
@@ -47,6 +49,16 @@ const software = ['Premiere Pro', 'Final Cut', 'DaVinci Resolve', 'CapCut', 'Aft
 export default function SignupPage() {
   const [step, setStep] = useState<Step>(0);
   const [role, setRole] = useState<Role>('brand');
+  // Nobody is assumed to be a Brand: the user picks (or arrives with ?role=creator etc.)
+  const [roleChosen, setRoleChosen] = useState(false);
+
+  useEffect(() => {
+    const r = new URLSearchParams(window.location.search).get('role');
+    if (r === 'brand' || r === 'creator' || r === 'editor') {
+      setRole(r);
+      setRoleChosen(true);
+    }
+  }, []);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -224,28 +236,31 @@ export default function SignupPage() {
                 style={{ fontSize: 'clamp(24px,4vw,36px)', letterSpacing: '-0.8px', lineHeight: '1.1' }}
               >
                 I want to join<br />Fewsion as a{' '}
-                <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>{roleData[role].label}</em>
+                <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>{roleChosen ? roleData[role].label : '…'}</em>
               </h1>
-              <p className="text-[14px] text-[var(--muted)] mb-8 leading-[1.6]">Choose the role that best describes you. You can add other roles later.</p>
+              <p className="text-[14px] text-[var(--muted)] mb-2 leading-[1.6]">Choose the role that best describes you. You can add other roles later.</p>
+              <p className="text-[14px] text-[var(--text)] mb-8 leading-[1.6] font-semibold">Free · No credit card · About 5 minutes · 4 short steps: Role, Account, Profile, Done</p>
 
               <div className="grid grid-cols-3 gap-3 mb-8">
                 {(Object.entries(roleData) as [Role, typeof roleData.brand][]).map(([r, rd]) => (
                   <button
                     key={r}
-                    onClick={() => setRole(r)}
+                    type="button"
+                    aria-pressed={roleChosen && role === r}
+                    onClick={() => { setRole(r); setRoleChosen(true); }}
                     className="text-center rounded-2xl p-6 cursor-pointer border-none transition-all duration-200"
                     style={{
                       background: 'var(--card)',
-                      border: `2px solid ${role === r ? 'var(--amber)' : 'var(--border)'}`,
-                      backgroundColor: role === r ? 'rgba(245,166,35,0.05)' : 'var(--card)',
+                      border: `2px solid ${roleChosen && role === r ? 'var(--amber)' : 'var(--border)'}`,
+                      backgroundColor: roleChosen && role === r ? 'rgba(245,166,35,0.05)' : 'var(--card)',
                       transform: 'translateY(0)',
                       transition: 'all 0.2s',
                     }}
-                    onMouseEnter={(e) => { if (role !== r) (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+                    onMouseEnter={(e) => { if (!(roleChosen && role === r)) (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
                     onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
                   >
                     <div className="text-[32px] mb-[10px]">{rd.icon}</div>
-                    <div className="font-display text-[14px] font-bold mb-1" style={{ color: role === r ? 'var(--amber)' : 'var(--text)' }}>{rd.label}</div>
+                    <div className="font-display text-[14px] font-bold mb-1" style={{ color: roleChosen && role === r ? 'var(--amber)' : 'var(--text)' }}>{rd.label}</div>
                     <div className="text-[11px] leading-[1.5]" style={{ color: 'var(--muted)' }}>{rd.desc}</div>
                   </button>
                 ))}
@@ -253,12 +268,13 @@ export default function SignupPage() {
 
               <button
                 onClick={() => goStep(1)}
-                className="w-full font-display text-[15px] font-bold py-[15px] rounded-full border-none cursor-pointer flex items-center justify-center gap-2 transition-all duration-200"
+                disabled={!roleChosen}
+                className="w-full font-display text-[15px] font-bold py-[15px] rounded-full border-none cursor-pointer flex items-center justify-center gap-2 transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50"
                 style={{ background: 'linear-gradient(135deg, var(--amber), var(--amber2))', color: '#000' }}
                 onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 40px rgba(245,166,35,0.3)'; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.transform = ''; (e.currentTarget as HTMLElement).style.boxShadow = ''; }}
               >
-                Continue as {roleData[role].label} →
+                {roleChosen ? `Continue as ${roleData[role].label} →` : 'Choose a role to continue'}
               </button>
             </div>
           )}
@@ -293,23 +309,24 @@ export default function SignupPage() {
 
               <div className="grid grid-cols-2 gap-[14px] mb-4">
                 <div>
-                  <label className="form-label">First name</label>
-                  <input type="text" placeholder="Arjun" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="form-input" />
+                  <label className="form-label" htmlFor="su-first">First name</label>
+                  <input id="su-first" type="text" placeholder="Arjun" value={firstName} onChange={(e) => setFirstName(e.target.value)} className="form-input" />
                 </div>
                 <div>
-                  <label className="form-label">Last name</label>
-                  <input type="text" placeholder="Desai" value={lastName} onChange={(e) => setLastName(e.target.value)} className="form-input" />
+                  <label className="form-label" htmlFor="su-last">Last name</label>
+                  <input id="su-last" type="text" placeholder="Desai" value={lastName} onChange={(e) => setLastName(e.target.value)} className="form-input" />
                 </div>
               </div>
 
               <div className="mb-4">
-                <label className="form-label">Email address</label>
-                <input type="email" placeholder="you@company.com" value={email} onChange={(e) => setEmail(e.target.value)} className="form-input" autoComplete="email" />
+                <label className="form-label" htmlFor="su-email">Email address</label>
+                <input id="su-email" type="email" placeholder="you@company.com" value={email} onChange={(e) => setEmail(e.target.value)} className="form-input" autoComplete="email" />
               </div>
 
               <div className="mb-6">
-                <label className="form-label">Password</label>
+                <label className="form-label" htmlFor="su-password">Password</label>
                 <input
+                  id="su-password"
                   type="password"
                   placeholder="Create a strong password"
                   value={password}
@@ -495,6 +512,7 @@ export default function SignupPage() {
             </div>
           )}
 
+          <HelpLine className="mt-8 text-center" />
         </div>
       </div>
 

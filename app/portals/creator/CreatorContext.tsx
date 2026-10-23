@@ -771,7 +771,8 @@ export function CreatorProvider({ children }: { children: React.ReactNode }) {
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) {
-      setLoading(false);
+      // Logged out: send people to sign in (and back here afterwards), not to a dead-end shell
+      window.location.replace('/login?role=creator&next=%2Fportals%2Fcreator');
       return;
     }
     setUserId(user.id);

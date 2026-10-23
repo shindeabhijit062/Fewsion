@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
+import { isTestAccount } from '@/lib/testAccounts';
 
 interface Editor {
   id: string | number;
@@ -95,8 +96,9 @@ export default function EditorsPage() {
 
         if (error) throw error;
 
-        if (data && data.length > 0) {
-          const mapped: Editor[] = data.map((e) => ({
+        const rows = (data ?? []).filter((e) => !isTestAccount(e.editor_name));
+        if (rows.length > 0) {
+          const mapped: Editor[] = rows.map((e) => ({
             id: e.id,
             name: e.editor_name || 'Editor Name',
             cityState: e.city_state || 'India',
@@ -475,7 +477,7 @@ export default function EditorsPage() {
           <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>your main income?</em>
         </h2>
         <p className="text-[18px] text-[var(--muted)] max-w-[480px] mx-auto mb-10 font-light">
-          Join thousands of Indian editors already on the waitlist. Free forever to join.
+          Create your editor profile and get found by brands and creators. Free to join.
         </p>
         <div className="flex gap-[14px] justify-center flex-wrap">
           <Link href="/signup?role=editor" className="btn-primary">Claim your editor profile →</Link>

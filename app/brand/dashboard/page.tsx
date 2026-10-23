@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const metadata = {
-  title: 'Brand Portal — Fewsion Marketplace',
+  title: 'Brand portal',
   description: 'Manage brand campaigns, review AI-scored creator applications, and execute smart agreements.'
 };
 

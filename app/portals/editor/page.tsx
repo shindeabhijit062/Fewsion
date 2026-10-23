@@ -360,7 +360,7 @@ export default function EditorPortalPage() {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      window.location.href = '/login';
+      window.location.replace('/login?role=editor&next=%2Fportals%2Feditor');
       return;
     }
     setUserId(user.id);
