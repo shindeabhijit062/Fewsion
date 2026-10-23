@@ -22,14 +22,14 @@ import {
   BRIEF_EXAMPLE,
   CONTACT,
   CTA,
-  CTA_LABEL,
   FAQ,
   HERO,
+  JOIN,
   MONEY,
   PRICING,
   PROBLEM,
+  ROLE_BUTTONS,
   ROLES,
-  SIGNUP,
   STATUS,
   STEPS,
   VIDEO_CHECKS,
@@ -91,12 +91,12 @@ export function Hero() {
             {HERO.sub}
           </p>
           <div className="fx-hero__ctas fx-intro" style={{ ['--i' as string]: 7 }}>
-            <Link href={SIGNUP.brand} className="fx-btn fx-btn--primary fx-btn--lg">
-              {CTA_LABEL} <ArrowRight size={18} aria-hidden="true" />
+            <Link href={HERO.cta.href} className="fx-btn fx-btn--primary fx-btn--lg">
+              {HERO.cta.label} <ArrowRight size={18} aria-hidden="true" />
             </Link>
-            <Link href={SIGNUP.creator} className="fx-btn fx-btn--ghost fx-btn--lg">
-              I’m a creator or editor
-            </Link>
+            <a href={HERO.secondary.href} className="fx-btn fx-btn--ghost fx-btn--lg">
+              <Play size={16} aria-hidden="true" /> {HERO.secondary.label}
+            </a>
           </div>
           <ul className="fx-hero__proof fx-intro" style={{ ['--i' as string]: 8 }}>
             {HERO.proof.map((p) => (
@@ -440,8 +440,8 @@ export function Roles() {
                   ))}
                 </ul>
                 <div className="fx-role__actions" data-reveal="2">
-                  <Link href={r.href} className="fx-btn fx-btn--primary">
-                    {CTA_LABEL} <ArrowRight size={18} aria-hidden="true" />
+                  <Link href={r.button.href} className="fx-btn fx-btn--primary">
+                    {r.button.label} <ArrowRight size={18} aria-hidden="true" />
                   </Link>
                 </div>
                 <div className="fx-notify" data-float="0.5" aria-hidden="true">
@@ -494,8 +494,8 @@ export function Pricing() {
                   </li>
                 ))}
               </ul>
-              <Link href={p.href} className={p.featured ? 'fx-btn fx-btn--dark' : 'fx-btn fx-btn--outline'}>
-                {CTA_LABEL} <ArrowRight size={16} aria-hidden="true" />
+              <Link href={JOIN.href} className={p.featured ? 'fx-btn fx-btn--dark' : 'fx-btn fx-btn--outline'}>
+                {JOIN.label} <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </article>
           ))}
@@ -538,14 +538,14 @@ export function FinalCta() {
         </h2>
         <p data-reveal="1">{CTA.sub}</p>
         <div className="fx-cta__buttons" data-reveal="2">
-          <Link href={SIGNUP.brand} className="fx-btn fx-btn--primary fx-btn--lg">
-            {CTA_LABEL} <ArrowRight size={18} aria-hidden="true" />
+          <Link href={ROLE_BUTTONS.creator.href} className="fx-btn fx-btn--primary fx-btn--lg">
+            {ROLE_BUTTONS.creator.label} <ArrowRight size={18} aria-hidden="true" />
           </Link>
-          <Link href={SIGNUP.creator} className="fx-btn fx-btn--ghost fx-btn--lg">
-            I’m a creator
+          <Link href={ROLE_BUTTONS.brand.href} className="fx-btn fx-btn--primary fx-btn--lg">
+            {ROLE_BUTTONS.brand.label} <ArrowRight size={18} aria-hidden="true" />
           </Link>
-          <Link href={SIGNUP.editor} className="fx-btn fx-btn--ghost fx-btn--lg">
-            I’m an editor
+          <Link href={ROLE_BUTTONS.editor.href} className="fx-btn fx-btn--ghost fx-btn--lg">
+            {ROLE_BUTTONS.editor.label}
           </Link>
         </div>
       </div>
@@ -584,32 +584,32 @@ export function LandingFooter() {
             </p>
           </div>
         </div>
-        <nav aria-label="Product">
-          <h3>Product</h3>
+        <nav aria-label="On this page">
+          <h3>On this page</h3>
           <a href="#how">How it works</a>
           <a href="#ai">AI tools</a>
           <a href="#money">Payment protection</a>
-          <Link href="/pricing">Pricing</Link>
+          <a href="#faq">FAQ</a>
         </nav>
-        <nav aria-label="Join">
-          <h3>Join</h3>
-          <Link href={SIGNUP.brand}>For brands</Link>
-          <Link href={SIGNUP.creator}>For creators</Link>
-          <Link href={SIGNUP.editor}>For editors</Link>
-          <Link href="/login">Log in</Link>
+        <nav aria-label="Platform">
+          <h3>Platform</h3>
+          <Link href="/creators">For Creators</Link>
+          <Link href="/brands">Live Campaigns</Link>
+          <Link href="/editors">For Editors</Link>
+          <Link href="/pricing">Pricing</Link>
         </nav>
         <nav aria-label="Company">
           <h3>Company</h3>
           <Link href="/about">About</Link>
           <Link href="/blog">Blog</Link>
           <Link href="/careers">Careers</Link>
-          <a href="#contact">Contact</a>
+          <a href={`mailto:${CONTACT.email}`}>Contact</a>
         </nav>
         <nav aria-label="Legal">
           <h3>Legal</h3>
-          <Link href="/privacy">Privacy</Link>
-          <Link href="/terms">Terms</Link>
-          <Link href="/cookie">Cookies</Link>
+          <Link href="/privacy">Privacy Policy</Link>
+          <Link href="/terms">Terms of Service</Link>
+          <Link href="/cookie">Cookie Policy</Link>
         </nav>
       </div>
       <div className="fx-wrap fx-footer__bottom">

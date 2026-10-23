@@ -6,22 +6,24 @@
 // - Text in [square brackets] is a placeholder the team must fill in; it renders
 //   highlighted so it can't ship unnoticed.
 
-export const SIGNUP = {
-  any: '/signup',
-  brand: '/signup?role=brand',
-  creator: '/signup?role=creator',
-  editor: '/signup?role=editor',
-};
-
-export const CTA_LABEL = 'Sign up free';
+// Buttons and nav keep the live site's original labels and destinations.
+export const JOIN = { label: 'Join Waitlist', href: '/signup' };
+export const LOGIN = { label: 'Login', href: '/login' };
 
 export const NAV_LINKS = [
-  { href: '#how', label: 'How it works' },
-  { href: '#brands', label: 'Find creators' },
-  { href: '#creators', label: 'Find campaigns' },
-  { href: '#editors', label: 'For editors' },
-  { href: '#pricing', label: 'Pricing' },
+  { href: '/creators', label: 'Creators' },
+  { href: '/brands', label: 'Brands' },
+  { href: '/editors', label: 'Editors' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/about', label: 'About' },
 ];
+
+// The original "I'm a …" buttons, used per role and in the closing section.
+export const ROLE_BUTTONS = {
+  creator: { label: 'I’m a Creator', href: '/creators' },
+  brand: { label: 'I’m a Brand', href: '/brands' },
+  editor: { label: 'I’m an Editor', href: '/editors' },
+};
 
 // One source of truth for what exists today. Quarters come from the public
 // roadmap on the previous landing page; Video Check comes from the MVP scope and
@@ -44,6 +46,8 @@ export const HERO = {
     [{ w: 'your', accent: true }, { w: 'brief.', accent: true }],
   ],
   sub: 'Paste a product link and Fewsion’s AI writes a brief creators can’t misread. Every draft is checked against that brief before it reaches you, and the creator is paid only when you approve.',
+  cta: { label: 'Join the waitlist', href: '/signup' },
+  secondary: { label: 'See how it works', href: '#how' },
   proof: [
     { label: 'A brief from a product link', status: STATUS.briefBuilder },
     { label: 'Every draft checked against your brief', status: STATUS.videoCheck },
@@ -148,7 +152,7 @@ export const ROLES = [
       'Pay when you approve, not before',
       'Start free and pay a fee only on paid projects',
     ],
-    href: SIGNUP.brand,
+    button: ROLE_BUTTONS.brand,
     card: { title: 'Draft ready for review', meta: 'Passed 6 of 6 checks', status: 'Ready' },
   },
   {
@@ -161,7 +165,7 @@ export const ROLES = [
       'Budget held before you start',
       'Keep 100% of your quoted rate',
     ],
-    href: SIGNUP.creator,
+    button: ROLE_BUTTONS.creator,
     card: { title: 'New brief: Vitamin C serum', meta: '1 Reel · 9:16 · 20–30 sec', status: 'Budget held' },
   },
   {
@@ -175,7 +179,7 @@ export const ROLES = [
       'The same AI check before anything goes to the brand',
       'The same payment protection as creators',
     ],
-    href: SIGNUP.editor,
+    button: ROLE_BUTTONS.editor,
     card: { title: 'Edit request from a creator', meta: 'Cut to 25 sec · add captions', status: 'Invited' },
   },
 ];
@@ -190,7 +194,6 @@ export const PRICING = [
       '10–15% fee on each paid project, paid by you on top of the creator’s rate',
       'Brand Premium at ₹2,999/month adds the AI Brief Builder and performance tracking when they launch (Q1 2027)',
     ],
-    href: SIGNUP.brand,
     featured: true,
   },
   {
@@ -198,14 +201,12 @@ export const PRICING = [
     price: 'Free',
     unit: 'always',
     lines: ['Keep 100% of your quoted rate', 'Creator Pro at ₹499/month for priority placement and deeper analytics'],
-    href: SIGNUP.creator,
   },
   {
     who: 'Editors',
     price: 'Free',
     unit: 'always',
     lines: ['Keep 100% of your quoted rate', 'Editor Pro at ₹299/month for priority ranking and project analytics'],
-    href: SIGNUP.editor,
   },
 ];
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '../../utils/supabase';
 
@@ -56,12 +56,6 @@ export default function SignupPage() {
   const [selectedSoftware, setSelectedSoftware] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ msg: string; error: boolean } | null>(null);
-
-  // Landing page CTAs link here with ?role=brand|creator|editor.
-  useEffect(() => {
-    const r = new URLSearchParams(window.location.search).get('role');
-    if (r === 'brand' || r === 'creator' || r === 'editor') setRole(r);
-  }, []);
 
   const showToast = (msg: string, error = false) => {
     setToast({ msg, error });

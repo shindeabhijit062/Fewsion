@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, LayoutDashboard, Menu, X } from 'lucide-react';
+import { LayoutDashboard, Menu, X } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
-import { CTA_LABEL, NAV_LINKS, SIGNUP } from './content';
+import { JOIN, LOGIN, NAV_LINKS } from './content';
 
 const PORTAL: Record<string, string> = { brand: '/portals/brand', editor: '/portals/editor', creator: '/portals/creator' };
 
@@ -20,7 +20,7 @@ export default function LandingNav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Signed-in visitors get a way back to their portal instead of "Log in".
+  // Signed-in visitors get a way back to their portal instead of "Login".
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (!session?.user) return;
@@ -49,9 +49,9 @@ export default function LandingNav() {
 
         <nav aria-label="Main" className="fx-nav__links">
           {NAV_LINKS.map((l) => (
-            <a key={l.href} href={l.href}>
+            <Link key={l.href} href={l.href}>
               {l.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -61,12 +61,12 @@ export default function LandingNav() {
               <LayoutDashboard size={16} aria-hidden="true" /> Dashboard
             </Link>
           ) : (
-            <Link href="/login" className="fx-nav__login">
-              Log in
+            <Link href={LOGIN.href} className="fx-nav__login">
+              {LOGIN.label}
             </Link>
           )}
-          <Link href={SIGNUP.any} className="fx-btn fx-btn--primary fx-btn--sm fx-nav__cta">
-            {CTA_LABEL} <ArrowRight size={16} aria-hidden="true" />
+          <Link href={JOIN.href} className="fx-btn fx-btn--primary fx-btn--sm fx-nav__cta">
+            {JOIN.label}
           </Link>
           <button
             type="button"
@@ -83,9 +83,9 @@ export default function LandingNav() {
 
       <div id="fx-mobile-menu" className="fx-nav__sheet" hidden={!open}>
         {NAV_LINKS.map((l) => (
-          <a key={l.href} href={l.href} onClick={() => setOpen(false)}>
+          <Link key={l.href} href={l.href} onClick={() => setOpen(false)}>
             {l.label}
-          </a>
+          </Link>
         ))}
         <div className="fx-nav__sheet-actions">
           {portal ? (
@@ -93,12 +93,12 @@ export default function LandingNav() {
               Go to dashboard
             </Link>
           ) : (
-            <Link href="/login" className="fx-btn fx-btn--ghost">
-              Log in
+            <Link href={LOGIN.href} className="fx-btn fx-btn--ghost">
+              {LOGIN.label}
             </Link>
           )}
-          <Link href={SIGNUP.any} className="fx-btn fx-btn--primary">
-            {CTA_LABEL} <ArrowRight size={18} aria-hidden="true" />
+          <Link href={JOIN.href} className="fx-btn fx-btn--primary">
+            {JOIN.label}
           </Link>
         </div>
       </div>
