@@ -188,14 +188,16 @@ export function Solution() {
                   <div>
                     <h3>{s.title}</h3>
                     <div className="fx-steps__body">
-                      <ul className="fx-steps__list">
-                        {s.points.map((p) => (
-                          <li key={p}>
-                            <Check size={15} aria-hidden="true" />
-                            {p}
-                          </li>
-                        ))}
-                      </ul>
+                      <div className="fx-steps__inner">
+                        <ul className="fx-steps__list">
+                          {s.points.map((p) => (
+                            <li key={p}>
+                              <Check size={15} aria-hidden="true" />
+                              {p}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </li>

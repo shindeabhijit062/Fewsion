@@ -933,7 +933,8 @@ html[data-fx-motion] .fx-steps__body {
     opacity 0.5s;
 }
 
-html[data-fx-motion] .fx-steps__body > p {
+html[data-fx-motion] .fx-steps__body > * {
+  min-height: 0;
   overflow: hidden;
 }
 
@@ -2986,5 +2987,32 @@ html[data-fx-motion] .fx-steps li:not([data-active]) .fx-status {
 
   .fx-timeline__dot {
     left: -36px;
+  }
+}
+
+/* Solution steps on phones: keep the active portal inside the pinned screen */
+@media (max-width: 900px) {
+  html[data-fx-motion] .fx-how__grid {
+    grid-template-rows: 24svh 1fr;
+  }
+
+  .fx-steps__list {
+    gap: 6px;
+    padding-top: 6px;
+  }
+
+  .fx-steps__list li {
+    font-size: 14.5px;
+    line-height: 1.45;
+  }
+}
+
+@media (max-width: 900px) and (max-height: 700px) {
+  html[data-fx-motion] .fx-how__grid {
+    grid-template-rows: 16svh 1fr;
+  }
+
+  .fx-steps__list li {
+    font-size: 13.5px;
   }
 }
