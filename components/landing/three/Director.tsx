@@ -114,6 +114,7 @@ export const frame = {
   money: 0,
   orbit: 0, // rotation of the network ring
   narrow: false,
+  story: 0, // smoothed chapter position, for scroll parallax
 };
 
 const smooth = (x: number) => x * x * (3 - 2 * x);
@@ -151,6 +152,7 @@ export default function Director() {
     const pb = resolve(b, aspect, fov, narrow, poseB);
 
     frame.narrow = narrow;
+    frame.story = story;
     frame.stage.set(lerp(pa.x, pb.x, e), lerp(pa.y, pb.y, e), lerp(pa.z, pb.z, e));
     frame.logoScale = lerp(pa.logo, pb.logo, e);
     frame.spin = lerp(a.spin, b.spin, e);
