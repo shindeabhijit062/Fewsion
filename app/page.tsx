@@ -3,7 +3,7 @@ import Landing from '@/components/landing/Landing';
 
 export const metadata: Metadata = {
   description:
-    'Paste a product link and Fewsion’s AI writes a brief creators can’t misread. Every draft is checked against it before you see it, and creators are paid only when you approve.',
+    'Fewsion connects D2C brands, UGC content creators, and video editors — powered by AI matching, verified performance data, and built-in escrow payments.',
 };
 
 export default function HomePage() {

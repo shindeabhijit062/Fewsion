@@ -121,7 +121,7 @@ export default function Choreography() {
           });
         });
 
-        // Pinned how-it-works: one step per quarter of the scroll distance.
+        // Pinned steps: each step gets an equal share of the scroll distance.
         const how = document.querySelector<HTMLElement>('[data-how]');
         if (how) {
           const items = Array.from(how.querySelectorAll<HTMLElement>('[data-step]'));
@@ -132,7 +132,7 @@ export default function Choreography() {
             end: 'bottom bottom',
             onUpdate: (self) => {
               const p = self.progress;
-              sceneState.step = Math.min(3.999, p * 4);
+              sceneState.step = Math.min(items.length - 0.001, p * items.length);
               how.style.setProperty('--how-p', p.toFixed(4));
               const idx = Math.min(items.length - 1, Math.floor(p * items.length));
               if (idx !== active) {

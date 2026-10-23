@@ -897,7 +897,7 @@ html[data-fx3d-ready] .fx-hero__grab {
 }
 
 html[data-fx-motion] .fx-how {
-  height: 440vh;
+  height: 340vh; /* ~110vh of scroll per step (3 portals) */
   padding: 0;
 }
 
@@ -2216,4 +2216,775 @@ html:not([data-fx-motion]) .fx-rail i,
 
 html[data-fx-motion] .fx-steps li:not([data-active]) .fx-status {
   opacity: 0.55;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Original home-page content in the landing style
+   (stats, problem cards, portals, feature bento, market, comparison,
+   business model, roadmap, vision)
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Hero: stats row + floating status cards ── */
+.fx-hero {
+  align-content: center;
+  row-gap: clamp(40px, 6vw, 72px);
+}
+
+.fx-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  padding-top: 28px;
+  border-top: 1px solid var(--fx-line);
+}
+
+.fx-stats div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 6px;
+}
+
+.fx-stats dd {
+  font-size: clamp(30px, 3.4vw, 48px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  background: linear-gradient(100deg, #fff8f0 10%, #ffb36b 60%, var(--fx-orange-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.fx-stats dt {
+  color: var(--fx-dim);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.fx-hero__float {
+  position: absolute;
+  z-index: 3;
+  margin: 0;
+  padding: 10px 14px;
+  pointer-events: none;
+}
+
+.fx-hero__float .fx-notify__text strong {
+  font-size: 13px;
+}
+
+.fx-hero__float--1 {
+  top: 8%;
+  left: -6%;
+}
+
+.fx-hero__float--2 {
+  bottom: 12%;
+  left: -2%;
+}
+
+.fx-hero__float--3 {
+  top: 46%;
+  right: 0;
+}
+
+/* ── Problem: three friction cards ── */
+.fx-pains {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: clamp(48px, 6vw, 72px);
+}
+
+.fx-pain {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  padding: 28px;
+  transition: border-color 0.4s, background-color 0.4s;
+}
+
+.fx-pain:hover {
+  border-color: rgba(255, 138, 31, 0.35);
+}
+
+.fx-pain h3 {
+  margin: 0;
+}
+
+.fx-pain p {
+  color: var(--fx-muted);
+  font-size: 15.5px;
+  line-height: 1.7;
+}
+
+/* ── Solution: portal bullet lists inside the pinned steps ── */
+.fx-how__intro {
+  max-width: 36em;
+  margin: -12px 0 22px;
+  color: var(--fx-muted);
+  font-size: 16.5px;
+  line-height: 1.65;
+}
+
+.fx-steps__list {
+  display: grid;
+  gap: 8px;
+  padding-top: 10px;
+}
+
+.fx-steps__list li {
+  display: grid;
+  grid-template-columns: 18px 1fr;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  color: var(--fx-muted);
+  font-size: 15.5px;
+  line-height: 1.5;
+}
+
+.fx-steps__list svg {
+  margin-top: 3px;
+  color: var(--fx-orange-2);
+}
+
+/* ── 8 features: bento grid ── */
+.fx-bento {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-auto-flow: dense;
+  gap: 18px;
+}
+
+.fx-feature {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 26px;
+  transition: border-color 0.4s, transform 0.5s var(--fx-ease);
+}
+
+.fx-feature:hover {
+  border-color: rgba(255, 138, 31, 0.35);
+  transform: translateY(-4px);
+}
+
+.fx-feature h3 {
+  margin: 4px 0 0;
+  font-size: 18px;
+}
+
+.fx-feature p {
+  color: var(--fx-muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.fx-feature__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fx-feature__n {
+  color: var(--fx-orange-2);
+  font-size: 14px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 01 wide; 04 wide and tall with the payment visual; the rest fill around it */
+.fx-feature--01 {
+  grid-column: span 2;
+}
+
+.fx-feature--04 {
+  grid-column: span 2;
+  grid-row: span 2;
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(242, 106, 15, 0.22), transparent 60%),
+    var(--fx-glass);
+  border-color: rgba(255, 138, 31, 0.3);
+}
+
+.fx-feature--04 h3 {
+  font-size: clamp(22px, 2.2vw, 30px);
+  letter-spacing: -0.02em;
+}
+
+.fx-feature--04 p {
+  font-size: 16.5px;
+  max-width: 34em;
+}
+
+.fx-score {
+  display: grid;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.fx-score__row {
+  display: grid;
+  grid-template-columns: 140px 1fr 28px;
+  align-items: center;
+  gap: 12px;
+  color: var(--fx-dim);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.fx-score__row b {
+  color: var(--fx-text);
+  text-align: right;
+}
+
+.fx-score__bar {
+  height: 6px;
+  border-radius: 99px;
+  background: var(--fx-line);
+  overflow: hidden;
+}
+
+.fx-score__bar i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--fx-orange), #ffb36b);
+}
+
+.fx-feature__rail {
+  margin: 26px 0 4px;
+}
+
+/* Escrow card: held amount, payment flow, release receipt */
+.fx-escrow {
+  margin-top: auto;
+  padding-top: 22px;
+}
+
+.fx-escrow__held {
+  position: relative;
+  display: grid;
+  gap: 6px;
+  padding: 22px 22px 20px;
+  border-radius: 18px;
+  border: 1px solid var(--fx-line-2);
+  background:
+    linear-gradient(135deg, rgba(242, 106, 15, 0.16), rgba(15, 19, 48, 0.4) 60%),
+    rgba(7, 10, 28, 0.55);
+  box-shadow: 0 24px 50px -30px rgba(0, 0, 0, 0.8);
+}
+
+.fx-escrow__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--fx-dim);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fx-escrow__label svg {
+  color: var(--fx-orange-2);
+}
+
+.fx-escrow__held strong {
+  font-size: clamp(36px, 3.6vw, 52px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.fx-escrow__meta {
+  color: var(--fx-muted);
+  font-size: 14px;
+}
+
+.fx-escrow__receipt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  border: 1px solid rgba(126, 226, 168, 0.28);
+  background: rgba(30, 140, 90, 0.12);
+}
+
+.fx-escrow__receipt strong {
+  display: block;
+  font-size: 15px;
+}
+
+.fx-escrow__receipt em {
+  display: block;
+  color: var(--fx-muted);
+  font-size: 13px;
+  font-style: normal;
+}
+
+.fx-escrow__tick {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #2fbf7b;
+  color: #06231a;
+}
+
+.fx-rail--4 ol {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.fx-rail--4 .fx-rail__track {
+  width: calc(75% + 6px);
+}
+
+/* ── Market opportunity ── */
+.fx-money__copy h2 {
+  max-width: 20ch;
+}
+
+.fx-metric {
+  display: grid;
+  gap: 8px;
+}
+
+.fx-metric strong {
+  font-size: clamp(28px, 2.6vw, 36px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.fx-metric__label {
+  color: var(--fx-dim);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.fx-metric__note {
+  color: var(--fx-muted);
+  font-size: 14px;
+}
+
+.fx-metric--hero {
+  margin-top: 36px;
+  padding: 28px;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 138, 31, 0.3);
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(242, 106, 15, 0.2), transparent 60%),
+    var(--fx-glass);
+}
+
+.fx-metric--hero strong {
+  font-size: clamp(40px, 4.6vw, 64px);
+}
+
+.fx-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.fx-market__text {
+  display: grid;
+  gap: 16px;
+  margin-top: 36px;
+  color: var(--fx-muted);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.fx-market__text blockquote {
+  margin: 4px 0 0;
+  padding: 18px 22px;
+  border-left: 3px solid var(--fx-orange-2);
+  border-radius: 0 14px 14px 0;
+  background: rgba(242, 106, 15, 0.1);
+  color: var(--fx-text);
+  font-style: italic;
+}
+
+/* ── Competitive landscape: tabs + table ── */
+.fx-competitors {
+  padding-bottom: clamp(96px, 12vw, 160px);
+}
+
+.fx-compare__tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 22px;
+  overflow-x: auto;
+}
+
+.fx-compare__tab {
+  flex: none;
+  padding: 10px 18px;
+  border-radius: 99px;
+  border: 1px solid var(--fx-line-2);
+  background: transparent;
+  color: var(--fx-muted);
+  font: inherit;
+  font-size: 14.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s, border-color 0.3s;
+}
+
+.fx-compare__tab:hover {
+  color: var(--fx-text);
+}
+
+.fx-compare__tab[aria-selected='true'] {
+  border-color: transparent;
+  background: linear-gradient(100deg, var(--fx-orange), var(--fx-orange-2));
+  color: var(--fx-navy);
+}
+
+.fx-compare__panel {
+  border-radius: 22px;
+  border: 1px solid var(--fx-line);
+  background: var(--fx-glass);
+  backdrop-filter: blur(14px);
+  animation: fx-tab-in 0.5s var(--fx-ease);
+}
+
+@keyframes fx-tab-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.fx-compare__scroll {
+  overflow-x: auto;
+}
+
+.fx-table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  font-size: 15px;
+  text-align: left;
+}
+
+.fx-table th,
+.fx-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--fx-line);
+}
+
+.fx-table thead th {
+  color: var(--fx-dim);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fx-table tbody th {
+  font-weight: 700;
+}
+
+.fx-table td {
+  color: var(--fx-muted);
+}
+
+.fx-table td[data-mark='yes'] {
+  color: #7ee2a8;
+  font-weight: 700;
+}
+
+.fx-table td[data-mark='no'] {
+  color: var(--fx-dim);
+}
+
+.fx-table tr[data-ours] {
+  background: rgba(242, 106, 15, 0.12);
+}
+
+.fx-table tr[data-ours] th {
+  color: var(--fx-orange-2);
+}
+
+.fx-table tr[data-ours] td {
+  color: var(--fx-text);
+  font-weight: 700;
+}
+
+.fx-table tbody tr:last-child th,
+.fx-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ── Business model + roadmap (cream block) ── */
+.fx-ink-accent {
+  color: var(--fx-orange-ink);
+}
+
+.fx-pricing .fx-head h2 {
+  max-width: 18ch;
+}
+
+.fx-streams {
+  margin-top: 8px;
+}
+
+.fx-stream {
+  gap: 10px;
+  border-bottom: 3px solid var(--fx-orange);
+}
+
+.fx-stream .fx-plan__price {
+  color: var(--fx-orange-ink);
+  font-size: clamp(30px, 3vw, 40px);
+}
+
+.fx-stream h3 {
+  color: var(--fx-navy);
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  text-transform: none;
+}
+
+.fx-stream__body {
+  color: rgba(15, 19, 48, 0.72);
+  font-size: 15.5px;
+  line-height: 1.6;
+}
+
+.fx-milestones {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.fx-milestone {
+  display: grid;
+  gap: 6px;
+  padding: 22px;
+  border-radius: 20px;
+  border: 1px solid rgba(15, 19, 48, 0.09);
+  background: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.fx-milestone span {
+  color: rgba(15, 19, 48, 0.55);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fx-milestone strong {
+  font-size: clamp(26px, 2.6vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.fx-milestone em {
+  color: rgba(15, 19, 48, 0.62);
+  font-size: 14px;
+  font-style: normal;
+}
+
+.fx-roadmap {
+  margin-top: clamp(80px, 10vw, 128px);
+}
+
+.fx-timeline {
+  position: relative;
+  display: grid;
+  gap: 36px;
+  margin-left: 8px;
+  padding-left: 36px;
+}
+
+.fx-timeline::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  left: 0;
+  width: 2px;
+  background: linear-gradient(var(--fx-orange) 0%, var(--fx-orange) 38%, rgba(15, 19, 48, 0.12) 42%);
+}
+
+.fx-timeline li {
+  position: relative;
+}
+
+.fx-timeline__dot {
+  position: absolute;
+  top: 4px;
+  left: -44px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(15, 19, 48, 0.2);
+  background: var(--fx-cream);
+}
+
+.fx-timeline li[data-done] .fx-timeline__dot {
+  border-color: var(--fx-orange);
+  box-shadow: inset 0 0 0 4px var(--fx-cream);
+  background: var(--fx-orange);
+}
+
+.fx-timeline__when {
+  color: rgba(15, 19, 48, 0.55);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fx-timeline li[data-done] .fx-timeline__when {
+  color: var(--fx-orange-ink);
+}
+
+.fx-timeline h3 {
+  margin: 6px 0 14px;
+  font-size: clamp(20px, 2vw, 24px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.fx-timeline__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fx-timeline__chips span {
+  padding: 7px 14px;
+  border-radius: 99px;
+  border: 1px solid rgba(15, 19, 48, 0.12);
+  background: #fff;
+  color: rgba(15, 19, 48, 0.75);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.fx-timeline li[data-done] .fx-timeline__chips span {
+  border-color: rgba(194, 84, 10, 0.3);
+  background: rgba(242, 106, 15, 0.08);
+  color: var(--fx-orange-ink);
+}
+
+/* ── Vision ── */
+.fx-vision {
+  position: relative;
+  padding-block: clamp(96px, 13vw, 176px) 0;
+}
+
+.fx-vision h2 {
+  max-width: 24ch;
+  font-size: clamp(28px, 3.6vw, 48px);
+  line-height: 1.15;
+}
+
+.fx-vision__body {
+  max-width: 44em;
+  color: var(--fx-muted);
+  font-size: clamp(16px, 1.4vw, 18.5px);
+  line-height: 1.75;
+}
+
+/* ── Final CTA: longer original headline ── */
+.fx-cta__eyebrow {
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.fx-cta h2.fx-cta__title {
+  max-width: 16ch;
+  font-size: clamp(38px, 6vw, 88px);
+  line-height: 1;
+}
+
+/* ── Footer: brand + three link columns ── */
+.fx-footer__grid {
+  grid-template-columns: 1.6fr repeat(3, 1fr);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .fx-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fx-feature--04 {
+    grid-row: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .fx-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 24px;
+  }
+
+  .fx-hero__float {
+    display: none;
+  }
+
+  .fx-pains {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fx-how__intro {
+    display: none;
+  }
+
+  .fx-milestones {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .fx-bento,
+  .fx-metrics {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .fx-feature--01,
+  .fx-feature--04 {
+    grid-column: auto;
+  }
+
+  .fx-score__row {
+    grid-template-columns: 110px 1fr 24px;
+  }
+
+  .fx-rail--4 ol {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 18px;
+  }
+
+  .fx-rail--4 .fx-rail__track {
+    display: none;
+  }
+
+  .fx-timeline {
+    padding-left: 28px;
+  }
+
+  .fx-timeline__dot {
+    left: -36px;
+  }
 }
