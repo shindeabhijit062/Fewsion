@@ -47,7 +47,7 @@ const vertex = /* glsl */ `
     float far = smoothstep(uFocus + 0.3, uFocus + 4.0, dist);
     vBlur = smoothstep(uFocus - 2.4, uFocus - 5.5, dist);
     float size = uSize * (0.35 + aRand.z * 1.15) * (1.0 - 0.55 * far);
-    gl_PointSize = (size / dist + vBlur * (6.0 + aRand.z * 14.0)) * uPixelRatio;
+    gl_PointSize = (size / dist + vBlur * (4.0 + aRand.z * 8.0)) * uPixelRatio;
 
     // A scan line sweeps the phone frame (AI Video Check).
     float scanY = mod(uTime * 1.1, 4.6) - 2.3;
@@ -61,7 +61,7 @@ const vertex = /* glsl */ `
     vColor += scan * vec3(0.6, 0.5, 0.3);
     float twinkle = 0.8 + 0.2 * sin(uTime * 1.7 + aRand.y * 40.0);
     vAlpha = (0.55 + aRand.z * 0.75) * (1.0 + scan * 2.0) * twinkle;
-    vAlpha *= (1.0 - 0.9 * far) * mix(1.0, 0.3, vBlur);
+    vAlpha *= (1.0 - 0.9 * far) * mix(1.0, 0.2, vBlur);
 
     // Keep the nav, headline and dark background clean: the loose cloud thins
     // out towards the top of the screen and behind the text column.

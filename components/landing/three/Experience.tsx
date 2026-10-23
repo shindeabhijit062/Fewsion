@@ -104,7 +104,7 @@ export default function Experience({ tier, onReady }: { tier: Exclude<Tier, 'off
       <KnotLogo tier={tier} />
       <Network dpr={dpr} />
       <Particles count={full ? 6500 : 2800} />
-      <Bokeh count={full ? 54 : 24} />
+      <Bokeh count={full ? 14 : 6} />
 
       {effects && (
         <EffectComposer multisampling={4}>

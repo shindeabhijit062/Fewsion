@@ -28,15 +28,15 @@ const vertex = /* glsl */ `
     float halfH = aDepth * uTanHalf * 1.2;
     float halfW = halfH * uAspect;
     // Float upward and wrap; scrolling pushes nearer flakes further.
-    float y = fract(aBase.y * 0.5 + 0.5 + uTime * (0.006 + aRand.x * 0.01) + uScroll * 0.55 / aDepth) * 2.0 - 1.0;
+    float y = fract(aBase.y * 0.5 + 0.5 + uTime * (0.003 + aRand.x * 0.005) + uScroll * 0.3 / aDepth) * 2.0 - 1.0;
     float x = aBase.x + sin(uTime * (0.15 + aRand.y * 0.2) + aRand.z * 6.2831) * 0.05;
     vec3 pos = vec3(x * halfW, y * halfH * 1.1, uCamZ - aDepth);
     vec4 mv = modelViewMatrix * vec4(pos, 1.0);
     gl_Position = projectionMatrix * mv;
 
     // Closer flakes are bigger and blurrier; a few are huge and faint.
-    float size = (170.0 + aRand.z * aRand.z * 320.0) / aDepth * uScale;
-    gl_PointSize = min(size, 220.0) * uPixelRatio;
+    float size = (140.0 + aRand.z * aRand.z * 200.0) / aDepth * uScale;
+    gl_PointSize = min(size, 160.0) * uPixelRatio;
 
     vec3 orange = vec3(1.0, 0.5, 0.16);
     vec3 peach = vec3(1.0, 0.8, 0.6);
@@ -48,7 +48,7 @@ const vertex = /* glsl */ `
     // No flakes over the nav and headline at the top of the screen.
     edge *= 1.0 - smoothstep(0.05, 0.55, y);
     // Bigger flakes are fainter, so the energy spreads like a real out-of-focus light.
-    vAlpha = (0.06 + aRand.x * 0.09) * mix(1.0, 0.5, aRand.z) * breathe * edge * uVis;
+    vAlpha = (0.035 + aRand.x * 0.05) * mix(1.0, 0.5, aRand.z) * breathe * edge * uVis;
   }
 `;
 
@@ -88,10 +88,10 @@ export default function Bokeh({ count }: { count: number }) {
     for (let i = 0; i < count; i++) {
       // Keep the headline column clear: most flakes sit on the logo side,
       // the rest hug the far left edge.
-      base[i * 2] = rnd() < 0.72 ? 0.05 + rnd() * 0.95 : -1 + rnd() * 0.22;
+      base[i * 2] = rnd() < 0.7 ? 0.5 + rnd() * 0.5 : -1 + rnd() * 0.2;
       base[i * 2 + 1] = rnd() * 2 - 1;
       // Bias towards the camera so most flakes are big and soft.
-      depth[i] = 1.8 + Math.pow(rnd(), 0.8) * 4.2;
+      depth[i] = 2.4 + Math.pow(rnd(), 0.8) * 4.0;
       rand[i * 3] = rnd();
       rand[i * 3 + 1] = rnd();
       rand[i * 3 + 2] = rnd();
