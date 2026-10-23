@@ -102,7 +102,8 @@ export default function Navbar() {
   ];
 
   if (
-    pathname?.startsWith('/portals/') || 
+    pathname === '/' || // the landing page renders its own nav
+    pathname?.startsWith('/portals/') ||
     pathname?.startsWith('/superadmin') || 
     pathname?.startsWith('/sign-in') || 
     pathname?.startsWith('/sign-up')
