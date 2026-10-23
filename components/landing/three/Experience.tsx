@@ -9,6 +9,7 @@ import Director from './Director';
 import KnotLogo from './KnotLogo';
 import Particles from './Particles';
 import Network from './Network';
+import Bokeh from './Bokeh';
 import type { Tier } from '../sceneState';
 
 // Soft navy glow behind everything, so the scene has depth without an HDR file.
@@ -102,7 +103,8 @@ export default function Experience({ tier, onReady }: { tier: Exclude<Tier, 'off
 
       <KnotLogo tier={tier} />
       <Network dpr={dpr} />
-      <Particles count={full ? 9000 : 3800} />
+      <Particles count={full ? 6500 : 2800} />
+      <Bokeh count={full ? 54 : 24} />
 
       {effects && (
         <EffectComposer multisampling={4}>

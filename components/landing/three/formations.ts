@@ -38,15 +38,16 @@ export function buildFormations(count: number) {
     rand[o + 1] = rnd();
     rand[o + 2] = rnd();
 
-    // nebula: wide, flattened cloud, denser towards the middle
+    // nebula: flattened cloud packed around the logo, with only a thin, shallow
+    // tail far away (the shader fades whatever sits behind the focus plane)
     {
       const u = rnd() * 2 - 1;
       const th = rnd() * Math.PI * 2;
-      const r = 1.6 + Math.pow(rnd(), 0.65) * 7.5;
+      const r = 1.4 + Math.pow(rnd(), 1.6) * 6.2;
       const s = Math.sqrt(1 - u * u);
-      nebula[o] = Math.cos(th) * s * r * 1.5;
-      nebula[o + 1] = u * r * 0.7;
-      nebula[o + 2] = Math.sin(th) * s * r * 0.8 - 1.5;
+      nebula[o] = Math.cos(th) * s * r * 1.55;
+      nebula[o + 1] = u * r * 0.5;
+      nebula[o + 2] = Math.sin(th) * s * r * 0.5 - 0.3;
     }
 
     // rings: three orbits plus a dense glow around the core
