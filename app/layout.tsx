@@ -5,7 +5,11 @@ import Footer from '@/components/Footer';
 import Script from 'next/script';
 
 export const metadata: Metadata = {
-  title: 'Fewsion — Where Brands Meet Creators',
+  // Every page sets its own short title; this template adds the brand name.
+  title: {
+    default: 'Fewsion — Where Brands Meet Creators',
+    template: '%s · Fewsion',
+  },
   description: 'Connect Brands, Creators, and Editors with AI-driven contracts, Instagram screenshot 0-100 authenticity scoring, and performance payouts.',
   keywords: ['Fewsion', 'creator marketplace', 'india influencer marketing', 'UGC creators', 'video editors', 'AI creator score'],
   authors: [{ name: 'Fewsion Team' }],
@@ -63,8 +67,11 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">Skip to main content</a>
         <Navbar />
-        {children}
+        <div id="main-content" tabIndex={-1}>
+          {children}
+        </div>
         <Footer />
       </body>
     </html>

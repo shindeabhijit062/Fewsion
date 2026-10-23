@@ -3,10 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import AIChatbotWidget from '@/components/AIChatbotWidget';
-import AnimatedCounter from '@/components/AnimatedCounter';
+import StatusChip from '@/components/StatusChip';
 
 export default function HomePage() {
-  const [activeTab, setActiveTab] = useState<'global' | 'india' | 'gap'>('global');
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -54,51 +53,30 @@ export default function HomePage() {
             </h1>
 
             <p className="hero-reveal-2 mt-7 max-w-xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
-              Fewsion connects D2C brands, UGC content creators, and video editors — powered by AI matching, verified performance data, and built-in escrow payments.
+              Tell us what you sell and what you can spend. Fewsion&apos;s AI shortlists the UGC creators and video editors who fit, and explains why.
             </p>
 
             <div className="hero-reveal-3 mt-10 flex flex-col items-center gap-4 sm:flex-row">
               <Link href="/signup" className="hero-btn-primary group relative overflow-hidden">
                 <span className="relative z-10 flex items-center gap-2">
-                  Join the waitlist
+                  Sign up free
                   <span className="inline-block transition-transform duration-300 group-hover:translate-x-1.5">&rarr;</span>
                 </span>
               </Link>
-              <a href="#solution" className="btn-ghost flex items-center gap-2">
+              <a href="#how-it-works" className="btn-ghost flex items-center gap-2">
                 <svg className="w-4 h-4 fill-current text-[var(--amber)]" viewBox="0 0 24 24">
                   <path d="M8 5v14l11-7z" />
                 </svg>
                 See how it works
               </a>
             </div>
+            <p className="hero-reveal-3 mt-4 text-sm text-[var(--muted)]">Free to start · No credit card needed · Takes about 5 minutes</p>
           </div>
 
           {/* Orbital Graphic & Floating Mockups */}
           <div className="hero-reveal-4 relative mx-auto aspect-square w-full max-w-[480px] overflow-visible select-none">
             {/* Ambient glows behind the orbit */}
             <div className="absolute inset-0 rounded-full bg-[var(--amber)]/5 blur-[60px] pointer-events-none"></div>
-
-            {/* Static Status Badge 1: Top-Left */}
-            <div className="absolute top-[6%] left-[-4%] md:left-[-10%] z-40 float-1 flex items-center gap-1.5 rounded-full border border-[var(--border2)] bg-[var(--deep)] px-3 py-1.5 text-[10px] md:text-xs text-[var(--text)] shadow-[0_4px_20px_rgba(0,0,0,0.15)] backdrop-blur-md">
-              <svg className="w-3.5 h-3.5 text-[var(--amber)] fill-current" viewBox="0 0 24 24">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-              </svg>
-              <span className="font-semibold">AI matched: 96% fit</span>
-            </div>
-
-            {/* Static Status Badge 2: Bottom-Left */}
-            <div className="absolute bottom-[12%] left-[-6%] md:left-[-12%] z-40 float-2 flex items-center gap-1.5 rounded-full border border-[var(--border2)] bg-[var(--deep)] px-3 py-1.5 text-[10px] md:text-xs text-[var(--text)] shadow-[0_4px_20px_rgba(0,0,0,0.15)] backdrop-blur-md">
-              <span className="font-extrabold text-[var(--amber)] text-[11px] leading-none">₹</span>
-              <span className="font-semibold">Escrow released ₹45,000</span>
-            </div>
-
-            {/* Static Status Badge 3: Mid-Right */}
-            <div className="absolute bottom-[32%] right-[-6%] md:right-[-12%] z-40 float-3 flex items-center gap-1.5 rounded-full border border-[var(--border2)] bg-[var(--deep)] px-3 py-1.5 text-[10px] md:text-xs text-[var(--text)] shadow-[0_4px_20px_rgba(0,0,0,0.15)] backdrop-blur-md">
-              <svg className="w-3.5 h-3.5 text-[var(--amber)] fill-none stroke-current" strokeWidth="3" viewBox="0 0 24 24">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              <span className="font-semibold">Verified: 2.4M views delivered</span>
-            </div>
 
             {/* Rotating Container (contains connecting lines and orbiting node cards) */}
             <div className="absolute inset-0 animate-orbit-sync">
@@ -209,63 +187,37 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-
-            {/* Premium Floating Card 1 */}
-            <div className="hero-floating-card float-1 -top-[5%] left-1/2 -translate-x-1/2 hidden md:flex">
-              <div className="floating-card-icon-amber">🤖</div>
-              <div>
-                <div className="text-[11px] font-bold text-[var(--text)] leading-tight">AI Matching</div>
-                <div className="text-[9px] text-[var(--muted)] leading-none mt-0.5">Found 12 creators (98%)</div>
-              </div>
-            </div>
-
-            {/* Premium Floating Card 2 */}
-            <div className="hero-floating-card float-2 bottom-[10%] -left-[5%] hidden md:flex">
-              <div className="floating-card-icon-green">🛡️</div>
-              <div>
-                <div className="text-[11px] font-bold text-[var(--text)] leading-tight">Escrow Secured</div>
-                <div className="text-[9px] text-[var(--muted)] leading-none mt-0.5">₹2,50,000 Milestone</div>
-              </div>
-            </div>
-
-            {/* Premium Floating Card 3 */}
-            <div className="hero-floating-card float-3 bottom-[10%] -right-[5%] hidden md:flex">
-              <div className="floating-card-icon-amber">📈</div>
-              <div>
-                <div className="text-[11px] font-bold text-[var(--text)] leading-tight">UGC CTR: +8.4%</div>
-                <div className="text-[9px] text-[var(--muted)] leading-none mt-0.5">Verified Performance</div>
-              </div>
-            </div>
           </div>
         </div>
+      </section>
 
-        {/* Stats */}
-        <div className="relative z-10 mx-auto mt-24 grid w-full max-w-5xl grid-cols-2 gap-x-4 gap-y-10 px-4 pb-16 sm:px-6 lg:mt-32 lg:grid-cols-4 text-center">
-          <div>
-            <span className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">
-              <AnimatedCounter value={3500} prefix="₹" suffix="Cr" />
-            </span>
-            <p className="mt-2 text-sm text-muted-foreground">Indian Market Size</p>
-          </div>
-          <div>
-            <span className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">
-              <AnimatedCounter value={4.5} decimals={1} suffix="M+" />
-            </span>
-            <p className="mt-2 text-sm text-muted-foreground">Indian Creators</p>
-          </div>
-          <div>
-            <span className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">
-              <AnimatedCounter value={323} prefix="$" suffix="B" />
-            </span>
-            <p className="mt-2 text-sm text-muted-foreground">Global Creator Economy</p>
-          </div>
-          <div>
-            <span className="text-4xl font-bold tracking-tight text-primary sm:text-5xl">
-              <AnimatedCounter value={26} suffix="%" />
-            </span>
-            <p className="mt-2 text-sm text-muted-foreground">Annual Growth Rate</p>
-          </div>
+      {/* HOW IT WORKS */}
+      <section id="how-it-works" className="py-[80px] px-[5%] md:py-[100px] bg-[var(--black)]">
+        <div className="flex items-center gap-3 mb-5 reveal">
+          <div className="w-5 h-[2px] bg-amber"></div>
+          <span className="text-xs uppercase tracking-[0.2em] font-bold text-amber">How it works</span>
         </div>
+        <h2 className="text-[clamp(28px,4.5vw,48px)] font-display font-extrabold leading-[1.1] tracking-[-1.2px] mb-10 text-[var(--text)] reveal">
+          From brief to creator<br />
+          <span className="text-amber">in three steps</span>
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { n: '1', t: 'Tell us what you need', d: 'Pick your niche, your goal (sales, awareness, repeat buyers or a launch) and a budget per creator. It takes about a minute.' },
+            { n: '2', t: 'Get a shortlist, with reasons', d: 'AI ranks creators on niche fit, rate, engagement and reach, and tells you in plain words why each one was picked.' },
+            { n: '3', t: 'Send an offer and work together', d: 'Open a profile, send an offer for your campaign, and keep the whole conversation in one place instead of scattered DMs.' },
+          ].map((s, i) => (
+            <div key={s.n} className={`bg-[var(--card)] border border-border rounded-2xl p-7 reveal ${i ? 'reveal-delay-' + i : ''}`}>
+              <div className="w-10 h-10 rounded-full bg-amber-glow border border-amber/30 flex items-center justify-center text-base font-extrabold text-amber mb-4">{s.n}</div>
+              <h3 className="text-lg font-display font-bold mb-2 text-[var(--text)]">{s.t}</h3>
+              <p className="text-sm md:text-[15px] text-text-muted leading-[1.7]">{s.d}</p>
+            </div>
+          ))}
+        </div>
+        <p className="mt-8 text-sm text-text-muted reveal">
+          Payments held in escrow until you approve the work are <strong className="text-[var(--text)]">coming Q4 2026</strong>. Until then,
+          agree payment terms inside the offer. <Link href="/pricing" className="font-semibold text-[var(--text)] underline">See pricing</Link>.
+        </p>
       </section>
 
       {/* PROBLEM */}
@@ -324,7 +276,7 @@ export default function HomePage() {
             </h2>
           </div>
           <p className="text-[14px] md:text-[15px] text-text-muted max-w-[420px] leading-[1.7] lg:mb-0 reveal reveal-delay-1">
-            Fewsion unifies every stakeholder in the creator economy — with AI-powered matching, performance tracking, escrow payments, and built-in collaboration tools.
+            One home for brands, creators and editors. Every feature below is labelled Live, Beta or Coming soon, so you know exactly what you can use today.
           </p>
         </div>
 
@@ -333,11 +285,11 @@ export default function HomePage() {
             <div className="w-10 h-10 bg-amber-glow border border-amber/20 rounded-lg flex items-center justify-center text-[18px] mb-6">🎬</div>
             <h3 className="text-[18px] font-display font-bold mb-5 tracking-[-0.3px] text-[var(--text)]">Creator Portal</h3>
             <ul className="list-none p-0 m-0 flex flex-col gap-3.5">
-              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Performance-backed portfolio & niche tagging</li>
-              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Real CTR and engagement stats on every piece</li>
-              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Invite editors directly into your projects</li>
+              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Performance-backed portfolio & niche tagging<StatusChip feature="creatorScore" /></li>
+              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Real CTR and engagement stats on every piece<StatusChip feature="performanceTracker" /></li>
+              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Invite editors directly into your projects<StatusChip feature="creatorEditorCollab" /></li>
               <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Browse & apply to brand campaigns</li>
-              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Escrow-protected payments</li>
+              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Escrow-protected payments<StatusChip feature="escrow" /></li>
             </ul>
           </div>
 
@@ -345,11 +297,11 @@ export default function HomePage() {
             <div className="w-10 h-10 bg-amber-glow border border-amber/20 rounded-lg flex items-center justify-center text-[18px] mb-6">🏢</div>
             <h3 className="text-[18px] font-display font-bold mb-5 tracking-[-0.3px] text-[var(--text)]">Brand Portal</h3>
             <ul className="list-none p-0 m-0 flex flex-col gap-3.5">
-              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> AI-powered brief builder in seconds</li>
+              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> AI-powered brief builder in seconds<StatusChip feature="briefBuilder" /></li>
               <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Discover creators by proven performance, not followers</li>
               <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Post UGC, ad video, and content campaigns</li>
-              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> AI chatbot to find the right creator instantly</li>
-              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Public brand storefront with creator reviews</li>
+              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> AI matchmaker to find the right creator<StatusChip feature="aiMatching" /></li>
+              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Public brand storefront with creator reviews<StatusChip feature="brandReviews" /></li>
             </ul>
           </div>
 
@@ -357,11 +309,11 @@ export default function HomePage() {
             <div className="w-10 h-10 bg-amber-glow border border-amber/20 rounded-lg flex items-center justify-center text-[18px] mb-6">🎞️</div>
             <h3 className="text-[18px] font-display font-bold mb-5 tracking-[-0.3px] text-[var(--text)]">Editor Portal</h3>
             <ul className="list-none p-0 m-0 flex flex-col gap-3.5">
-              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> First Indian platform with a dedicated editor marketplace</li>
+              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> A marketplace built for video editors<StatusChip feature="editorMarketplace" /></li>
               <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Showcase reels, ad edits, short-form work</li>
               <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Get hired by brands directly — not just creators</li>
-              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Receive collab invites from creators on projects</li>
-              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Performance rating builds long-term reputation</li>
+              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Receive collab invites from creators on projects<StatusChip feature="creatorEditorCollab" /></li>
+              <li className="flex items-start gap-3 text-text-muted text-[13px] leading-[1.6]"><span className="text-amber mt-[2px] text-[12px]">➔</span> Performance rating builds long-term reputation<StatusChip feature="creatorScore" /></li>
             </ul>
           </div>
         </div>
@@ -374,8 +326,8 @@ export default function HomePage() {
           <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-amber">What Makes Us Different</span>
         </div>
         <h2 className="text-[clamp(32px,5vw,56px)] font-display font-extrabold leading-[1.1] tracking-[-1.5px] mb-4 reveal">
-          <span className="text-[var(--text)]">8 features no Indian</span><br />
-          <span className="text-amber">platform has today</span>
+          <span className="text-[var(--text)]">What Fewsion does</span><br />
+          <span className="text-amber">differently</span>
         </h2>
 
         <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 bg-[var(--deep)] border border-border rounded-2xl overflow-hidden reveal reveal-delay-1">
@@ -384,7 +336,7 @@ export default function HomePage() {
           <div className="flex gap-5 p-8 border-b border-border lg:border-r transition-colors duration-300 hover:bg-[var(--card2)]">
             <div className="text-amber text-[14px] font-bold font-display mt-1">01</div>
             <div>
-              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">Performance-Based Creator Score</h4>
+              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">Performance-Based Creator Score<StatusChip feature="creatorScore" /></h4>
               <p className="text-text-muted text-[13px] leading-[1.6]">A public trust score built on on-time delivery, brand satisfaction, content CTR, and repeat hire rate — not follower count.</p>
             </div>
           </div>
@@ -393,8 +345,8 @@ export default function HomePage() {
           <div className="flex gap-5 p-8 border-b border-border transition-colors duration-300 hover:bg-[var(--card2)]">
             <div className="text-amber text-[14px] font-bold font-display mt-1">02</div>
             <div>
-              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">AI Campaign Brief Builder</h4>
-              <p className="text-text-muted text-[13px] leading-[1.6]">Brands auto-generate structured, professional campaign briefs in seconds. Reduces back-and-forth and creator drop-off dramatically.</p>
+              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">AI Campaign Brief Builder<StatusChip feature="briefBuilder" /></h4>
+              <p className="text-text-muted text-[13px] leading-[1.6]">Brands auto-generate structured, professional campaign briefs in seconds. Aims to cut the back-and-forth between brands and creators.</p>
             </div>
           </div>
 
@@ -402,8 +354,8 @@ export default function HomePage() {
           <div className="flex gap-5 p-8 border-b border-border lg:border-r transition-colors duration-300 hover:bg-[var(--card2)]">
             <div className="text-amber text-[14px] font-bold font-display mt-1">03</div>
             <div>
-              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">Content Performance Tracker</h4>
-              <p className="text-text-muted text-[13px] leading-[1.6]">Track real ad performance after delivery — views, clicks, CTR, conversions. Creators build data-backed portfolios, brands get proof of ROI.</p>
+              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">Content Performance Tracker<StatusChip feature="performanceTracker" /></h4>
+              <p className="text-text-muted text-[13px] leading-[1.6]">Track real ad performance after delivery — views, clicks, CTR, conversions. So creators build data-backed portfolios and brands can see what they got for their money.</p>
             </div>
           </div>
 
@@ -411,8 +363,8 @@ export default function HomePage() {
           <div className="flex gap-5 p-8 border-b border-border transition-colors duration-300 hover:bg-[var(--card2)]">
             <div className="text-amber text-[14px] font-bold font-display mt-1">04</div>
             <div>
-              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">Escrow Payment Protection</h4>
-              <p className="text-text-muted text-[13px] leading-[1.6]">Brand deposits money upfront via Razorpay escrow. Creator gets paid only after approval. Eliminates payment disputes for both sides.</p>
+              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">Escrow Payment Protection<StatusChip feature="escrow" /></h4>
+              <p className="text-text-muted text-[13px] leading-[1.6]">The brand funds the work upfront through Razorpay, and the creator is paid after the brand approves it. Review windows, revisions and refunds will be published before launch.</p>
             </div>
           </div>
 
@@ -420,7 +372,7 @@ export default function HomePage() {
           <div className="flex gap-5 p-8 border-b border-border lg:border-r transition-colors duration-300 hover:bg-[var(--card2)]">
             <div className="text-amber text-[14px] font-bold font-display mt-1">05</div>
             <div>
-              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">Creator ↔ Editor In-Platform Collab</h4>
+              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">Creator ↔ Editor In-Platform Collab<StatusChip feature="creatorEditorCollab" /></h4>
               <p className="text-text-muted text-[13px] leading-[1.6]">Creators invite editors directly inside any live project. No more WhatsApp back-and-forth. Everything stays on Fewsion.</p>
             </div>
           </div>
@@ -429,7 +381,7 @@ export default function HomePage() {
           <div className="flex gap-5 p-8 border-b border-border transition-colors duration-300 hover:bg-[var(--card2)]">
             <div className="text-amber text-[14px] font-bold font-display mt-1">06</div>
             <div>
-              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">Brand Storefront with Creator Reviews</h4>
+              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">Brand Storefront with Creator Reviews<StatusChip feature="brandReviews" /></h4>
               <p className="text-text-muted text-[13px] leading-[1.6]">Each company gets a public page with past campaigns and creator reviews. Creators apply to brands they actually want to work with.</p>
             </div>
           </div>
@@ -438,7 +390,7 @@ export default function HomePage() {
           <div className="flex gap-5 p-8 lg:border-r border-border transition-colors duration-300 hover:bg-[var(--card2)]">
             <div className="text-amber text-[14px] font-bold font-display mt-1">07</div>
             <div>
-              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">AI Matching Chatbot</h4>
+              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">AI Matching Chatbot<StatusChip feature="aiMatching" /></h4>
               <p className="text-text-muted text-[13px] leading-[1.6]">Brands type what they need — niche, budget, platform, language — and AI returns the best matched, verified creators instantly.</p>
             </div>
           </div>
@@ -447,435 +399,11 @@ export default function HomePage() {
           <div className="flex gap-5 p-8 transition-colors duration-300 hover:bg-[var(--card2)]">
             <div className="text-amber text-[14px] font-bold font-display mt-1">08</div>
             <div>
-              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">One-Click AI Contract Generator</h4>
-              <p className="text-text-muted text-[13px] leading-[1.6]">Auto-generated contracts covering usage rights, deadlines, and payment terms. No lawyer, no back-and-forth — just one click.</p>
+              <h4 className="text-[16px] md:text-[18px] font-bold text-[var(--text)] mb-2 tracking-[-0.3px]">One-Click AI Contract Generator<StatusChip feature="contractGenerator" /></h4>
+              <p className="text-text-muted text-[13px] leading-[1.6]">Auto-generated contracts covering usage rights, deadlines, and payment terms. Fewer messages back and forth before work starts.</p>
             </div>
           </div>
 
-        </div>
-      </section>
-
-      {/* MARKET OPPORTUNITY */}
-      <section id="market" className="py-[90px] px-[5%] md:py-[120px] bg-[var(--black)]">
-        <div className="flex items-center gap-3 mb-5 reveal">
-          <div className="w-5 h-[2px] bg-amber"></div>
-          <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-amber">Market Opportunity</span>
-        </div>
-        <h2 className="text-[clamp(32px,5vw,56px)] font-display font-extrabold leading-[1.1] tracking-[-1.5px] mb-4 reveal">
-          <span className="text-[var(--text)]">A </span>
-          <span className="text-amber">₹3,500 Cr</span>
-          <span className="text-[var(--text)]"> industry</span><br />
-          <span className="text-[var(--text)]">with no dominant self-serve player</span>
-        </h2>
-
-        <div className="mt-16 flex flex-col lg:flex-row gap-10 lg:gap-16">
-
-          {/* Left Column: Metrics Cards */}
-          <div className="flex-1 flex flex-col gap-4 reveal reveal-delay-1">
-            <div className="bg-[var(--amber-glow)] border border-amber/10 rounded-2xl p-6 lg:p-8">
-              <div className="text-[var(--muted)] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">Global Creator Economy (2026)</div>
-              <div className="text-amber text-[36px] lg:text-[48px] font-extrabold font-display leading-[1] mb-2 tracking-[-1px]">$323 Billion</div>
-              <div className="text-[var(--muted2)] text-[12px]">Growing at 26.2% CAGR — projected to reach $820B by 2030</div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-[var(--card)] border border-border rounded-xl p-6">
-                <div className="text-[var(--muted)] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">India Market (2026)</div>
-                <div className="text-[var(--text)] text-[28px] lg:text-[32px] font-extrabold font-display leading-[1] mb-2 tracking-[-1px]">$15B</div>
-                <div className="text-[var(--muted2)] text-[12px]">Expected to reach $61.87B by 2033</div>
-              </div>
-              <div className="bg-[var(--card)] border border-border rounded-xl p-6">
-                <div className="text-[var(--muted)] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">India Growth Rate</div>
-                <div className="text-[var(--text)] text-[28px] lg:text-[32px] font-extrabold font-display leading-[1] mb-2 tracking-[-1px]">22.4%</div>
-                <div className="text-[var(--muted2)] text-[12px]">CAGR — one of the fastest in Asia</div>
-              </div>
-              <div className="bg-[var(--card)] border border-border rounded-xl p-6">
-                <div className="text-[var(--muted)] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">Indian Creators</div>
-                <div className="text-[var(--text)] text-[28px] lg:text-[32px] font-extrabold font-display leading-[1] mb-2 tracking-[-1px]">4-5M+</div>
-                <div className="text-[var(--muted2)] text-[12px]">Active creators across platforms</div>
-              </div>
-              <div className="bg-[var(--card)] border border-border rounded-xl p-6">
-                <div className="text-[var(--muted)] uppercase text-[10px] tracking-[0.15em] mb-4 font-bold">Influencer Marketing India</div>
-                <div className="text-[var(--text)] text-[28px] lg:text-[32px] font-extrabold font-display leading-[1] mb-2 tracking-[-1px]">₹3,500Cr</div>
-                <div className="text-[var(--muted2)] text-[12px]">2025 industry value, growing fast</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Column: Text Content */}
-          <div className="flex-1 flex flex-col gap-6 justify-center lg:pt-12 text-text-muted text-[13px] md:text-[14px] leading-[1.8] reveal reveal-delay-2">
-            <p>India's creator economy is exploding — fuelled by 900M+ smartphone users, affordable data, and a massive shift in how D2C brands acquire customers. Brands are moving away from expensive celebrity endorsements and toward authentic, performance-driven UGC content.</p>
-            <p>Yet every existing Indian platform — Kofluence, Qoruz, Good Creator Co. — serves enterprise brands through agency-style models. There is no self-serve, performance-first marketplace where a small D2C brand can find a quality creator in minutes.</p>
-
-            <div className="bg-[var(--amber-glow)] border-l-[3px] border-amber rounded-r-lg p-5 mt-2">
-              <p className="text-[var(--text)] text-[13px] italic mb-0">"Even capturing 0.1% of the Indian market puts Fewsion at ₹35 Cr GMV — a realistic Year 2 target."</p>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* COMPETITORS */}
-      <section id="competitors" className="py-[90px] px-[5%] md:py-[120px] bg-[var(--black)]">
-        <div className="flex items-center gap-3 mb-5 reveal">
-          <div className="w-5 h-[2px] bg-amber"></div>
-          <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-amber">Competitive Landscape</span>
-        </div>
-        <h2 className="text-[clamp(32px,5vw,56px)] font-display font-extrabold leading-[1.1] tracking-[-1.5px] mb-12 text-left text-[var(--text)] reveal">
-          We're not competing.<br />
-          <span className="text-amber">We're filling a gap</span> they left open.
-        </h2>
-
-        <div className="flex gap-8 mb-8 border-b border-border overflow-x-auto whitespace-nowrap">
-          <button className={`text-[13px] md:text-[14px] font-bold pb-3 cursor-pointer transition-colors duration-300 ${activeTab === 'global' ? 'text-amber border-b-2 border-amber' : 'text-text-muted hover:text-foreground border-b-2 border-transparent'}`} onClick={() => setActiveTab('global')}>Global Platforms</button>
-          <button className={`text-[13px] md:text-[14px] font-bold pb-3 cursor-pointer transition-colors duration-300 ${activeTab === 'india' ? 'text-amber border-b-2 border-amber' : 'text-text-muted hover:text-foreground border-b-2 border-transparent'}`} onClick={() => setActiveTab('india')}>Indian Players</button>
-          <button className={`text-[13px] md:text-[14px] font-bold pb-3 cursor-pointer transition-colors duration-300 ${activeTab === 'gap' ? 'text-amber border-b-2 border-amber' : 'text-text-muted hover:text-foreground border-b-2 border-transparent'}`} onClick={() => setActiveTab('gap')}>The Gap We Fill</button>
-        </div>
-
-        {activeTab === 'global' && (
-          <div className="block animate-[fadeIn_0.4s_ease]" id="tab-global">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-[13px] border-collapse whitespace-nowrap min-w-[700px]">
-                <thead>
-                  <tr>
-                    <th className="py-[20px] pr-[24px] pl-0 font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[15%]">Platform</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[14%]">Creators</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[14%]">Brands</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[14%]">Editors</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[14%]">AI Matching</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[14%]">India Focus</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[15%]">Escrow</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground font-medium">Collabstr</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                  </tr>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground font-medium">Billo</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                  </tr>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground font-medium">Fiverr</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground font-bold">✓</td>
-                  </tr>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground font-medium">Contra</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                  </tr>
-                  <tr className="bg-card2">
-                    <td className="py-[20px] pr-[24px] pl-4 border-b-0 text-amber font-bold rounded-l-lg">Fewsion</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold">✓</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold rounded-r-lg">✓</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'india' && (
-          <div className="block animate-[fadeIn_0.4s_ease]" id="tab-india">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-[13px] border-collapse whitespace-nowrap min-w-[700px]">
-                <thead>
-                  <tr>
-                    <th className="py-[20px] pr-[24px] pl-0 font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[20%]">Company</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[16%]">Funding</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[16%]">Revenue FY25</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[16%]">Valuation</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[16%]">Self-Serve</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[16%]">Editor Mkt.</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground font-medium">Good Creator Co.</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">$306M (group)</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">~₹252 Cr</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">$1.2B unicorn</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗ Agency</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                  </tr>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground font-medium">Kofluence</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">₹29.91 Cr</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">₹52.5 Cr</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">Undisclosed</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗ Agency</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                  </tr>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground font-medium">Qoruz</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">$1.03M</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">₹56.4 Cr</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">~$21–38M</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗ Analytics</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                  </tr>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground font-medium">Chtrbox</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">~$158K</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">Undisclosed</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">Acquired</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗ Agency</td>
-                    <td className="p-[20px_24px] border-b border-border text-text-muted">✗</td>
-                  </tr>
-                  <tr className="bg-card2">
-                    <td className="py-[20px] pr-[24px] pl-4 border-b-0 text-amber font-bold rounded-l-lg">Fewsion</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold">Raising seed</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold">Launching 2026</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold">—</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold">✓ Self-serve</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold rounded-r-lg">✓</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'gap' && (
-          <div className="block animate-[fadeIn_0.4s_ease]" id="tab-gap">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-[13px] border-collapse min-w-[700px]">
-                <thead>
-                  <tr>
-                    <th className="py-[20px] pr-[24px] pl-0 font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[30%]">Gap in Indian Market</th>
-                    <th className="p-[20px_24px] font-bold text-text-muted uppercase text-[10px] tracking-[0.1em] border-b border-border w-[70%]">What Fewsion Does Instead</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground/80 font-medium">All enterprise / agency tools only</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">Self-serve — any brand posts a campaign in minutes, no sales call</td>
-                  </tr>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground/80 font-medium">Hire by follower count</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">Hire by Creator Score and proven CTR — data beats vanity metrics</td>
-                  </tr>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground/80 font-medium">No editor marketplace</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">First Indian platform where editors get a dedicated portfolio and job listings</td>
-                  </tr>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground/80 font-medium">No escrow payments</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">Razorpay escrow on every deal — money released only after content approved</td>
-                  </tr>
-                  <tr>
-                    <td className="py-[20px] pr-[24px] pl-0 border-b border-border text-foreground/80 font-medium">No AI brief builder</td>
-                    <td className="p-[20px_24px] border-b border-border text-foreground/80">AI generates structured campaign briefs in seconds</td>
-                  </tr>
-                  <tr className="bg-card2">
-                    <td className="py-[20px] pr-[24px] pl-4 border-b-0 text-amber font-bold rounded-l-lg">No Creator–Editor collaboration</td>
-                    <td className="p-[20px_24px] border-b-0 text-foreground font-bold rounded-r-lg">Creators invite editors directly inside a project on the same platform</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* REVENUE */}
-      <section id="revenue" className="py-[90px] px-[5%] md:py-[120px] bg-[var(--black)]">
-        <div className="flex items-center gap-3 mb-5 reveal">
-          <div className="w-5 h-[2px] bg-amber"></div>
-          <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-amber">Business Model</span>
-        </div>
-        <h2 className="text-[clamp(32px,5vw,56px)] font-display font-extrabold leading-[1.1] tracking-[-1.5px] mb-12 text-left text-[var(--text)] reveal">
-          Multiple revenue streams<br />
-          <span className="text-amber">built to scale</span>
-        </h2>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="bg-[var(--card)] border border-border border-b-[2px] border-b-amber p-8 rounded-2xl reveal">
-            <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">10-15%</div>
-            <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">Transaction Commission</h3>
-            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">A percentage cut on every paid project completed through the platform. Primary revenue driver at scale.</p>
-          </div>
-          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-1">
-            <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">₹499/mo</div>
-            <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">Creator Pro Subscription</h3>
-            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">Advanced analytics, priority search ranking, featured profile placement, and AI-powered career insights.</p>
-          </div>
-          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-2">
-            <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">₹2,999/mo</div>
-            <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">Brand Premium Plan</h3>
-            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">Unlimited campaign briefs, AI chatbot access, bulk creator outreach, and priority matching.</p>
-          </div>
-          <div className="bg-[var(--card)] border border-border border-b-[2px] border-b-amber p-8 rounded-2xl reveal">
-            <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">₹999</div>
-            <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">Featured Brand Listings</h3>
-            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">Brands pay to be highlighted to relevant creators, driving faster applications and better talent.</p>
-          </div>
-          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-1">
-            <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">₹99</div>
-            <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">AI Contract Generator</h3>
-            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">Per-contract fee for auto-generated usage rights, deadline, and payment agreements — no lawyer needed.</p>
-          </div>
-          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] border-b-[2px] border-b-amber p-8 rounded-2xl reveal reveal-delay-2">
-            <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-3 tracking-[-1px]">Custom</div>
-            <h3 className="text-[16px] md:text-[18px] text-[var(--text)] font-bold mb-3">Enterprise Packages</h3>
-            <p className="text-[13px] md:text-[14px] text-[var(--muted)] leading-[1.6]">White-glove matching, dedicated account management, and bulk campaign tooling for large brands.</p>
-          </div>
-        </div>
-
-        <div className="mt-6 grid grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-[var(--card)] border border-border p-6 rounded-2xl text-center reveal">
-            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[var(--muted2)] mb-4">Month 1–3</div>
-            <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-[var(--text)] mb-1 tracking-[-1px]">500</div>
-            <div className="text-[12px] text-[var(--muted2)]">Creators onboarded</div>
-          </div>
-          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] p-6 rounded-2xl text-center reveal reveal-delay-1">
-            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[var(--muted2)] mb-4">Month 6</div>
-            <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-[var(--text)] mb-1 tracking-[-1px]">₹15–20L</div>
-            <div className="text-[12px] text-[var(--muted2)]">Monthly GMV target</div>
-          </div>
-          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] p-6 rounded-2xl text-center reveal reveal-delay-2">
-            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[var(--muted2)] mb-4">Month 6</div>
-            <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-1 tracking-[-1px]">₹2–3L</div>
-            <div className="text-[12px] text-[var(--muted2)]">Monthly revenue</div>
-          </div>
-          <div className="bg-[var(--card)] border border-[rgba(15, 23, 42, 0.05)] p-6 rounded-2xl text-center reveal reveal-delay-3">
-            <div className="text-[11px] uppercase tracking-[0.1em] font-bold text-[var(--muted2)] mb-4">Year 2</div>
-            <div className="text-[clamp(24px,3vw,28px)] font-extrabold font-display text-amber mb-1 tracking-[-1px]">₹35Cr+</div>
-            <div className="text-[12px] text-[var(--muted2)]">GMV milestone</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ROADMAP */}
-      <section id="roadmap" className="py-[90px] px-[5%] md:py-[120px] bg-[var(--black)]">
-        <div className="flex items-center gap-3 mb-5 reveal">
-          <div className="w-5 h-[2px] bg-amber"></div>
-          <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-amber">Roadmap</span>
-        </div>
-        <h2 className="text-[clamp(32px,5vw,56px)] font-display font-extrabold leading-[1.1] tracking-[-1.5px] mb-12 text-left text-[var(--text)] reveal">
-          From MVP to<br />
-          <span className="text-amber">market leader</span>
-        </h2>
-
-        <div className="relative ml-3 md:ml-6 pl-8 md:pl-10 py-4 flex flex-col gap-14 mt-16">
-          {/* Timeline Line */}
-          <div className="absolute top-0 bottom-0 left-0 w-[1px] bg-gradient-to-b from-amber via-amber to-[var(--border)] via-[30%]"></div>
-
-          {/* Q3 2026 */}
-          <div className="relative reveal">
-            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-amber bg-[var(--black)] flex items-center justify-center">
-              <div className="w-1.5 h-1.5 bg-amber rounded-full"></div>
-            </div>
-            <div className="text-amber text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q3 2026 — LAUNCH</div>
-            <h3 className="text-[20px] md:text-[22px] font-bold text-[var(--text)] mb-5">MVP — Core Platform</h3>
-            <div className="flex flex-wrap gap-3">
-              <span className="bg-[rgba(245,166,35,0.05)] border border-[rgba(245,166,35,0.2)] text-amber py-2 px-4 rounded-full text-[13px]">Creator profiles</span>
-              <span className="bg-[rgba(245,166,35,0.05)] border border-[rgba(245,166,35,0.2)] text-amber py-2 px-4 rounded-full text-[13px]">Brand job listings</span>
-              <span className="bg-[rgba(245,166,35,0.05)] border border-[rgba(245,166,35,0.2)] text-amber py-2 px-4 rounded-full text-[13px]">Basic AI matching</span>
-              <span className="bg-[rgba(245,166,35,0.05)] border border-[rgba(245,166,35,0.2)] text-amber py-2 px-4 rounded-full text-[13px]">Niche categories</span>
-            </div>
-          </div>
-
-          {/* Q4 2026 */}
-          <div className="relative reveal">
-            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-amber bg-[var(--black)] flex items-center justify-center">
-              <div className="w-1.5 h-1.5 bg-amber rounded-full"></div>
-            </div>
-            <div className="text-amber text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q4 2026 — TRUST LAYER</div>
-            <h3 className="text-[20px] md:text-[22px] font-bold text-[var(--text)] mb-5">Payments + Creator Score</h3>
-            <div className="flex flex-wrap gap-3">
-              <span className="bg-[rgba(245,166,35,0.05)] border border-[rgba(245,166,35,0.2)] text-amber py-2 px-4 rounded-full text-[13px]">Razorpay escrow</span>
-              <span className="bg-[rgba(245,166,35,0.05)] border border-[rgba(245,166,35,0.2)] text-amber py-2 px-4 rounded-full text-[13px]">Creator Score system</span>
-              <span className="bg-[rgba(245,166,35,0.05)] border border-[rgba(245,166,35,0.2)] text-amber py-2 px-4 rounded-full text-[13px]">Editor marketplace</span>
-              <span className="bg-[rgba(245,166,35,0.05)] border border-[rgba(245,166,35,0.2)] text-amber py-2 px-4 rounded-full text-[13px]">Brand reviews</span>
-            </div>
-          </div>
-
-          {/* Q1 2027 */}
-          <div className="relative reveal">
-            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-[var(--border2)] bg-[var(--black)]"></div>
-            <div className="text-[var(--muted)] text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q1 2027 — AI LAYER</div>
-            <h3 className="text-[20px] md:text-[22px] font-bold text-[var(--text)] mb-5">Intelligence Features</h3>
-            <div className="flex flex-wrap gap-3">
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">AI brief builder</span>
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">AI contract generator</span>
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Performance tracker</span>
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Creator–Editor collab</span>
-            </div>
-          </div>
-
-          {/* Q2 2027 */}
-          <div className="relative reveal">
-            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-[var(--border2)] bg-[var(--black)]"></div>
-            <div className="text-[var(--muted)] text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q2 2027 — SCALE</div>
-            <h3 className="text-[20px] md:text-[22px] font-bold text-[var(--text)] mb-5">Mobile + Growth</h3>
-            <div className="flex flex-wrap gap-3">
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">iOS + Android app</span>
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Referral program</span>
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">SEA market entry</span>
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Brand storefront V2</span>
-            </div>
-          </div>
-
-          {/* Q3 2027 */}
-          <div className="relative reveal">
-            <div className="absolute -left-[39px] md:-left-[47px] top-1 w-4 h-4 rounded-full border-2 border-[var(--border2)] bg-[var(--black)]"></div>
-            <div className="text-[var(--muted)] text-[11px] uppercase tracking-[0.1em] font-bold mb-3">Q3 2027 — FUNDING</div>
-            <h3 className="text-[20px] md:text-[22px] font-bold text-[var(--text)] mb-5">Seed Round + 10K Users</h3>
-            <div className="flex flex-wrap gap-3">
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">₹3–5 Cr seed raise</span>
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">10,000 active users</span>
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Enterprise tier launch</span>
-              <span className="bg-[rgba(15, 23, 42, 0.02)] border border-[rgba(15, 23, 42, 0.05)] text-[var(--muted)] py-2 px-4 rounded-full text-[13px]">Social API integrations</span>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* VISION */}
-      <section id="vision" className="py-[120px] px-[5%] text-center bg-[var(--black)]">
-        <div className="max-w-[900px] mx-auto flex flex-col items-center">
-          <div className="flex items-center justify-center gap-3 mb-8 reveal">
-            <div className="w-5 h-[2px] bg-amber"></div>
-            <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-amber">Our Vision</span>
-          </div>
-
-          <h2 className="text-[clamp(22px,3.5vw,40px)] font-display font-bold leading-[1.25] tracking-[-1px] mb-8 text-[var(--text)] reveal max-w-[800px]">
-            "The only platform where creators are hired based on <span className="text-amber">proven performance,</span> not follower count."
-          </h2>
-
-          <p className="text-[14px] md:text-[16px] text-[var(--muted)] leading-[1.8] mb-12 max-w-[650px] reveal reveal-delay-1">
-            Fewsion aims to become the default infrastructure for the creator economy in India and Southeast Asia — the place where every brand finds its best creator, every creator builds their legacy, and every editor finally gets the recognition they deserve.
-          </p>
-
-          <a href="#cta" className="inline-flex items-center justify-center bg-gradient-to-r from-amber to-[#FF6B35] text-black font-bold text-[14px] rounded-full px-8 py-3.5 transition-transform hover:scale-105 hover:shadow-[0_0_20px_rgba(245,166,35,0.4)] reveal reveal-delay-2">
-            Be part of the story →
-          </a>
         </div>
       </section>
 
@@ -892,17 +420,17 @@ export default function HomePage() {
         </h2>
 
         <p className="text-[17px] text-[var(--muted)] font-light leading-[1.7] max-w-[460px] mx-auto mb-10 reveal reveal-delay-1">
-          Whether you're a brand, creator, or editor — Fewsion is building for you. Join the waitlist and be among the first to experience it.
+          Whether you are a brand, a creator or an editor, you can create a free account and try the AI matchmaker today.
         </p>
 
         <div className="flex flex-wrap justify-center gap-3.5 reveal reveal-delay-2">
-          <Link href="/creators" className="btn-primary !px-5 !py-2.5 text-[14px]">
+          <Link href="/signup?role=creator" className="btn-primary !px-5 !py-2.5 text-[14px]">
             I&apos;m a Creator &rarr;
           </Link>
-          <Link href="/brands" className="btn-primary !bg-[var(--amber2)] !px-5 !py-2.5 text-[14px]">
+          <Link href="/signup?role=brand" className="btn-primary !bg-[var(--amber2)] !px-5 !py-2.5 text-[14px]">
             I&apos;m a Brand &rarr;
           </Link>
-          <Link href="/editors" className="btn-ghost !px-5 !py-2.5 text-[14px]">
+          <Link href="/signup?role=editor" className="btn-ghost !px-5 !py-2.5 text-[14px]">
             I&apos;m an Editor
           </Link>
         </div>

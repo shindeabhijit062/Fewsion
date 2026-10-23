@@ -192,7 +192,9 @@ export default function AIChatbotWidget({
       <button 
         id="chat-fab" 
         onClick={handleFabClick} 
-        aria-label="Open AI assistant"
+        aria-label={open ? 'Close AI assistant' : 'Open AI assistant'}
+        aria-expanded={open}
+        aria-controls="chat-window"
         className={open ? 'open' : ''}
       >
         <span className="fab-icon flex items-center justify-center">
@@ -200,7 +202,7 @@ export default function AIChatbotWidget({
         </span>
       </button>
 
-      <div id="chat-window" className={open ? 'open' : ''} role="dialog">
+      <div id="chat-window" className={open ? 'open' : ''} role="dialog" aria-label="Fewsion AI chat" aria-hidden={!open}>
         <div className="chat-header flex justify-between items-center w-full">
           <div className="flex items-center">
             <div className="chat-avatar p-0 overflow-hidden bg-white mr-3">
@@ -278,7 +280,7 @@ export default function AIChatbotWidget({
 
         <div className="chat-input-area">
           <input 
-            id="chat-input" 
+            id="chat-input" aria-label="Type your message" 
             type="text" 
             placeholder="Type your message..." 
             value={inputVal}

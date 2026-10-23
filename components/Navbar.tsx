@@ -94,9 +94,11 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { href: '/creators', label: 'Creators' },
-    { href: '/brands', label: 'Brands' },
-    { href: '/editors', label: 'Editors' },
+    // Labels say what you can DO there. /creators is the directory brands browse,
+    // /brands is the campaign board creators browse.
+    { href: '/creators', label: 'Find creators' },
+    { href: '/brands', label: 'Find campaigns' },
+    { href: '/editors', label: 'For editors' },
     { href: '/pricing', label: 'Pricing' },
     { href: '/about', label: 'About' },
   ];
@@ -145,6 +147,8 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setDropdownOpen(!dropdownOpen)}
+                aria-expanded={dropdownOpen}
+                aria-haspopup="menu"
                 className="flex items-center gap-2.5 rounded-full bg-[var(--card2)] border border-[var(--border2)] px-3 py-1.5 transition-all duration-200 hover:border-[var(--amber)] cursor-pointer"
               >
                 <ProfileAvatar
@@ -211,7 +215,7 @@ export default function Navbar() {
                   className="nav-cta"
                   onClick={() => setMobileOpen(false)}
                 >
-                  Join Waitlist
+                  Sign up free
                 </Link>
               </li>
             </>
@@ -219,12 +223,14 @@ export default function Navbar() {
         </ul>
 
         {/* Hamburger */}
-        <div
+        <button
+          type="button"
           className="nav-hamburger"
           id="hamburger"
           onClick={() => setMobileOpen(!mobileOpen)}
           aria-label="Toggle mobile menu"
-          role="button"
+          aria-expanded={mobileOpen}
+          aria-controls="navLinks"
         >
           <span
             className={`block w-6 h-[2px] rounded-sm transition-all duration-300 origin-center
@@ -244,7 +250,7 @@ export default function Navbar() {
             `}
             style={{ background: 'var(--text)' }}
           />
-        </div>
+        </button>
       </nav>
 
       {/* Mobile backdrop */}
