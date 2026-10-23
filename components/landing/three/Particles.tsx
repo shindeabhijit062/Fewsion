@@ -69,6 +69,12 @@ const vertex = /* glsl */ `
     float top = smoothstep(0.15, 0.75, ndc.y);
     float textSide = smoothstep(0.1, -0.45, ndc.x);
     vAlpha *= 1.0 - uW[0] * (0.92 * top + 0.5 * textSide * (1.0 - top));
+
+    // The loose cloud is only a light sprinkle: about 1 in 5 points shows, a
+    // little dimmer. All points come back when they form the rings, frame,
+    // shield or halo.
+    float keep = step(aRand.y, 0.2);
+    vAlpha *= mix(1.0, keep * 0.75, uW[0]);
   }
 `;
 
