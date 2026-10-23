@@ -46,7 +46,7 @@ export function buildFormations(count: number) {
       const r = 1.4 + Math.pow(rnd(), 1.6) * 6.2;
       const s = Math.sqrt(1 - u * u);
       nebula[o] = Math.cos(th) * s * r * 1.55;
-      nebula[o + 1] = u * r * 0.7;
+      nebula[o + 1] = u * r * 0.5;
       nebula[o + 2] = Math.sin(th) * s * r * 0.5 - 0.3;
     }
 

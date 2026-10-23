@@ -45,6 +45,8 @@ const vertex = /* glsl */ `
     float breathe = 0.75 + 0.25 * sin(uTime * (0.4 + aRand.y * 0.5) + aRand.x * 12.0);
     // Fade in near the top and bottom of the wrap so flakes never pop.
     float edge = smoothstep(1.0, 0.8, abs(y));
+    // No flakes over the nav and headline at the top of the screen.
+    edge *= 1.0 - smoothstep(0.05, 0.55, y);
     // Bigger flakes are fainter, so the energy spreads like a real out-of-focus light.
     vAlpha = (0.06 + aRand.x * 0.09) * mix(1.0, 0.5, aRand.z) * breathe * edge * uVis;
   }

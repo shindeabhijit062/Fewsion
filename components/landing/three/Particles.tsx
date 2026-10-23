@@ -62,6 +62,13 @@ const vertex = /* glsl */ `
     float twinkle = 0.8 + 0.2 * sin(uTime * 1.7 + aRand.y * 40.0);
     vAlpha = (0.55 + aRand.z * 0.75) * (1.0 + scan * 2.0) * twinkle;
     vAlpha *= (1.0 - 0.9 * far) * mix(1.0, 0.3, vBlur);
+
+    // Keep the nav, headline and dark background clean: the loose cloud thins
+    // out towards the top of the screen and behind the text column.
+    vec2 ndc = gl_Position.xy / gl_Position.w;
+    float top = smoothstep(0.15, 0.75, ndc.y);
+    float textSide = smoothstep(0.1, -0.45, ndc.x);
+    vAlpha *= 1.0 - uW[0] * (0.92 * top + 0.5 * textSide * (1.0 - top));
   }
 `;
 
