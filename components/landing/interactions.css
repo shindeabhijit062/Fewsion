@@ -1,0 +1,281 @@
+/* ═══════════════════════════════════════════════════════════════
+   FEWSION LANDING — interaction layer
+   Hover and pointer effects driven by Interactions.tsx (mouse only).
+   Every moving part is gated on html[data-fx-hover], which is never
+   set for touch devices or prefers-reduced-motion.
+═══════════════════════════════════════════════════════════════ */
+
+/* Registered so the wordmark's reveal radius can animate; inherited so the
+   fill layer sees the value set on the wordmark. */
+@property --wr {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 0px;
+}
+
+/* ── Rolling button labels ────────────────────────────────── */
+
+.fx-roll {
+  display: inline-grid;
+  overflow: hidden;
+  padding-block: 0.12em;
+  margin-block: -0.12em;
+}
+
+.fx-roll > span {
+  grid-area: 1 / 1;
+  transition: transform 0.55s var(--fx-ease);
+}
+
+.fx-roll__b {
+  transform: translateY(115%);
+}
+
+html[data-fx-hover] .fx-btn:hover .fx-roll__a {
+  transform: translateY(-115%);
+}
+
+html[data-fx-hover] .fx-btn:hover .fx-roll__b {
+  transform: none;
+}
+
+/* The label leans a little further than the button for depth. */
+html[data-fx-hover] .fx-btn .fx-roll {
+  transform: translate3d(calc(var(--mag-x) * 0.35), calc(var(--mag-y) * 0.35), 0);
+  transition: transform 0.6s cubic-bezier(0.22, 1.4, 0.36, 1);
+}
+
+/* Primary buttons get a light sweep on hover. */
+.fx-btn--primary {
+  overflow: hidden;
+}
+
+.fx-btn--primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.45) 50%, transparent 70%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+html[data-fx-hover] .fx-btn--primary:hover::after {
+  transform: translateX(120%);
+  transition: transform 0.9s var(--fx-ease);
+}
+
+/* ── Spotlight cards ──────────────────────────────────────── */
+
+.fx-card,
+.fx-plan,
+.fx-compare__panel {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Border light that follows the cursor. */
+.fx-card::before,
+.fx-plan::before,
+.fx-compare__panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1px;
+  border-radius: inherit;
+  background: radial-gradient(240px circle at var(--sx, -999px) var(--sy, -999px), rgba(255, 150, 60, 0.9), transparent 70%);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+/* Soft glow on the surface under the cursor. */
+.fx-card::after,
+.fx-plan::after,
+.fx-compare__panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(420px circle at var(--sx, -999px) var(--sy, -999px), rgba(255, 122, 26, 0.09), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.fx-plan::after {
+  background: radial-gradient(420px circle at var(--sx, -999px) var(--sy, -999px), rgba(255, 122, 26, 0.12), transparent 60%);
+}
+
+html[data-fx-hover] :is(.fx-card, .fx-plan, .fx-compare__panel):hover::before,
+html[data-fx-hover] :is(.fx-card, .fx-plan, .fx-compare__panel):hover::after {
+  opacity: 1;
+}
+
+/* Icons wake up with their card. */
+html[data-fx-hover] .fx-card:hover .fx-tool__icon {
+  color: var(--fx-orange-2);
+  border-color: rgba(255, 138, 31, 0.45);
+  transform: rotate(-8deg) scale(1.08);
+}
+
+/* ── Hero headline: letters that react to the cursor ─────── */
+
+.fx-ch {
+  --f: 0;
+  display: inline-block;
+}
+
+html[data-fx-hover] .fx-ch {
+  transform: translate3d(0, calc(var(--f) * -0.14em), 0) scale(calc(1 + var(--f) * 0.07));
+  text-shadow: 0 0 calc(var(--f) * 30px) rgba(255, 138, 31, calc(var(--f) * 0.7));
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    text-shadow 0.35s ease,
+    color 0.35s ease;
+  will-change: transform;
+}
+
+html[data-fx-hover] [data-letters][data-ready] .fx-word {
+  overflow: visible;
+}
+
+html[data-fx-hover] .fx-word__in:not(.fx-grad) .fx-ch {
+  color: color-mix(in oklab, var(--fx-orange-2) calc(var(--f) * 85%), var(--fx-text));
+}
+
+/* ── Nav: sliding pill and scroll progress ───────────────── */
+
+.fx-nav__links {
+  position: relative;
+}
+
+.fx-nav__links a {
+  position: relative;
+  z-index: 1;
+}
+
+.fx-nav__pill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  z-index: 0;
+  height: 38px;
+  margin-top: -19px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.06);
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    transform 0.5s var(--fx-ease),
+    width 0.5s var(--fx-ease),
+    opacity 0.3s ease;
+}
+
+.fx-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--fx-orange), #ffb36b);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+
+/* ── Footer wordmark ─────────────────────────────────────── */
+
+.fx-wordmark {
+  --wr: 0px;
+  position: relative;
+  display: grid;
+  margin-top: clamp(40px, 6vw, 72px);
+  font-size: clamp(84px, 21vw, 330px);
+  font-weight: 800;
+  line-height: 0.78;
+  letter-spacing: -0.065em;
+  text-align: center;
+  user-select: none;
+  transition: --wr 0.6s var(--fx-ease);
+}
+
+.fx-wordmark > span {
+  grid-area: 1 / 1;
+  padding-bottom: 0.08em;
+}
+
+.fx-wordmark__outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.22);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), transparent 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.fx-wordmark__fill {
+  color: var(--fx-orange-2);
+  -webkit-mask: radial-gradient(circle var(--wr) at var(--wx, 50%) var(--wy, 50%), #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 100%);
+  mask: radial-gradient(circle var(--wr) at var(--wx, 50%) var(--wy, 50%), #000 0%, rgba(0, 0, 0, 0.6) 45%, transparent 100%);
+}
+
+html[data-fx-hover] .fx-wordmark[data-lit] {
+  --wr: 260px;
+}
+
+/* ── Small motion details ────────────────────────────────── */
+
+/* Footer links slide an arrow in. */
+.fx-footer nav a {
+  gap: 0;
+  transition:
+    color 0.2s,
+    gap 0.35s var(--fx-ease);
+}
+
+.fx-footer nav a::after {
+  content: '→';
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition:
+    width 0.35s var(--fx-ease),
+    opacity 0.25s;
+}
+
+html[data-fx-hover] .fx-footer nav a:hover {
+  gap: 6px;
+}
+
+html[data-fx-hover] .fx-footer nav a:hover::after {
+  width: 1em;
+  opacity: 1;
+}
+
+/* Comparison rows light up under the cursor. */
+html[data-fx-hover] .fx-table tbody tr {
+  transition: background-color 0.25s ease;
+}
+
+html[data-fx-hover] .fx-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+/* Hero floating chips settle on hover. */
+html[data-fx-hover] .fx-hero__float {
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+}
+
+html[data-fx-hover] .fx-hero__float:hover {
+  border-color: rgba(255, 138, 31, 0.45);
+}

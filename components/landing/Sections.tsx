@@ -36,9 +36,11 @@ import {
 } from './content';
 import { NetworkDiagram, ShieldDiagram } from './Diagrams';
 import CompetitorTabs from './CompetitorTabs';
+import Roll from './Roll';
 
 // ── Hero ─────────────────────────────────────────────────────────────
 const FLOAT_ICONS = [Bot, ShieldCheck, TrendingUp];
+const HERO_TITLE = HERO.lines.map((line) => line.map((w) => w.w).join(' ')).join(' ');
 
 export function Hero() {
   let wordIndex = 0;
@@ -50,16 +52,20 @@ export function Hero() {
             <span className="fx-chip__dot" aria-hidden="true" />
             {HERO.eyebrow}
           </p>
-          <h1 id="fx-hero-title" className="fx-hero__title">
+          <h1 id="fx-hero-title" className="fx-hero__title" aria-label={HERO_TITLE} data-letters>
             {HERO.lines.map((line, li) => (
-              <span className="fx-line" key={li}>
+              <span className="fx-line" key={li} aria-hidden="true">
                 {line.map((w) => {
                   const i = wordIndex++;
                   return (
                     <Fragment key={w.w}>
                       <span className="fx-word">
                         <span className={w.accent ? 'fx-word__in fx-grad' : 'fx-word__in'} style={{ ['--i' as string]: i }}>
-                          {w.w}
+                          {Array.from(w.w).map((ch, k) => (
+                            <span className="fx-ch" key={k}>
+                              {ch}
+                            </span>
+                          ))}
                         </span>
                       </span>{' '}
                     </Fragment>
@@ -73,10 +79,10 @@ export function Hero() {
           </p>
           <div className="fx-hero__ctas fx-intro" style={{ ['--i' as string]: 6 }}>
             <Link href={HERO.cta.href} className="fx-btn fx-btn--primary fx-btn--lg">
-              {HERO.cta.label} <ArrowRight size={18} aria-hidden="true" />
+              <Roll>{HERO.cta.label}</Roll> <ArrowRight size={18} aria-hidden="true" />
             </Link>
             <a href={HERO.secondary.href} className="fx-btn fx-btn--ghost fx-btn--lg">
-              <Play size={16} aria-hidden="true" /> {HERO.secondary.label}
+              <Play size={16} aria-hidden="true" /> <Roll>{HERO.secondary.label}</Roll>
             </a>
           </div>
         </div>
@@ -457,7 +463,7 @@ export function Vision() {
             {VISION.body}
           </p>
           <a href={VISION.button.href} className="fx-btn fx-btn--primary fx-btn--lg" data-reveal="3">
-            {VISION.button.label} <ArrowRight size={18} aria-hidden="true" />
+            <Roll>{VISION.button.label}</Roll> <ArrowRight size={18} aria-hidden="true" />
           </a>
         </header>
       </div>
@@ -483,13 +489,13 @@ export function FinalCta() {
         <p data-reveal="1">{CTA.sub}</p>
         <div className="fx-cta__buttons" data-reveal="2">
           <Link href={ROLE_BUTTONS.creator.href} className="fx-btn fx-btn--primary fx-btn--lg">
-            {ROLE_BUTTONS.creator.label} <ArrowRight size={18} aria-hidden="true" />
+            <Roll>{ROLE_BUTTONS.creator.label}</Roll> <ArrowRight size={18} aria-hidden="true" />
           </Link>
           <Link href={ROLE_BUTTONS.brand.href} className="fx-btn fx-btn--primary fx-btn--lg">
-            {ROLE_BUTTONS.brand.label} <ArrowRight size={18} aria-hidden="true" />
+            <Roll>{ROLE_BUTTONS.brand.label}</Roll> <ArrowRight size={18} aria-hidden="true" />
           </Link>
           <Link href={ROLE_BUTTONS.editor.href} className="fx-btn fx-btn--ghost fx-btn--lg">
-            {ROLE_BUTTONS.editor.label}
+            <Roll>{ROLE_BUTTONS.editor.label}</Roll>
           </Link>
         </div>
       </div>
@@ -532,6 +538,10 @@ export function LandingFooter() {
           <Link href="/terms">Terms of Service</Link>
           <Link href="/cookie">Cookie Policy</Link>
         </nav>
+      </div>
+      <div className="fx-wrap fx-wordmark" data-wordmark aria-hidden="true">
+        <span className="fx-wordmark__outline">Fewsion</span>
+        <span className="fx-wordmark__fill">Fewsion</span>
       </div>
       <div className="fx-wrap fx-footer__bottom">
         <span>

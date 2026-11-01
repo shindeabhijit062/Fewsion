@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { LayoutDashboard, Menu, X } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
 import { JOIN, LOGIN, NAV_LINKS } from './content';
+import Roll from './Roll';
 
 const PORTAL: Record<string, string> = { brand: '/portals/brand', editor: '/portals/editor', creator: '/portals/creator' };
 
@@ -13,8 +14,33 @@ export default function LandingNav() {
   const [open, setOpen] = useState(false);
   const [portal, setPortal] = useState<string | null>(null);
 
+  const linksRef = useRef<HTMLElement>(null);
+  const pillRef = useRef<HTMLSpanElement>(null);
+  const progressRef = useRef<HTMLSpanElement>(null);
+
+  // Slide the hover pill under whichever link the pointer or focus is on.
+  const movePill = (link: HTMLElement | null) => {
+    const pill = pillRef.current;
+    const nav = linksRef.current;
+    if (!pill || !nav) return;
+    if (!link) {
+      pill.style.opacity = '0';
+      return;
+    }
+    const n = nav.getBoundingClientRect();
+    const r = link.getBoundingClientRect();
+    pill.style.width = `${r.width}px`;
+    pill.style.transform = `translateX(${r.left - n.left}px)`;
+    pill.style.opacity = '1';
+  };
+
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 12);
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+      if (progressRef.current) progressRef.current.style.transform = `scaleX(${p.toFixed(4)})`;
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -47,9 +73,16 @@ export default function LandingNav() {
           </span>
         </Link>
 
-        <nav aria-label="Main" className="fx-nav__links">
+        <nav aria-label="Main" className="fx-nav__links" ref={linksRef} onMouseLeave={() => movePill(null)}>
+          <span className="fx-nav__pill" ref={pillRef} aria-hidden="true" />
           {NAV_LINKS.map((l) => (
-            <Link key={l.href} href={l.href}>
+            <Link
+              key={l.href}
+              href={l.href}
+              onMouseEnter={(e) => movePill(e.currentTarget)}
+              onFocus={(e) => movePill(e.currentTarget)}
+              onBlur={() => movePill(null)}
+            >
               {l.label}
             </Link>
           ))}
@@ -66,7 +99,7 @@ export default function LandingNav() {
             </Link>
           )}
           <Link href={JOIN.href} className="fx-btn fx-btn--primary fx-btn--sm fx-nav__cta">
-            {JOIN.label}
+            <Roll>{JOIN.label}</Roll>
           </Link>
           <button
             type="button"
@@ -80,6 +113,8 @@ export default function LandingNav() {
           </button>
         </div>
       </div>
+
+      <span className="fx-progress" ref={progressRef} aria-hidden="true" />
 
       <div id="fx-mobile-menu" className="fx-nav__sheet" hidden={!open}>
         {NAV_LINKS.map((l) => (
