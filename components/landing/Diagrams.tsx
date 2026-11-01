@@ -25,7 +25,7 @@ export function NetworkDiagram({ focus }: { focus?: number }) {
       <text x="160" y="175" textAnchor="middle" className="fx-diagram__core">AI</text>
       {NODES.map((n, i) => (
         <g key={n.label} opacity={focus === undefined || focus === i ? 1 : 0.45}>
-          <circle cx={n.x} cy={n.y} r="20" fill="#141a46" stroke="#ff8a1f" strokeWidth={focus === i ? 2.5 : 1.5} />
+          <circle cx={n.x} cy={n.y} r="20" fill="#151517" stroke="#ff8a1f" strokeWidth={focus === i ? 2.5 : 1.5} />
           <text x={n.x} y={n.y + 40} textAnchor="middle" className="fx-diagram__label">
             {n.label}
           </text>
@@ -43,8 +43,8 @@ export function ShieldDiagram() {
       ))}
       <rect x="132" y="138" width="56" height="44" rx="10" fill="#f26a0f" />
       <path d="M144 138v-12a16 16 0 0 1 32 0v12" fill="none" stroke="#f26a0f" strokeWidth="7" strokeLinecap="round" />
-      <circle cx="160" cy="158" r="5" fill="#0f1330" />
-      <rect x="157.5" y="160" width="5" height="12" rx="2" fill="#0f1330" />
+      <circle cx="160" cy="158" r="5" fill="#0b0b0d" />
+      <rect x="157.5" y="160" width="5" height="12" rx="2" fill="#0b0b0d" />
     </svg>
   );
 }

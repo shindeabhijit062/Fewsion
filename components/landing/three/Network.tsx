@@ -137,7 +137,7 @@ export default function Network({ dpr }: { dpr: number }) {
       NODES.map(
         (n) =>
           new THREE.MeshStandardMaterial({
-            color: '#141a46',
+            color: '#151517',
             emissive: n.color,
             emissiveIntensity: 0.35,
             roughness: 0.2,
