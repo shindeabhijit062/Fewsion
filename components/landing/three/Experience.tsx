@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas, useThree } from '@react-three/fiber';
 import { Environment, Lightformer, PerformanceMonitor } from '@react-three/drei';
@@ -11,39 +11,6 @@ import Particles from './Particles';
 import Network from './Network';
 import Bokeh from './Bokeh';
 import type { Tier } from '../sceneState';
-
-// Soft navy glow behind everything, so the scene has depth without an HDR file.
-function Backdrop() {
-  const material = useMemo(
-    () =>
-      new THREE.ShaderMaterial({
-        depthWrite: false,
-        uniforms: {},
-        vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.9999, 1.0); }',
-        fragmentShader: `
-          varying vec2 vUv;
-          void main() {
-            vec2 p = vUv - vec2(0.62, 0.55);
-            float g = smoothstep(0.85, 0.0, length(p * vec2(1.2, 1.6)));
-            vec3 ink = vec3(0.027, 0.039, 0.11);
-            vec3 navy = vec3(0.075, 0.09, 0.24);
-            vec3 ember = vec3(0.22, 0.09, 0.03);
-            vec3 col = mix(ink, navy, g * 0.9) + ember * pow(g, 3.0) * 0.55;
-            // Colours above are sRGB; convert so the composer and the plain
-            // renderer both output the same shade.
-            gl_FragColor = vec4(pow(col, vec3(2.2)), 1.0);
-            #include <colorspace_fragment>
-          }
-        `,
-      }),
-    []
-  );
-  return (
-    <mesh frustumCulled={false} renderOrder={-1} material={material}>
-      <planeGeometry args={[2, 2]} />
-    </mesh>
-  );
-}
 
 // Stops rendering while an opaque section fully covers the canvas.
 function PauseWhenCovered() {
@@ -90,12 +57,12 @@ export default function Experience({ tier, onReady }: { tier: Exclude<Tier, 'off
       <PauseWhenCovered />
       <ReadySignal onReady={onReady} />
       <Director />
-      <Backdrop />
+      <color attach="background" args={['#000000']} />
 
       <Environment resolution={256} frames={1}>
         <Lightformer form="rect" intensity={3} color="#fff1e0" position={[0, 4, 3]} scale={[8, 2, 1]} rotation-x={Math.PI / 2.5} />
         <Lightformer form="rect" intensity={2.2} color="#ff9a3c" position={[-5, 0, 2]} scale={[2, 7, 1]} rotation-y={Math.PI / 2} />
-        <Lightformer form="rect" intensity={1.6} color="#7f8cff" position={[5, -1, 1]} scale={[2, 6, 1]} rotation-y={-Math.PI / 2} />
+        <Lightformer form="rect" intensity={1.4} color="#ffe2c4" position={[5, -1, 1]} scale={[2, 6, 1]} rotation-y={-Math.PI / 2} />
         <Lightformer form="ring" intensity={2.5} color="#ffffff" position={[2, 2, 5]} scale={1.5} />
       </Environment>
       <ambientLight intensity={0.15} />

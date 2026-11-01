@@ -55,7 +55,7 @@ const vertex = /* glsl */ `
 
     vec3 orange = vec3(1.0, 0.45, 0.08);
     vec3 peach = vec3(1.0, 0.85, 0.68);
-    vec3 cool = vec3(0.55, 0.62, 1.0);
+    vec3 cool = vec3(1.0, 0.94, 0.86); // a few warm-white accents
     vColor = mix(orange, peach, aRand.x * aRand.x);
     vColor = mix(vColor, cool, step(0.93, aRand.y) * 0.8);
     vColor += scan * vec3(0.6, 0.5, 0.3);

@@ -2,6 +2,7 @@ import './landing.css';
 import LandingNav from './LandingNav';
 import SceneMount from './SceneMount';
 import Choreography from './Choreography';
+import CustomCursor from './CustomCursor';
 import AIChatbotWidget from '@/components/AIChatbotWidget';
 import {
   BusinessModel,
@@ -41,6 +42,7 @@ export default function Landing() {
       </main>
       <LandingFooter />
       <Choreography />
+      <CustomCursor />
       <AIChatbotWidget />
     </div>
   );
