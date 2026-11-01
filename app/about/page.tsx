@@ -206,10 +206,10 @@ export default function AboutPage() {
           <em style={{ fontStyle: 'normal', color: 'var(--amber)' }}>creator economy with us.</em>
         </h2>
         <p className="text-[18px] text-[var(--muted)] max-w-[460px] mx-auto mb-10 font-light">
-          Join the waitlist, partner with us, or just follow what we&apos;re building.
+          Create a free account, partner with us, or just follow what we&apos;re building.
         </p>
         <div className="flex gap-[14px] justify-center flex-wrap">
-          <Link href="/signup" className="btn-primary">Join the waitlist →</Link>
+          <Link href="/signup" className="btn-primary">Sign up free →</Link>
           <a href="mailto:founders@fewsion.in" className="btn-ghost">Email the founders</a>
         </div>
       </section>

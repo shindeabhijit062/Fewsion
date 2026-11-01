@@ -31,6 +31,8 @@ export interface CreatorMatch {
   engagementRate: number | null;
   score: number | null;
   rate: string | null;
+  /** Numeric rate in INR; used to flag creators who are over the brief's budget */
+  rateValue?: number | null;
   bio: string | null;
   matchScore: number;
   reason: string;
@@ -52,12 +54,14 @@ export const NICHES = [
   'Parenting',
 ];
 
+// `value` is what the API expects; `label` and `hint` are what people read.
 const GOALS = [
-  { value: 'Conversions', hint: 'Prioritises engagement' },
-  { value: 'Awareness', hint: 'Prioritises reach' },
-  { value: 'Retention', hint: 'Prioritises trust & score' },
-  { value: 'Brand Launch', hint: 'Balanced reach & quality' },
+  { value: 'Conversions', label: 'Get sales', hint: 'Favours creators whose audience engages' },
+  { value: 'Awareness', label: 'Get seen', hint: 'Favours creators with the biggest reach' },
+  { value: 'Retention', label: 'Repeat buyers', hint: 'Favours trusted, high-scoring creators' },
+  { value: 'Brand Launch', label: 'Launch a product', hint: 'A balance of reach and quality' },
 ];
+const goalLabel = (value: string) => GOALS.find((g) => g.value === value)?.label ?? value;
 
 const AVATAR_GRADIENTS = [
   'linear-gradient(135deg, #F5A623, #FF6B35)',
@@ -84,6 +88,9 @@ const initials = (name: string) =>
     .slice(0, 2);
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/** Match % at or above this reads as a strong fit; below it we say "Closest fit" */
+const STRONG_MATCH = 75;
 
 type Phase = 'idle' | 'running' | 'done' | 'error';
 
@@ -116,7 +123,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
     'Reading your campaign brief',
     scanned != null ? `Scanning ${scanned} creator profiles` : 'Scanning creator profiles',
     niche === 'Any' ? 'Scoring content fit across all niches' : `Scoring niche fit for ${niche}`,
-    `Weighting signals for ${goal.toLowerCase()}`,
+    `Weighting signals for ${goalLabel(goal).toLowerCase()}`,
     `Checking creator rates against ${budgetLabel}`,
     'Ranking matches & writing explanations',
   ];
@@ -189,6 +196,8 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
   };
 
   const leadMatch = matches[0];
+  const leadOverBudget = !!leadMatch?.rateValue && leadMatch.rateValue > budget;
+  const leadIsStrong = !!leadMatch && leadMatch.matchScore >= STRONG_MATCH && !leadOverBudget;
 
   return (
     <section className="relative overflow-hidden rounded-3xl border border-[var(--border2)] bg-[var(--black)] p-4 sm:p-6 lg:p-10 shadow-2xl">
@@ -200,7 +209,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
       <div className="relative z-10 mb-6 sm:mb-8 text-center max-w-2xl mx-auto">
         <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(245,166,35,0.30)] bg-[rgba(245,166,35,0.10)] px-3.5 py-1.5 text-xs font-semibold text-[var(--amber)] mb-3">
           <Zap size={14} />
-          <span>Fewsion AI Neural Matchmaker</span>
+          <span>Fewsion AI Matchmaker</span>
         </div>
         <h2 className="font-display text-xl sm:text-2xl lg:text-3xl font-extrabold text-[var(--text)] tracking-tight">
           {title || 'Match Brands & Creators'}
@@ -255,8 +264,8 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                     : 'border-[var(--border)] bg-[var(--card)] hover:border-[rgba(245,166,35,0.40)]'
                     }`}
                 >
-                  <div className={`text-xs font-bold ${goal === g.value ? 'text-[var(--amber)]' : 'text-[var(--text)]'}`}>{g.value}</div>
-                  <div className="text-[10px] text-[var(--muted2)] mt-0.5">{g.hint}</div>
+                  <div className={`text-xs font-bold ${goal === g.value ? 'text-[var(--amber)]' : 'text-[var(--text)]'}`}>{g.label}</div>
+                  <div className="text-xs text-[var(--muted)] mt-0.5">{g.hint}</div>
                 </button>
               ))}
             </div>
@@ -284,9 +293,9 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
               className="w-full accent-[var(--amber)] cursor-pointer h-2 bg-[var(--card2)] rounded-lg"
             />
             <div className="flex justify-between text-[10px] font-semibold text-[var(--muted2)]">
-              <span>₹5K Micro</span>
-              <span>₹25K Pro</span>
-              <span>₹50K+ Scale</span>
+              <span>₹5K Small creators</span>
+              <span>₹25K Medium</span>
+              <span>₹50K+ Large</span>
             </div>
           </div>
 
@@ -399,7 +408,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                       {matches.length > 1 ? `Top ${matches.length} AI matches` : matches.length ? 'Your AI match' : 'No matches yet'}
                     </div>
                     <div className="mt-0.5 text-[11px] text-[var(--muted2)]">
-                      {scanned} creator profile{scanned === 1 ? '' : 's'} analysed · {niche === 'Any' ? 'all niches' : niche} · {goal} · {budgetLabel}
+                      {scanned} creator profile{scanned === 1 ? '' : 's'} analysed · {niche === 'Any' ? 'all niches' : niche} · {goalLabel(goal)} · {budgetLabel}
                     </div>
                   </div>
                   {matches.length > 0 && (
@@ -422,7 +431,7 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                   <>
                     <div className="grid grid-cols-1 2xl:grid-cols-2 gap-4">
                       {matches.map((c, i) => (
-                        <MatchCard key={c.id} creator={c} rank={i} onSelect={onSelectCreator} status={creatorStatus?.[c.id]} />
+                        <MatchCard key={c.id} creator={c} rank={i} budget={budget} onSelect={onSelectCreator} status={creatorStatus?.[c.id]} />
                       ))}
                     </div>
 
@@ -436,24 +445,35 @@ export function AIMatchmaker({ onSelectCreator, title, subtitle, creatorStatus }
                         <div className="min-w-0">
                           <div className="inline-flex items-center gap-1.5 text-[11px] font-extrabold uppercase tracking-wider text-[var(--amber)]">
                             <Trophy size={14} />
-                            <span>AI recommendation</span>
+                            <span>{leadIsStrong ? 'AI recommendation' : 'Closest fit'}</span>
                           </div>
                           <p className="text-xs text-[var(--text)] mt-1">
-                            <strong className="text-[var(--amber)]">{leadMatch.name}</strong> is your strongest fit at{' '}
-                            {leadMatch.matchScore}% for this {goal.toLowerCase()} campaign.
+                            {leadIsStrong ? (
+                              <>
+                                <strong className="text-[var(--amber)]">{leadMatch.name}</strong> is your strongest fit at{' '}
+                                {leadMatch.matchScore}% for this “{goalLabel(goal).toLowerCase()}” campaign.
+                              </>
+                            ) : (
+                              <>
+                                <strong className="text-[var(--amber)]">{leadMatch.name}</strong> is the closest fit we found
+                                ({leadMatch.matchScore}%){leadOverBudget ? ', but the rate is over your budget' : ''}. Check the details
+                                before you send an offer.
+                              </>
+                            )}
                           </p>
                         </div>
                         <button
                           onClick={() => onSelectCreator?.(leadMatch)}
                           className="shrink-0 rounded-full bg-[var(--amber)] px-5 py-2 text-xs font-extrabold text-black hover:opacity-90 transition-all cursor-pointer"
                         >
-                          {creatorStatus?.[leadMatch.id] ? `${creatorStatus[leadMatch.id]} →` : 'Send offer →'}
+                          {creatorStatus?.[leadMatch.id] ? 'Open details →' : 'Send offer →'}
                         </button>
                       </motion.div>
                     )}
 
-                    <p className="mt-4 text-center text-[10px] text-[var(--muted2)]">
+                    <p className="mt-4 text-center text-xs text-[var(--muted)]">
                       Match % combines niche fit, rate vs budget, engagement, reach and Creator Score, weighted for your goal.
+                      75% and above is a strong fit, 60–74% is fair, below 60% is weak.
                       {aiExplained ? ' Explanations written by Fewsion AI.' : ''}
                     </p>
                   </>
@@ -598,15 +618,20 @@ export function ScoreRing({ value, delay }: { value: number; delay: number }) {
 function MatchCard({
   creator,
   rank,
+  budget,
   onSelect,
   status,
 }: {
   creator: CreatorMatch;
   rank: number;
+  budget: number;
   onSelect?: (c: CreatorMatch) => void;
   status?: string;
 }) {
   const delay = 0.1 + rank * 0.12;
+  const overBudgetBy = creator.rateValue && creator.rateValue > budget ? creator.rateValue - budget : 0;
+  // Only call it a "best match" when it is a strong fit AND inside the budget
+  const topLabel = creator.matchScore >= STRONG_MATCH && !overBudgetBy ? 'Best match' : 'Closest fit';
   const subline = [creator.platform, creator.niche].filter(Boolean).join(' • ') || 'Fewsion creator';
   const bars = [
     { label: 'Niche', value: creator.signals.niche },
@@ -630,7 +655,7 @@ function MatchCard({
     >
       {rank === 0 && (
         <span className="absolute -top-2.5 left-4 inline-flex items-center gap-1 rounded-full bg-[var(--amber)] px-2 py-0.5 text-[10px] font-extrabold text-black">
-          <Trophy size={10} /> Best match
+          <Trophy size={10} /> {topLabel}
         </span>
       )}
 
@@ -670,7 +695,9 @@ function MatchCard({
                 transition={{ delay: delay + 0.25 + i * 0.06, duration: 0.6, ease: 'easeOut' }}
               />
             </div>
-            <div className="mt-1 truncate text-[9px] uppercase tracking-wider text-[var(--muted2)]">{b.label}</div>
+            <div className="mt-1 truncate text-[11px] font-semibold uppercase tracking-wider text-[var(--muted)]">
+              {b.label} {Math.round(b.value)}
+            </div>
           </div>
         ))}
       </div>
@@ -685,25 +712,28 @@ function MatchCard({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-[var(--border)] pt-3">
-        <div className="text-xs font-extrabold text-[var(--text)]">
-          {creator.rate ?? <span className="font-medium text-[var(--muted2)]">Rate not set</span>}
+        <div className="flex flex-wrap items-center gap-2 text-xs font-extrabold text-[var(--text)]">
+          {creator.rate ?? <span className="font-medium text-[var(--muted)]">Rate not set</span>}
+          {overBudgetBy > 0 && (
+            <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-[11px] font-bold text-red-600">
+              Over budget by ₹{overBudgetBy.toLocaleString('en-IN')}
+            </span>
+          )}
         </div>
-        {status ? (
-          <button
-            onClick={() => onSelect?.(creator)}
-            className="rounded-full bg-[rgba(245,166,35,0.12)] px-2.5 py-1 text-[11px] font-bold text-[var(--amber)] hover:bg-[rgba(245,166,35,0.2)]"
-          >
-            {status}
-          </button>
-        ) : (
+        <div className="flex flex-wrap items-center gap-2">
+          {status && (
+            <span className="rounded-full bg-[var(--card2)] px-2.5 py-1 text-[11px] font-bold text-[var(--muted)]">
+              In your pipeline: {status}
+            </span>
+          )}
           <button
             onClick={() => onSelect?.(creator)}
             className="flex items-center gap-1 text-xs font-bold text-[var(--amber)] hover:underline"
           >
-            <span>Connect</span>
+            <span>{status ? 'Open details' : 'Send offer'}</span>
             <ArrowRight size={13} />
           </button>
-        )}
+        </div>
       </div>
     </motion.div>
   );

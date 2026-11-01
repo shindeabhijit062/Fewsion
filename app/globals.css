@@ -24,7 +24,8 @@
   --green-glow: rgba(22, 163, 74, 0.1);
   --text: #0f172a;
   --muted: #475569;
-  --muted2: #64748b;
+  --muted2: #556377;
+  --amber-text: #a3490a;
   --white: #0f172a;
   --font-display: 'Plus Jakarta Sans', 'Outfit', sans-serif;
   --font-body: 'Plus Jakarta Sans', 'Outfit', sans-serif;
@@ -50,7 +51,8 @@
   --green-glow: rgba(22, 163, 74, 0.1);
   --text: #0f172a;
   --muted: #475569;
-  --muted2: #64748b;
+  --muted2: #556377;
+  --amber-text: #a3490a;
   --white: #0f172a;
   --core-bg: #ffffff;
   --core-text: #0f172a;
@@ -300,7 +302,7 @@ textarea {
 
   .footer-top {
     @apply grid gap-12 mb-12;
-    grid-template-columns: 1.5fr repeat(3, 1fr);
+    grid-template-columns: 1.5fr repeat(4, 1fr);
   }
 
   .footer-brand .logo {
@@ -821,13 +823,17 @@ textarea {
     z-index: 80;
     opacity: 0;
     pointer-events: none;
+    /* hidden from keyboard and screen readers while closed (was still tab-focusable) */
+    visibility: hidden;
     transform: translateY(16px) scale(0.97);
-    transition: opacity 0.3s, transform 0.3s;
+    transition: opacity 0.3s, transform 0.3s, visibility 0s linear 0.3s;
   }
 
   #chat-window.open {
     opacity: 1;
     pointer-events: all;
+    visibility: visible;
+    transition-delay: 0s;
     transform: translateY(0) scale(1);
   }
 
@@ -1190,4 +1196,44 @@ textarea {
     transform: scale(1.03);
     box-shadow: 0 10px 30px rgba(245, 166, 35, 0.45);
   }
+}
+
+/* ── ACCESSIBILITY OVERRIDES (UX review, Oct 2026) ──
+   1. Amber (#d97706) is only 3.2:1 on white, which fails WCAG AA for text.
+      Keep it for backgrounds and borders; use a darker amber for text.
+   2. Nothing on screen should be smaller than 12px. */
+.text-amber,
+.text-\[var\(--amber\)\],
+.text-\[var\(--amber2\)\] {
+  color: var(--amber-text);
+}
+.text-\[9px\],
+.text-\[10px\],
+.text-\[11px\] {
+  font-size: 0.75rem !important;
+  line-height: 1.4 !important;
+}
+.text-\[7px\],
+.text-\[8px\] {
+  font-size: 0.6875rem !important;
+}
+
+/* Skip link: first Tab stop on every page, visible only when focused */
+.skip-link {
+  position: absolute;
+  left: 16px;
+  top: -64px;
+  z-index: 200;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 12px;
+}
+#main-content:focus {
+  outline: none;
 }

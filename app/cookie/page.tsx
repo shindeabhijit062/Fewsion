@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy - Fewsion',
+  title: 'Cookie Policy',
   description: 'Cookie Policy for Fewsion',
 };
 

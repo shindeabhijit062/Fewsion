@@ -299,7 +299,8 @@ export default function BrandPortalPage() {
       data: { user },
     } = await supabase.auth.getUser();
     if (!user) {
-      setLoading(false);
+      // Logged out: send people to sign in (and back here afterwards), not to a dead-end shell
+      window.location.replace('/login?role=brand&next=%2Fportals%2Fbrand');
       return;
     }
     setUserId(user.id);

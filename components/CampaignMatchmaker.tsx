@@ -299,7 +299,7 @@ export function CampaignMatchmaker({ title, subtitle, canApply = true, beforeApp
                 )}
                 {matches.length > 0 && (
                   <p className="mt-4 text-center text-[10px] text-[var(--muted2)]">
-                    Match % combines niche, platform, budget vs your rate and the brand&apos;s engagement bar.
+                    Match % combines niche, platform, budget vs your rate and the brand&apos;s engagement bar. 75% and above is a strong fit, 60–74% is fair, below 60% is weak.
                     {aiExplained ? ' Explanations written by Fewsion AI.' : ''}
                   </p>
                 )}
@@ -363,7 +363,7 @@ function CampaignCard({
     >
       {rank === 0 && (
         <span className="absolute -top-2.5 left-4 inline-flex items-center gap-1 rounded-full bg-[var(--amber)] px-2 py-0.5 text-[10px] font-extrabold text-black">
-          <Trophy size={10} /> Best match
+          <Trophy size={10} /> {campaign.matchScore >= 75 ? 'Best match' : 'Closest fit'}
         </span>
       )}
       <div className="flex items-start justify-between gap-3">

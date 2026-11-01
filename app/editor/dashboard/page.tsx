@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const metadata = {
-  title: 'Editor Portal — Fewsion Marketplace',
+  title: 'Editor portal',
   description: 'View video editing assignments, upload draft cuts, and track commission earnings.'
 };
 

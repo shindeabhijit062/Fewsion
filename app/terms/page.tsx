@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions - Fewsion',
+  title: 'Terms & Conditions',
   description: 'Terms and Conditions for Fewsion Creators and Brands',
 };
 

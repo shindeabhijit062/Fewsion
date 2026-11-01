@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/utils/supabase';
+import { isTestAccount } from '@/lib/testAccounts';
 import { AIMatchmaker } from '@/components/AIMatchmaker';
 import { CreatorOfferDrawer, OfferCreator } from '@/components/CreatorOfferDrawer';
 import { STATUS_LABEL } from '@/lib/offers';
@@ -128,8 +129,9 @@ export default function CreatorsPage() {
           .select('*')
           .order('ai_total_score', { ascending: false });
         if (error) throw error;
-        if (data && data.length > 0) {
-          const mapped: Creator[] = data.map((c) => {
+        const rows = (data ?? []).filter((c) => !isTestAccount(c.creator_name));
+        if (rows.length > 0) {
+          const mapped: Creator[] = rows.map((c) => {
             const colors = getNicheColors(c.primary_niche || 'General');
             return {
               id: c.id,

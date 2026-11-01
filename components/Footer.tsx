@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { COMPANY } from '@/lib/company';
 
 export default function Footer() {
   const pathname = usePathname();
@@ -36,9 +37,9 @@ export default function Footer() {
         <div className="footer-col">
           <h5>Platform</h5>
           <ul>
-            <li><Link href="/creators">For Creators</Link></li>
-            <li><Link href="/brands">Live Campaigns</Link></li>
-            <li><Link href="/editors">For Editors</Link></li>
+            <li><Link href="/creators">Find creators</Link></li>
+            <li><Link href="/brands">Find campaigns</Link></li>
+            <li><Link href="/editors">For editors</Link></li>
             <li><Link href="/pricing">Pricing</Link></li>
           </ul>
         </div>
@@ -48,9 +49,24 @@ export default function Footer() {
           <h5>Company</h5>
           <ul>
             <li><Link href="/about">About</Link></li>
-            <li><Link href="/blog">Blog</Link></li>
             <li><Link href="/careers">Careers</Link></li>
-            <li><a href="mailto:founders@fewsion.in">Contact</a></li>
+            <li><Link href="/investors">Investors</Link></li>
+          </ul>
+        </div>
+
+        {/* Contact col: a real way to reach a human */}
+        <div className="footer-col">
+          <h5>Talk to us</h5>
+          <ul>
+            {COMPANY.phone && (
+              <li><a href={`tel:${COMPANY.phone.replace(/[^\d+]/g, '')}`}>{COMPANY.phone}</a></li>
+            )}
+            {COMPANY.whatsapp && (
+              <li><a href={`https://wa.me/${COMPANY.whatsapp}`} target="_blank" rel="noopener noreferrer">WhatsApp us</a></li>
+            )}
+            <li><a href={`mailto:${COMPANY.email}`}>{COMPANY.email}</a></li>
+            {COMPANY.hours && <li><span>{COMPANY.hours}</span></li>}
+            {COMPANY.address && <li><span>{COMPANY.address}</span></li>}
           </ul>
         </div>
 
@@ -66,7 +82,10 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <p>© {new Date().getFullYear()} Fewsion. All rights reserved.</p>
+        <p>
+          © {new Date().getFullYear()} {COMPANY.legalName || 'Fewsion'}. All rights reserved.
+          {COMPANY.gstin ? ` GSTIN: ${COMPANY.gstin}.` : ''}
+        </p>
       </div>
     </footer>
   );

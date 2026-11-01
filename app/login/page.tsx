@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import HelpLine from '@/components/HelpLine';
 import { supabase } from '../../utils/supabase';
 
 type Role = 'brand' | 'creator' | 'editor';
@@ -46,6 +47,12 @@ export default function LoginPage() {
     setToast({ msg, type });
     setTimeout(() => setToast(null), 4000);
   };
+
+  // Pre-select the role when we arrive with /login?role=brand|creator|editor
+  useEffect(() => {
+    const r = new URLSearchParams(window.location.search).get('role');
+    if (r === 'brand' || r === 'creator' || r === 'editor') setRole(r);
+  }, []);
 
   // Errors sent back by Instagram sign-in (/login?error=...)
   useEffect(() => {
@@ -189,20 +196,11 @@ export default function LoginPage() {
             <em className="text-gradient-amber" style={{ fontStyle: 'normal' }}>creator platform</em>
           </h2>
           <p className="text-[15px] text-[var(--muted)] leading-[1.7] max-w-[380px]">
-            Connect brands with verified UGC creators and editors — powered by AI matching and escrow-protected payments.
+            Find UGC creators and video editors who fit your product and budget, matched by AI, with the reasons shown.
           </p>
         </div>
 
-        <div className="relative z-10 flex gap-8">
-          {[{ n: '4.5', s: 'M+', l: 'Active Creators' }, { n: '2,400', s: '+', l: 'Brand Campaigns' }, { n: '4.8', s: '★', l: 'Avg Rating' }].map((stat) => (
-            <div key={stat.l}>
-              <div className="font-display text-[28px] font-extrabold text-[color:var(--text)]" style={{ letterSpacing: '-1px' }}>
-                {stat.n}<span style={{ color: 'var(--amber)' }}>{stat.s}</span>
-              </div>
-              <div className="text-[12px] text-[var(--muted)] mt-[2px]">{stat.l}</div>
-            </div>
-          ))}
-        </div>
+        <div aria-hidden />
       </div>
 
       {/* ── RIGHT panel ── */}
@@ -228,6 +226,8 @@ export default function LoginPage() {
             ] as { r: Role; icon: string; label: string }[]).map(({ r, icon, label }) => (
               <button
                 key={r}
+                type="button"
+                aria-pressed={role === r}
                 onClick={() => setRole(r)}
                 className="relative text-center rounded-[14px] p-4 cursor-pointer border-none transition-all duration-200"
                 style={{
@@ -292,8 +292,9 @@ export default function LoginPage() {
 
           {/* Email */}
           <div className="mb-[18px]">
-            <label className="form-label">Email address</label>
+            <label className="form-label" htmlFor="login-email">Email address</label>
             <input
+              id="login-email"
               type="email"
               placeholder="you@company.com"
               value={email}
@@ -309,10 +310,11 @@ export default function LoginPage() {
           {/* Password */}
           <div className="mb-[20px]">
             <div className="flex justify-between items-center mb-2">
-              <label className="form-label" style={{ marginBottom: 0 }}>Password</label>
+              <label className="form-label" htmlFor="login-password" style={{ marginBottom: 0 }}>Password</label>
               <Link href="/forgot-password" className="text-[12px] text-[var(--muted)] no-underline hover:text-[var(--text)] transition-colors">Forgot password?</Link>
             </div>
             <input
+              id="login-password"
               type="password"
               placeholder="••••••••"
               value={password}
@@ -326,8 +328,8 @@ export default function LoginPage() {
 
           {/* Remember me */}
           <div className="flex items-center gap-[10px] mb-5">
-            <input type="checkbox" id="remember" defaultChecked style={{ accentColor: 'var(--amber)', width: '15px', height: '15px' }} />
-            <label htmlFor="remember" className="text-[13px] text-[var(--muted)]">Keep me signed in for 30 days</label>
+            <input type="checkbox" id="remember" style={{ accentColor: 'var(--amber)', width: '15px', height: '15px' }} />
+            <label htmlFor="remember" className="text-[13px] text-[var(--muted)]">Keep me signed in on this device</label>
           </div>
 
           <button
@@ -348,6 +350,7 @@ export default function LoginPage() {
             <Link href="/terms" style={{ color: 'var(--muted)', textDecoration: 'underline' }}>Terms</Link>{' '}and{' '}
             <Link href="/privacy" style={{ color: 'var(--muted)', textDecoration: 'underline' }}>Privacy Policy</Link>.
           </p>
+          <HelpLine className="mt-4 text-center" />
         </div>
       </div>
 

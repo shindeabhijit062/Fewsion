@@ -2,6 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import StatusChip from '@/components/StatusChip';
+import { FEATURES, FeatureKey } from '@/lib/featureStatus';
+import { COMPANY } from '@/lib/company';
 
 type PlanTab = 'brand' | 'creator' | 'editor';
 
@@ -60,6 +63,14 @@ export default function PricingPage() {
           <p className="text-[19px] text-[var(--muted)] font-light max-w-[520px] mx-auto leading-[1.7]">
             No hidden fees. No agency markups. Start free and upgrade as your campaigns scale.
           </p>
+          <div className="mx-auto mt-8 max-w-[560px] rounded-2xl border border-[var(--border2)] bg-[var(--card)] p-5 text-left">
+            <div className="text-xs font-bold uppercase tracking-wider text-[var(--muted)] mb-2">Example: a ₹20,000 Reel</div>
+            <p className="text-[15px] leading-[1.7] text-[var(--text)]">
+              The brand pays <strong>₹22,000</strong> (₹20,000 + 10% Fewsion fee).
+              The creator or editor receives <strong>₹20,000</strong>: <strong>100% of the agreed rate</strong>.
+            </p>
+            <p className="mt-2 text-sm text-[var(--muted)]">The fee is 10–15% and always shown to the brand before a campaign is confirmed. 10% is used here as an example.</p>
+          </div>
         </div>
       </section>
 
@@ -86,10 +97,14 @@ export default function PricingPage() {
           ))}
         </div>
 
+        <p className="mx-auto mb-8 max-w-[640px] text-center text-sm text-[var(--muted)]">
+          Paid plans can&apos;t be bought yet. The free plans work today, and features marked <strong>Coming</strong> are on the roadmap, not live.
+        </p>
+
         {/* Brand Plans */}
-        {activeTab === 'brand' && <PlansGrid plans={brandPlans} />}
-        {activeTab === 'creator' && <PlansGrid plans={creatorPlans} />}
-        {activeTab === 'editor' && <PlansGrid plans={editorPlans} twoCol />}
+        {activeTab === 'brand' && <PlansGrid plans={brandPlans} role="brand" />}
+        {activeTab === 'creator' && <PlansGrid plans={creatorPlans} role="creator" />}
+        {activeTab === 'editor' && <PlansGrid plans={editorPlans} role="editor" twoCol />}
       </section>
 
       {/* ── ADD-ONS ── */}
@@ -166,7 +181,7 @@ export default function PricingPage() {
         </p>
         <div className="flex gap-[14px] justify-center flex-wrap">
           <Link href="/signup?role=brand" className="btn-primary">I&apos;m a Brand →</Link>
-          <Link href="/creators" className="btn-ghost">I&apos;m a Creator</Link>
+          <Link href="/signup?role=creator" className="btn-ghost">I&apos;m a Creator</Link>
         </div>
       </section>
 
@@ -176,19 +191,37 @@ export default function PricingPage() {
 
 /* ── Sub-components ── */
 
-function PlansGrid({ plans, twoCol }: { plans: Plan[]; twoCol?: boolean }) {
+function PlansGrid({ plans, role, twoCol }: { plans: Plan[]; role: PlanTab; twoCol?: boolean }) {
   return (
     <div
       className={`grid gap-4 grid-cols-1 ${twoCol ? 'md:grid-cols-2 max-w-[700px] mx-auto' : 'md:grid-cols-2 lg:grid-cols-3'}`}
     >
       {plans.map((plan, i) => (
-        <PlanCard key={plan.name} plan={plan} index={i} />
+        <PlanCard key={plan.name} plan={plan} index={i} role={role} />
       ))}
     </div>
   );
 }
 
-function PlanCard({ plan, index }: { plan: Plan; index: number }) {
+/** Which roadmap feature (if any) a plan bullet is about, so it can carry an honest status. */
+function featureKeyFor(text: string): FeatureKey | undefined {
+  const t = text.toLowerCase();
+  if (t.includes('escrow')) return 'escrow';
+  if (t.includes('contract')) return 'contractGenerator';
+  if (t.includes('brief builder')) return 'briefBuilder';
+  if (t.includes('performance tracker')) return 'performanceTracker';
+  if (t.includes('storefront')) return 'brandReviews';
+  if (t.includes('creator score')) return 'creatorScore';
+  if (t.includes('collab')) return 'creatorEditorCollab';
+  return undefined;
+}
+
+function PlanCard({ plan, index, role }: { plan: Plan; index: number; role: PlanTab }) {
+  const ctaHref =
+    plan.ctaHref ??
+    (plan.price === 'Custom' || plan.price === 'Coming'
+      ? `mailto:${COMPANY.email}?subject=${encodeURIComponent(plan.name)}`
+      : `/signup?role=${role}`);
   const delay = index === 1 ? 'reveal-delay-1' : index === 2 ? 'reveal-delay-2' : '';
   return (
     <div
@@ -235,7 +268,7 @@ function PlanCard({ plan, index }: { plan: Plan; index: number }) {
         {plan.desc}
       </div>
       <a
-        href={plan.ctaHref ?? '#'}
+        href={ctaHref}
         className={`block text-center w-full py-[13px] rounded-full font-display text-[14px] font-bold no-underline mb-7 transition-all duration-200 ${plan.ctaStyle === 'primary' ? 'plan-btn-primary' : 'plan-btn-ghost'}`}
         style={
           plan.ctaStyle === 'primary'
@@ -263,9 +296,14 @@ function PlanCard({ plan, index }: { plan: Plan; index: number }) {
         {plan.cta}
       </a>
       <ul className="flex flex-col gap-3 list-none">
-        {plan.features.map((f) => (
-          <li key={f.text} className={`flex items-start gap-[10px] text-[14px] leading-[1.5] ${f.included ? 'text-[var(--text)]' : 'text-[var(--muted2)]'}`}>
-            {f.included ? (
+        {plan.features.map((f) => {
+          const key = f.included ? featureKeyFor(f.text) : undefined;
+          const notLiveYet = !!key && FEATURES[key].status === 'soon';
+          return (
+          <li key={f.text} className={`flex items-start gap-[10px] text-[14px] leading-[1.5] ${f.included && !notLiveYet ? 'text-[var(--text)]' : 'text-[var(--muted2)]'}`}>
+            {notLiveYet ? (
+              <div className="flex-shrink-0 mt-[2px] flex items-center justify-center w-4 h-4 rounded-full border border-[var(--border2)] bg-[var(--card2)]" aria-hidden />
+            ) : f.included ? (
               <div className="flex-shrink-0 mt-[2px] flex items-center justify-center w-4 h-4 rounded-full border border-[rgba(74,222,128,0.3)] bg-[rgba(74,222,128,0.15)]">
                 <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M1 4L3.5 6.5L9 1" stroke="#4ade80" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -278,9 +316,13 @@ function PlanCard({ plan, index }: { plan: Plan; index: number }) {
                 </svg>
               </div>
             )}
-            {f.text}
+            <span>
+              {f.text}
+              {key && <StatusChip feature={key} />}
+            </span>
           </li>
-        ))}
+          );
+        })}
       </ul>
     </div>
   );
@@ -323,7 +365,7 @@ const brandPlans: Plan[] = [
       { text: 'Standard creator search & filters', included: true },
       { text: 'AI basic matching', included: true },
       { text: 'Razorpay escrow on all deals', included: true },
-      { text: 'AI contract generator (₹99/contract)', included: true },
+      { text: 'AI contract generator', included: true },
       { text: '10–15% transaction commission', included: true },
       { text: 'AI brief builder', included: false },
       { text: 'Brand storefront', included: false },
@@ -449,9 +491,9 @@ const editorPlans: Plan[] = [
 
 const addons = [
   {
-    price: '₹99',
+    price: 'Soon',
     name: 'AI Contract',
-    desc: 'One-click contract generation for any project. Covers usage rights, revisions, deadlines, and payment terms. Included free in Premium plans.',
+    desc: 'Coming Q1 2027, planned at ₹99 per contract. One-click contract generation for any project. Covers usage rights, revisions, deadlines, and payment terms. Included free in Premium plans.',
   },
   {
     price: '₹999',
@@ -468,8 +510,8 @@ const addons = [
 const faqs = [
   { q: 'How does the transaction commission work?', a: 'Fewsion charges 10–15% on every completed project. This is paid by the brand on top of the creator\'s agreed fee — creators and editors keep their full quoted amount.' },
   { q: 'Do creators and editors pay to join?', a: 'No. Creator and Editor Free tiers are genuinely free — no hidden charges. Brands pay the platform commission. Creators and editors can upgrade to Pro for extra visibility, but it\'s never required.' },
-  { q: 'How does escrow work exactly?', a: 'When a brand approves a creator for a campaign, they deposit the full agreed amount via Razorpay into escrow. This is held safely until the creator delivers approved content. No content, no release.' },
+  { q: 'How does escrow work exactly?', a: 'Escrow launches in Q4 2026. The plan: when a brand approves a creator for a campaign, they deposit the full agreed amount via Razorpay into escrow. This is held safely until the creator delivers approved content. No content, no release.' },
   { q: 'Can I cancel my subscription anytime?', a: 'Yes. All subscriptions are month-to-month with no lock-in. You can downgrade or cancel at any time — you keep access until the end of the billing period.' },
   { q: 'Is there a minimum spend for brands?', a: 'None at all. You can post a campaign with a budget as low as ₹5,000. Fewsion is built for D2C brands of all sizes, including those just starting with UGC.' },
-  { q: 'When does my Creator or Editor get paid?', a: 'Escrow releases within 24 hours of brand approval. Payment hits the creator or editor\'s linked bank account or UPI within 1–2 business days via Razorpay.' },
+  { q: 'When does my Creator or Editor get paid?', a: 'Once escrow launches (Q4 2026), the plan is for it to release within 24 hours of brand approval. Payment hits the creator or editor\'s linked bank account or UPI within 1–2 business days via Razorpay.' },
 ];
